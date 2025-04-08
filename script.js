@@ -163,6 +163,43 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  document.addEventListener("DOMContentLoaded", function () {
+    const leaderItems = document.querySelectorAll(".ourleaders_item");
+
+    // Mouse follow effect for leader items
+    leaderItems.forEach((item) => {
+      item.addEventListener("mousemove", function (e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const moveX = (x - centerX) / 20;
+        const moveY = (y - centerY) / 20;
+
+        this.style.transform = `translateY(${
+          this.classList.contains("ourleaders_owner") ? "-15px" : "-10px"
+        }) rotateX(${-moveY}deg) rotateY(${moveX}deg)`;
+      });
+
+      item.addEventListener("mouseleave", function () {
+        if (this.classList.contains("ourleaders_owner")) {
+          this.style.transform = "translateY(-5px) rotateX(0) rotateY(0)";
+        } else {
+          this.style.transform = "translateY(0) rotateX(0) rotateY(0)";
+        }
+        setTimeout(() => {
+          this.style.transition = "transform 0.4s ease, box-shadow 0.4s ease";
+        }, 100);
+      });
+
+      item.addEventListener("mouseenter", function () {
+        this.style.transition = "transform 0.1s ease, box-shadow 0.4s ease";
+      });
+    });
+  });
   const carousel = document.querySelector(".clients_logo-carousel");
   const wrapper = document.querySelector(".clients_logo-wrapper");
   const allItems = document.querySelectorAll(".clients_logo-item");
