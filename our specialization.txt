@@ -1,0 +1,39 @@
+ <div class="aboutus_specialization">
+            <h4 class="aboutus_specialization-heading">Our Specialization</h4>
+            <div class="aboutus_specialization-grid">
+              <div class="aboutus_specialization-item">
+                <span class="aboutus_specialization-number">01</span>
+                <p class="aboutus_specialization-text">Stationary Essentials</p>
+              </div>
+              <div class="aboutus_specialization-item">
+                <span class="aboutus_specialization-number">02</span>
+                <p class="aboutus_specialization-text">Car Wrapping</p>
+              </div>
+              <div class="aboutus_specialization-item">
+                <span class="aboutus_specialization-number">03</span>
+                <p class="aboutus_specialization-text">
+                  Printing on doors, walls, and more
+                </p>
+              </div>
+              <div class="aboutus_specialization-item">
+                <span class="aboutus_specialization-number">04</span>
+                <p class="aboutus_specialization-text">UV DTF</p>
+              </div>
+              <div class="aboutus_specialization-item">
+                <span class="aboutus_specialization-number">05</span>
+                <p class="aboutus_specialization-text">Billboards</p>
+              </div>
+              <div class="aboutus_specialization-item">
+                <span class="aboutus_specialization-number">06</span>
+                <p class="aboutus_specialization-text">Vinal Printing</p>
+              </div>
+              <div class="aboutus_specialization-item">
+                <span class="aboutus_specialization-number">07</span>
+                <p class="aboutus_specialization-text">Laser Cutting</p>
+              </div>
+              <div class="aboutus_specialization-item">
+                <span class="aboutus_specialization-number">08</span>
+                <p class="aboutus_specialization-text">Router Cutting</p>
+              </div>
+            </div>
+          </div>

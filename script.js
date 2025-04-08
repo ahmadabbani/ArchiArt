@@ -135,6 +135,34 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Select all service items
+  const serviceItems = document.querySelectorAll(".services_item");
+
+  // Define descriptions for each service
+  const descriptions = {
+    "01": "Posters, flyers, business cards, custom notebooks, mugs...",
+    "02": "Bulk copying, Color copies",
+    "03": "Logos, full marketing materials",
+    "04": "Billboards, wall murals, car wraps, Signs, cold neon, flex ...",
+    "05": "WOOD, PLEXI, ALOUCOBOND, ALUMINIUM ...",
+  };
+
+  // Add event listeners to each service item
+  serviceItems.forEach((item) => {
+    const titleElement = item.querySelector(".services_title");
+    const numberElement = item.querySelector(".services_number");
+    const originalHTML = titleElement.innerHTML;
+    const serviceNumber = numberElement.textContent;
+
+    item.addEventListener("mouseenter", () => {
+      titleElement.innerHTML = descriptions[serviceNumber];
+    });
+
+    item.addEventListener("mouseleave", () => {
+      titleElement.innerHTML = originalHTML;
+    });
+  });
+
   const carousel = document.querySelector(".clients_logo-carousel");
   const wrapper = document.querySelector(".clients_logo-wrapper");
   const allItems = document.querySelectorAll(".clients_logo-item");
