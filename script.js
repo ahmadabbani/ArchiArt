@@ -1,4 +1,47 @@
 document.addEventListener("DOMContentLoaded", function () {
+  AOS.init({
+    // Global settings
+    startEvent: "DOMContentLoaded",
+    offset: 120, // Offset (in px) from the original trigger point
+    easing: "ease",
+    once: false, // Whether animation should happen only once
+    mirror: false,
+  });
+  /*function updateAnimations() {
+    const mobileBreakpoint = 768; // Set your mobile breakpoint
+    const isMobile = window.innerWidth < mobileBreakpoint;
+
+    // Find all elements with the disable-mobile attribute
+    document
+      .querySelectorAll('[data-aos-disable-mobile="true"]')
+      .forEach((element) => {
+        if (isMobile) {
+          // Store the original animation type if we haven't already
+          if (!element.getAttribute("data-aos-original")) {
+            element.setAttribute(
+              "data-aos-original",
+              element.getAttribute("data-aos")
+            );
+          }
+          // Remove the animation
+          element.setAttribute("data-aos", "");
+        } else {
+          // Restore the original animation type if it exists
+          const originalAnim = element.getAttribute("data-aos-original");
+          if (originalAnim) {
+            element.setAttribute("data-aos", originalAnim);
+          }
+        }
+      });
+
+    // Refresh AOS to apply changes
+    AOS.refresh();
+  }
+
+  // Run on load and resize
+  window.addEventListener("load", updateAnimations);
+  window.addEventListener("resize", updateAnimations); */
+
   // Variables
   const header = document.querySelector(".header_container");
   const mobileToggle = document.querySelector(".header_mobile-toggle");

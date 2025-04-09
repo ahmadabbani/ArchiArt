@@ -17,6 +17,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="script.js" defer></script>
   </head>
   <body>
@@ -48,7 +50,7 @@
     <section id="hero" class="hero_section">
       <div class="hero_container">
         <div class="hero_left">
-          <div class="hero_top-content">
+          <div class="hero_top-content" data-aos="fade-right">
             <div class="hero_heading-box">
               <h1 class="hero_heading">ArchiArt Signs & Digital Printing</h1>
               <p class="hero_subheading">
@@ -71,7 +73,11 @@
             </div>
           </div>
           <div class="hero_bottom-content">
-            <div class="hero_widget hero_widget-1">
+            <div
+              class="hero_widget hero_widget-1"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
               <div class="hero_widget-content">
                 <span class="material-symbols-outlined hero_widget-icon">
                   print
@@ -82,7 +88,11 @@
                 </p>
               </div>
             </div>
-            <div class="hero_widget hero_widget-2">
+            <div
+              class="hero_widget hero_widget-2"
+              data-aos="fade-up"
+              data-aos-delay="400"
+            >
               <div class="hero_widget-content">
                 <span class="material-symbols-outlined hero_widget-icon">
                   palette
@@ -95,7 +105,7 @@
             </div>
           </div>
         </div>
-        <div class="hero_right">
+        <div class="hero_right" data-aos="fade-left" data-aos-delay="300">
           <div class="hero_main-image">
             <div class="hero_right_buttons">
               <button>
@@ -118,30 +128,41 @@
       <!-- Top container with company intro and image mosaic -->
       <div class="aboutus_top-container">
         <div class="aboutus_intro">
-          <h3 class="aboutus_sub-heading">OUR BIG IDEA</h3>
-          <p class="aboutus_description">
-            At ArchiArt, we’re all about bringing your ideas to life with
-            precision, creativity, and innovation. Whether it’s small-scale
-            prints like custom notebooks and mugs, or large-scale projects like
-            billboards, wall murals, signs and car wraps, we handle it all.
-          </p>
+          <div data-aos="fade-right">
+            <h3 class="aboutus_sub-heading">OUR BIG IDEA</h3>
+            <p class="aboutus_description">
+              At ArchiArt, we're all about bringing your ideas to life with
+              precision, creativity, and innovation. Whether it's small-scale
+              prints like custom notebooks and mugs, or large-scale projects
+              like billboards, wall murals, signs and car wraps, we handle it
+              all.
+            </p>
+          </div>
           <!-- Add this after the aboutus_description paragraph -->
           <div class="aboutus_specialization">
-            <div class="aboutus_mission">
+            <div
+              class="aboutus_mission"
+              data-aos="fade-right"
+              data-aos-delay="200"
+            >
               <h4 class="aboutus_specialization-heading">OUR MISSION</h4>
               <p>
                 Our mission is to offer top quality printing, design, and
-                cutting solutions that turn your vision into reality. But we’re
+                cutting solutions that turn your vision into reality. But we're
                 not stopping there.
               </p>
             </div>
-            <div class="aboutus_vision">
+            <div
+              class="aboutus_vision"
+              data-aos="fade-right"
+              data-aos-delay="400"
+            >
               <h4 class="aboutus_specialization-heading">OUR VISION</h4>
               <p>
                 Our vision is to become the go-to destination for every creative
                 need, whether you're looking to transform a space, promote your
                 brand, or c reate something unique. From scratch designs to
-                laser and router cutting, we’re here to make sure your project
+                laser and router cutting, we're here to make sure your project
                 stands out with excellence and lasting impact
               </p>
             </div>
@@ -149,9 +170,18 @@
         </div>
 
         <div class="aboutus_mosaic">
-          <div class="aboutus_mosaic-item aboutus_mosaic-1"></div>
-          <div class="aboutus_mosaic-item aboutus_mosaic-2"></div>
-          <div class="aboutus_mosaic-item aboutus_mosaic-3"></div>
+          <div
+            class="aboutus_mosaic-item aboutus_mosaic-1"
+            data-aos="fade-down"
+          ></div>
+          <div
+            class="aboutus_mosaic-item aboutus_mosaic-2"
+            data-aos="fade-up"
+          ></div>
+          <div
+            class="aboutus_mosaic-item aboutus_mosaic-3"
+            data-aos="fade-left"
+          ></div>
         </div>
       </div>
 
@@ -161,7 +191,11 @@
 
         <div class="aboutus_why-container">
           <div class="aboutus_features">
-            <div class="aboutus_feature-item">
+            <div
+              class="aboutus_feature-item"
+              data-aos="fade-right"
+              data-aos-delay="0"
+            >
               <span class="aboutus_feature-icon material-symbols-outlined"
                 >verified</span
               >
@@ -172,7 +206,11 @@
                 </p>
               </div>
             </div>
-            <div class="aboutus_feature-item">
+            <div
+              class="aboutus_feature-item"
+              data-aos="fade-right"
+              data-aos-delay="150"
+            >
               <span class="aboutus_feature-icon material-symbols-outlined"
                 >schedule</span
               >
@@ -184,7 +222,11 @@
               </div>
             </div>
 
-            <div class="aboutus_feature-item">
+            <div
+              class="aboutus_feature-item"
+              data-aos="fade-right"
+              data-aos-delay="300"
+            >
               <span class="aboutus_feature-icon material-symbols-outlined"
                 >eco</span
               >
@@ -196,7 +238,11 @@
               </div>
             </div>
 
-            <div class="aboutus_feature-item">
+            <div
+              class="aboutus_feature-item"
+              data-aos="fade-right"
+              data-aos-delay="450"
+            >
               <span class="aboutus_feature-icon material-symbols-outlined"
                 >support_agent</span
               >
@@ -210,28 +256,40 @@
           </div>
 
           <div class="aboutus_stats">
-            <div class="aboutus_stat-item">
+            <div class="aboutus_stat-item" data-aos="zoom-in">
               <span class="aboutus_stat-number" data-target="1000"
                 >0<span class="aboutus_stat-plus">+</span></span
               >
               <p class="aboutus_stat-label">Happy Clients</p>
             </div>
 
-            <div class="aboutus_stat-item">
+            <div
+              class="aboutus_stat-item"
+              data-aos="zoom-in"
+              data-aos-delay="100"
+            >
               <span class="aboutus_stat-number" data-target="1500"
                 >0<span class="aboutus_stat-plus">+</span></span
               >
               <p class="aboutus_stat-label">Projects Completed</p>
             </div>
 
-            <div class="aboutus_stat-item">
+            <div
+              class="aboutus_stat-item"
+              data-aos="zoom-in"
+              data-aos-delay="200"
+            >
               <span class="aboutus_stat-number" data-target="5"
                 >0<span class="aboutus_stat-plus">+</span></span
               >
               <p class="aboutus_stat-label">Years Experience</p>
             </div>
 
-            <div class="aboutus_stat-item">
+            <div
+              class="aboutus_stat-item"
+              data-aos="zoom-in"
+              data-aos-delay="300"
+            >
               <span class="aboutus_stat-number" data-target="98"
                 >0<span class="aboutus_stat-plus">%</span></span
               >
@@ -246,7 +304,7 @@
         <h2 class="services_heading">SERVICES WE OFFER</h2>
 
         <div class="services_grid">
-          <div class="services_item">
+          <div class="services_item" data-aos="zoom-in" data-aos-delay="0">
             <span class="services_number">01</span>
             <h3 class="services_title">
               DIGITAL PRINTING
@@ -255,7 +313,7 @@
             <div class="services_overlay"></div>
           </div>
 
-          <div class="services_item">
+          <div class="services_item" data-aos="zoom-in" data-aos-delay="100">
             <span class="services_number">02</span>
             <h3 class="services_title">
               COPY SERVICES
@@ -264,7 +322,7 @@
             <div class="services_overlay"></div>
           </div>
 
-          <div class="services_item">
+          <div class="services_item" data-aos="zoom-in" data-aos-delay="200">
             <span class="services_number">03</span>
             <h3 class="services_title">
               GRAPHIC DESIGN
@@ -273,7 +331,7 @@
             <div class="services_overlay"></div>
           </div>
 
-          <div class="services_item">
+          <div class="services_item" data-aos="zoom-in" data-aos-delay="300">
             <span class="services_number">04</span>
             <h3 class="services_title">
               LARGE-SCALE PROJECTS
@@ -282,7 +340,7 @@
             <div class="services_overlay"></div>
           </div>
 
-          <div class="services_item">
+          <div class="services_item" data-aos="zoom-in" data-aos-delay="400">
             <span class="services_number">05</span>
             <h3 class="services_title">
               CUTTING SOLUTIONS
@@ -294,7 +352,7 @@
       </div>
     </section>
     <section id="cta" class="cta_section">
-      <div class="cta_container">
+      <div class="cta_container" data-aos="fade-right">
         <h2 class="cta_heading">Ready to Elevate Your Brand?</h2>
         <p class="cta_subheading">
           Contact us today for a free consultation and quote.
@@ -303,10 +361,6 @@
           <a href="#contact" class="cta_button"
             >REQUEST A QUOTE <span> <i class="fas fa-file-alt"></i> </span
           ></a>
-          <!--<a href="#contact" class="cta_button">
-            Talk With Us
-            <span><i class="fab fa-whatsapp"></i></span>
-          </a> --->
         </div>
       </div>
     </section>
@@ -316,10 +370,10 @@
       <div class="ourmachines_container">
         <!-- Machine 1 -->
         <div class="ourmachines_item">
-          <div class="ourmachines_content left">
+          <div class="ourmachines_content left" data-aos="fade-right">
             <h3 class="ourmachines_title">ECO SOLVENT OUTDOOR</h3>
           </div>
-          <div class="ourmachines_images right">
+          <div class="ourmachines_images right" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m1.png"
@@ -332,10 +386,10 @@
 
         <!-- Machine 2 -->
         <div class="ourmachines_item reverse">
-          <div class="ourmachines_content right">
+          <div class="ourmachines_content right" data-aos="fade-right">
             <h3 class="ourmachines_title">ECO SOLVENT INDOOR</h3>
           </div>
-          <div class="ourmachines_images left">
+          <div class="ourmachines_images left" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m2.png"
@@ -348,10 +402,10 @@
 
         <!-- Machine 3 -->
         <div class="ourmachines_item">
-          <div class="ourmachines_content left">
+          <div class="ourmachines_content left" data-aos="fade-right">
             <h3 class="ourmachines_title">UV DTF</h3>
           </div>
-          <div class="ourmachines_images right">
+          <div class="ourmachines_images right" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m3.png"
@@ -364,10 +418,10 @@
 
         <!-- Machine 4 -->
         <div class="ourmachines_item reverse">
-          <div class="ourmachines_content right">
+          <div class="ourmachines_content right" data-aos="fade-right">
             <h3 class="ourmachines_title">UV STICKERS ONLY ONE IN LEBANON</h3>
           </div>
-          <div class="ourmachines_images left">
+          <div class="ourmachines_images left" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m4.png"
@@ -380,10 +434,10 @@
 
         <!-- Machine 5 -->
         <div class="ourmachines_item">
-          <div class="ourmachines_content left">
+          <div class="ourmachines_content left" data-aos="fade-right">
             <h3 class="ourmachines_title">SKYUT VYNIL PLOTTER</h3>
           </div>
-          <div class="ourmachines_images right">
+          <div class="ourmachines_images right" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m5.png"
@@ -396,10 +450,10 @@
 
         <!-- Machine 6 -->
         <div class="ourmachines_item reverse">
-          <div class="ourmachines_content right">
+          <div class="ourmachines_content right" data-aos="fade-right">
             <h3 class="ourmachines_title">CREASING MACHINE</h3>
           </div>
-          <div class="ourmachines_images left">
+          <div class="ourmachines_images left" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m6.png"
@@ -412,10 +466,10 @@
 
         <!-- Machine 7 -->
         <div class="ourmachines_item">
-          <div class="ourmachines_content left">
+          <div class="ourmachines_content left" data-aos="fade-right">
             <h3 class="ourmachines_title">LASER CUTTING MACHINE</h3>
           </div>
-          <div class="ourmachines_images right">
+          <div class="ourmachines_images right" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m7.png"
@@ -428,12 +482,12 @@
 
         <!-- Machine 8 -->
         <div class="ourmachines_item reverse">
-          <div class="ourmachines_content right">
+          <div class="ourmachines_content right" data-aos="fade-right">
             <h3 class="ourmachines_title">
               CNC ROUTER THE BIGGEST IN THE MIDDLE EAST
             </h3>
           </div>
-          <div class="ourmachines_images left">
+          <div class="ourmachines_images left" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m8.png"
@@ -446,10 +500,10 @@
 
         <!-- Machine 9 -->
         <div class="ourmachines_item">
-          <div class="ourmachines_content left">
+          <div class="ourmachines_content left" data-aos="fade-right">
             <h3 class="ourmachines_title">LAMINATION TABLE</h3>
           </div>
-          <div class="ourmachines_images right">
+          <div class="ourmachines_images right" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m9.png"
@@ -462,10 +516,10 @@
 
         <!-- Machine 10 -->
         <div class="ourmachines_item reverse">
-          <div class="ourmachines_content right">
+          <div class="ourmachines_content right" data-aos="fade-right">
             <h3 class="ourmachines_title">LAMINATION ROLL</h3>
           </div>
-          <div class="ourmachines_images left">
+          <div class="ourmachines_images left" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m10.png"
@@ -478,10 +532,10 @@
 
         <!-- Machine 11 -->
         <div class="ourmachines_item">
-          <div class="ourmachines_content left">
+          <div class="ourmachines_content left" data-aos="fade-right">
             <h3 class="ourmachines_title">SKYCUTTING STICKERS</h3>
           </div>
-          <div class="ourmachines_images right">
+          <div class="ourmachines_images right" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m11.png"
@@ -494,10 +548,10 @@
 
         <!-- Machine 12 -->
         <div class="ourmachines_item reverse">
-          <div class="ourmachines_content right">
+          <div class="ourmachines_content right" data-aos="fade-right">
             <h3 class="ourmachines_title">PLOTTER PRINTING MACHINE</h3>
           </div>
-          <div class="ourmachines_images left">
+          <div class="ourmachines_images left" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m12.png"
@@ -510,10 +564,10 @@
 
         <!-- Machine 13 -->
         <div class="ourmachines_item">
-          <div class="ourmachines_content left">
+          <div class="ourmachines_content left" data-aos="fade-right">
             <h3 class="ourmachines_title">PRODUCTION PRINTING MACHINE</h3>
           </div>
-          <div class="ourmachines_images right">
+          <div class="ourmachines_images right" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m14.png"
@@ -525,10 +579,10 @@
         </div>
         <!-- Machine 14 -->
         <div class="ourmachines_item reverse">
-          <div class="ourmachines_content right">
+          <div class="ourmachines_content right" data-aos="fade-right">
             <h3 class="ourmachines_title">GRAPHIC DESIGNER TEAM</h3>
           </div>
-          <div class="ourmachines_images left">
+          <div class="ourmachines_images left" data-aos="fade-left">
             <div class="ourmachines_img-wrapper primary">
               <img
                 src="images/m15.png"
@@ -544,7 +598,7 @@
       <h2 class="ourleaders_main-title">Our Leaders</h2>
 
       <div class="ourleaders_container">
-        <div class="ourleaders_item">
+        <div class="ourleaders_item" data-aos="zoom-in" data-aos-delay="0">
           <div class="ourleaders_image-wrapper">
             <div class="ourleaders_image-orbit">
               <div class="ourleaders_orbit-dot dot1"></div>
@@ -565,7 +619,11 @@
             <div class="ourleaders_separator"></div>
           </div>
         </div>
-        <div class="ourleaders_item ourleaders_owner">
+        <div
+          class="ourleaders_item ourleaders_owner"
+          data-aos="zoom-in"
+          data-aos-delay="100"
+        >
           <div class="ourleaders_image-wrapper">
             <div class="ourleaders_image-orbit">
               <div class="ourleaders_orbit-dot dot1"></div>
@@ -590,7 +648,7 @@
             <div class="ourleaders_separator"></div>
           </div>
         </div>
-        <div class="ourleaders_item">
+        <div class="ourleaders_item" data-aos="zoom-in" data-aos-delay="200">
           <div class="ourleaders_image-wrapper">
             <div class="ourleaders_image-orbit">
               <div class="ourleaders_orbit-dot dot1"></div>
@@ -613,11 +671,12 @@
         </div>
       </div>
     </section>
+
     <section id="faq" class="faq_section">
       <h2 class="faq_main-title">Frequently Asked Questions</h2>
       <div class="faq_container">
         <div class="faq_accordion">
-          <div class="faq_item">
+          <div class="faq_item" data-aos="zoom-in" data-aos-delay="0">
             <div class="faq_question-container">
               <div class="faq_number">01</div>
               <div class="faq_question">
@@ -637,7 +696,7 @@
             </div>
           </div>
 
-          <div class="faq_item">
+          <div class="faq_item" data-aos="zoom-in" data-aos-delay="100">
             <div class="faq_question-container">
               <div class="faq_number">02</div>
               <div class="faq_question">
@@ -657,7 +716,7 @@
             </div>
           </div>
 
-          <div class="faq_item">
+          <div class="faq_item" data-aos="zoom-in" data-aos-delay="200">
             <div class="faq_question-container">
               <div class="faq_number">03</div>
               <div class="faq_question">
@@ -677,7 +736,7 @@
             </div>
           </div>
 
-          <div class="faq_item">
+          <div class="faq_item" data-aos="zoom-in" data-aos-delay="300">
             <div class="faq_question-container">
               <div class="faq_number">04</div>
               <div class="faq_question">
@@ -698,7 +757,7 @@
             </div>
           </div>
 
-          <div class="faq_item">
+          <div class="faq_item" data-aos="zoom-in" data-aos-delay="400">
             <div class="faq_question-container">
               <div class="faq_number">05</div>
               <div class="faq_question">
@@ -721,10 +780,11 @@
         </div>
       </div>
     </section>
+
     <section id="contact" class="contactus_section">
       <h2 class="contactus_main-title">Contact Us</h2>
       <div class="contactus_container">
-        <div class="contactus_form-container">
+        <div class="contactus_form-container" data-aos="fade-right">
           <form class="contactus_form">
             <div class="contactus_form-group">
               <input
@@ -766,7 +826,7 @@
             </button>
           </form>
         </div>
-        <div class="contactus_info-container">
+        <div class="contactus_info-container" data-aos="fade-left">
           <div class="contactus_info-widget">
             <div class="contactus_info-item">
               <div class="contactus_icon">
@@ -821,7 +881,7 @@
     </section>
     <section id="clients" class="clients_section">
       <h2 class="clients_main-title">Our Trusted Clients</h2>
-      <div class="clients_container">
+      <div class="clients_container" data-aos="fade-up">
         <div class="clients_logo-wrapper">
           <div class="clients_logo-carousel">
             <div class="clients_logo-item">
@@ -908,55 +968,83 @@
     <footer class="footer_section">
       <div class="footer_container">
         <div class="footer_column footer_brand-column">
-          <div class="footer_logo">
+          <div class="footer_logo" data-aos="fade-right">
             <a href="#hero">
               <img src="images/logo.jpg" alt="ArchiArt Logo" />
             </a>
           </div>
-          <p class="footer_description">
+          <p
+            class="footer_description"
+            data-aos="fade-right"
+            data-aos-delay="200"
+          >
             ArchiArt delivers premium quality prints for businesses and
             individuals. From billboards to wall murals, we bring your vision to
             life with cutting-edge technology and exceptional service.
           </p>
-          <a href="#contact" class="footer_cta-button">
+          <a
+            href="#contact"
+            class="footer_cta-button"
+            data-aos="fade-right"
+            data-aos-delay="400"
+          >
             Talk With Us
             <span class="footer_cta-icon"><i class="fab fa-whatsapp"></i></span>
           </a>
         </div>
+
         <div class="footer_column footer_links-column">
           <h3 class="footer_column-title">Quick Links</h3>
           <ul class="footer_links-list">
-            <li><a href="#hero" class="footer_link">Home</a></li>
-            <li><a href="#about" class="footer_link">About Us</a></li>
-            <li><a href="#services" class="footer_link">Services</a></li>
-            <li><a href="#portfolio" class="footer_link">Portfolio</a></li>
-            <li><a href="#machines" class="footer_link">Our Machines</a></li>
-            <li><a href="#leaders" class="footer_link">Our Leaders</a></li>
-            <li><a href="#faq" class="footer_link">FAQs</a></li>
-            <li><a href="#contact" class="footer_link">Contact</a></li>
+            <li data-aos="zoom-in" data-aos-delay="100">
+              <a href="#hero" class="footer_link">Home</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="200">
+              <a href="#about" class="footer_link">About Us</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="300">
+              <a href="#services" class="footer_link">Services</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="400">
+              <a href="#portfolio" class="footer_link">Portfolio</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="500">
+              <a href="#machines" class="footer_link">Our Machines</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="600">
+              <a href="#leaders" class="footer_link">Our Leaders</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="700">
+              <a href="#faq" class="footer_link">FAQs</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="800">
+              <a href="#contact" class="footer_link">Contact</a>
+            </li>
           </ul>
         </div>
-        <div class="footer_column footer_social-column">
+
+        <div class="footer_column footer_social-column" data-aos="fade-left">
           <h3 class="footer_column-title">Connect With Us</h3>
           <div class="footer_social-container">
-            <a href="#" class="footer_social-link">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="footer_social-link">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a href="#" class="footer_social-link">
-              <i class="fab fa-instagram"></i>
-            </a>
-            <a href="#" class="footer_social-link">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a href="#" class="footer_social-link">
-              <i class="fab fa-pinterest-p"></i>
-            </a>
+            <a href="#" class="footer_social-link"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="#" class="footer_social-link"
+              ><i class="fab fa-twitter"></i
+            ></a>
+            <a href="#" class="footer_social-link"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="#" class="footer_social-link"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <a href="#" class="footer_social-link"
+              ><i class="fab fa-pinterest-p"></i
+            ></a>
           </div>
         </div>
       </div>
+
       <div class="footer_bottom">
         <div class="footer_copyright">
           <p>&copy; 2025 ArchiArt. All Rights Reserved.</p>
