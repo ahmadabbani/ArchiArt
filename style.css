@@ -14,10 +14,9 @@ body {
 section {
     height: 100vh;
     padding-top: 80px;
-    border: 2px solid rgb(255, 174, 0);
 }
 
-@media screen and (max-width: 992px) {
+/*@media screen and (max-width: 992px) {
     section {
         padding-top: 60px !important;
     }
@@ -25,7 +24,7 @@ section {
     .hero_section {
         padding-top: 80px !important;
     }
-}
+}*/
 
 h1,
 h2 {
@@ -414,6 +413,11 @@ h2 {
 
 /* Responsive Design */
 @media screen and (max-width: 992px) {
+    .hero_section {
+        min-height: auto;
+        max-height: 100vh;
+    }
+
     .hero_container {
         flex-direction: column;
     }
@@ -494,7 +498,6 @@ h2 {
     }
 
     .hero_right_buttons button {
-
         gap: 0px;
     }
 }
