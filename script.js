@@ -144,10 +144,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Select all service items
   const serviceItems = document.querySelectorAll(".services_item");
 
-  // Define descriptions for each service
   const descriptions = {
     "01": "Posters, flyers, business cards, custom notebooks, mugs...",
     "02": "Bulk copying, Color copies",
@@ -156,41 +154,24 @@ document.addEventListener("DOMContentLoaded", function () {
     "05": "WOOD, PLEXI, ALOUCOBOND, ALUMINIUM ...",
   };
 
-  // Add event listeners to each service item
   serviceItems.forEach((item) => {
     const titleElement = item.querySelector(".services_title");
     const numberElement = item.querySelector(".services_number");
-    const originalHTML = titleElement.innerHTML;
     const serviceNumber = numberElement.textContent;
-    let toggled = false;
+    const originalHTML = titleElement.innerHTML;
 
-    item.addEventListener("mouseenter", () => {
+    if (window.innerWidth <= 992) {
+      item.classList.add("active");
       titleElement.innerHTML = descriptions[serviceNumber];
-    });
+    } else {
+      item.addEventListener("mouseenter", () => {
+        titleElement.innerHTML = descriptions[serviceNumber];
+      });
 
-    item.addEventListener("mouseleave", () => {
-      if (!toggled) {
+      item.addEventListener("mouseleave", () => {
         titleElement.innerHTML = originalHTML;
-      }
-    });
-
-    item.addEventListener("click", () => {
-      if (window.innerWidth <= 992) {
-        serviceItems.forEach((el) => {
-          if (el !== item) {
-            el.classList.remove("active");
-            el.querySelector(".services_title").innerHTML =
-              el.querySelector(".services_number").textContent;
-          }
-        });
-
-        item.classList.toggle("active");
-        const isActive = item.classList.contains("active");
-        titleElement.innerHTML = isActive
-          ? descriptions[serviceNumber]
-          : serviceNumber;
-      }
-    });
+      });
+    }
   });
 
   document.addEventListener("DOMContentLoaded", function () {
