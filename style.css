@@ -8,8 +8,23 @@
 body {
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    overflow-x: hidden;
+    overflow-x: hidden !important;
 }
+
+/* Prevent horizontal overflow */
+body,
+html {
+    overflow-x: hidden !important;
+}
+
+[data-aos] {
+    overflow: hidden !important;
+}
+
+.aos-animate {
+    overflow: hidden !important;
+}
+
 
 /* Add some spacing for content sections to account for fixed header */
 section {
