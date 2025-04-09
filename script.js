@@ -162,13 +162,34 @@ document.addEventListener("DOMContentLoaded", function () {
     const numberElement = item.querySelector(".services_number");
     const originalHTML = titleElement.innerHTML;
     const serviceNumber = numberElement.textContent;
+    let toggled = false;
 
     item.addEventListener("mouseenter", () => {
       titleElement.innerHTML = descriptions[serviceNumber];
     });
 
     item.addEventListener("mouseleave", () => {
-      titleElement.innerHTML = originalHTML;
+      if (!toggled) {
+        titleElement.innerHTML = originalHTML;
+      }
+    });
+
+    item.addEventListener("click", () => {
+      if (window.innerWidth <= 992) {
+        serviceItems.forEach((el) => {
+          if (el !== item) {
+            el.classList.remove("active");
+            el.querySelector(".services_title").innerHTML =
+              el.querySelector(".services_number").textContent;
+          }
+        });
+
+        item.classList.toggle("active");
+        const isActive = item.classList.contains("active");
+        titleElement.innerHTML = isActive
+          ? descriptions[serviceNumber]
+          : serviceNumber;
+      }
     });
   });
 

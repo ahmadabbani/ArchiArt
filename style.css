@@ -17,16 +17,6 @@ section {
     padding-top: 80px;
 }
 
-/*@media screen and (max-width: 992px) {
-    section {
-        padding-top: 60px !important;
-    }
-
-    .hero_section {
-        padding-top: 80px !important;
-    }
-}*/
-
 h1,
 h2 {
     font-weight: 700;
@@ -1028,12 +1018,18 @@ h2 {
     transition: transform 0.4s ease;
 }
 
-.services_item:hover {
+.services_item:hover,
+.services_item.active {
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(254, 0, 0, 0.1);
 }
 
 .services_item:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.services_item.active::before {
     transform: scaleX(1);
     transform-origin: left;
 }
@@ -1050,7 +1046,8 @@ h2 {
     transition: all 0.3s ease;
 }
 
-.services_item:hover .services_number {
+.services_item:hover .services_number,
+.services_item.active .services_number {
     color: #fff;
     padding: 4px 8px;
     border-radius: 12px;
@@ -1079,7 +1076,8 @@ h2 {
     color: #fe0000;
 }
 
-.services_item:hover .services_title {
+.services_item:hover .services_title,
+.services_item.active .services_title {
     transform: translateX(8px);
     color: #fff;
     padding: 8px;
@@ -1125,7 +1123,8 @@ h2 {
     background-image: url('images/s5.jpg');
 }
 
-.services_item:hover .services_overlay {
+.services_item:hover .services_overlay,
+.services_item.active .services_overlay {
     opacity: 0.8;
 }
 
