@@ -481,7 +481,7 @@ h2 {
 
 @media screen and (max-width: 576px) {
     .hero_section {
-        max-height: 80vh;
+        max-height: 85vh;
     }
 
     .hero_subheading {
