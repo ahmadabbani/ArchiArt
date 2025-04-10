@@ -1,0 +1,830 @@
+ <section id="hero" class="hero_section">
+      <div class="hero_container">
+        <div class="hero_left">
+          <div class="hero_top-content">
+            <div class="hero_heading-box">
+              <h1 class="hero_heading">ArchiArt Signs & Digital Printing</h1>
+              <p class="hero_subheading">
+                Providing printing solution and marketing signs to boost your
+                business
+              </p>
+              <a href="#contact" class="hero_cta-button">Get a Quote</a>
+              <div class="hero_right_buttons mobile_buttons">
+                <button>
+                  LEARN MORE
+                  <span class="material-symbols-outlined">
+                    arrow_downward
+                  </span>
+                </button>
+                <button>
+                  ENQUIRE NOW
+                  <span class="material-symbols-outlined"> chat </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="hero_bottom-content">
+            <div class="hero_widget hero_widget-1">
+              <div class="hero_widget-content">
+                <span class="material-symbols-outlined hero_widget-icon">
+                  print
+                </span>
+
+                <p class="hero_widget-text">
+                  Excellence in Digital Printing and Copy Solutions
+                </p>
+              </div>
+            </div>
+            <div class="hero_widget hero_widget-2">
+              <div class="hero_widget-content">
+                <span class="material-symbols-outlined hero_widget-icon">
+                  palette
+                </span>
+
+                <p class="hero_widget-text">
+                  Excellence in Signs and Aluminium Composite Panel
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero_right">
+          <div class="hero_main-image">
+            <div class="hero_right_buttons">
+              <button>
+                LEARN MORE
+                <span class="material-symbols-outlined"> arrow_downward </span>
+              </button>
+              <button>
+                ENQUIRE NOW
+                <span class="material-symbols-outlined"> chat </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+ <section id="about" class="aboutus_section">
+      <h2 class="aboutus_main-title">About ArchiArt</h2>
+
+      <!-- Top container with company intro and image mosaic -->
+      <div class="aboutus_top-container">
+        <div class="aboutus_intro">
+          <h3 class="aboutus_sub-heading">OUR BIG IDEA</h3>
+          <p class="aboutus_description">
+            At ArchiArt, we’re all about bringing your ideas to life with
+            precision, creativity, and innovation. Whether it’s small-scale
+            prints like custom notebooks and mugs, or large-scale projects like
+            billboards, wall murals, signs and car wraps, we handle it all.
+          </p>
+          <!-- Add this after the aboutus_description paragraph -->
+          <div class="aboutus_specialization">
+            <div class="aboutus_mission">
+              <h4 class="aboutus_specialization-heading">OUR MISSION</h4>
+              <p>
+                Our mission is to offer top quality printing, design, and
+                cutting solutions that turn your vision into reality. But we’re
+                not stopping there.
+              </p>
+            </div>
+            <div class="aboutus_vision">
+              <h4 class="aboutus_specialization-heading">OUR VISION</h4>
+              <p>
+                Our vision is to become the go-to destination for every creative
+                need, whether you're looking to transform a space, promote your
+                brand, or c reate something unique. From scratch designs to
+                laser and router cutting, we’re here to make sure your project
+                stands out with excellence and lasting impact
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="aboutus_mosaic">
+          <div class="aboutus_mosaic-item aboutus_mosaic-1"></div>
+          <div class="aboutus_mosaic-item aboutus_mosaic-2"></div>
+          <div class="aboutus_mosaic-item aboutus_mosaic-3"></div>
+        </div>
+      </div>
+
+      <!-- Bottom container with why choose us and stats -->
+      <div class="aboutus_bottom-container">
+        <h3 class="aboutus_why-heading">Why Choose Us</h3>
+
+        <div class="aboutus_why-container">
+          <div class="aboutus_features">
+            <div class="aboutus_feature-item">
+              <span class="aboutus_feature-icon material-symbols-outlined"
+                >verified</span
+              >
+              <div class="aboutus_feature-content">
+                <h4 class="aboutus_feature-title">Premium Quality</h4>
+                <p class="aboutus_feature-text">
+                  State-of-the-art equipment and superior materials
+                </p>
+              </div>
+            </div>
+            <div class="aboutus_feature-item">
+              <span class="aboutus_feature-icon material-symbols-outlined"
+                >schedule</span
+              >
+              <div class="aboutus_feature-content">
+                <h4 class="aboutus_feature-title">Fast Turnaround</h4>
+                <p class="aboutus_feature-text">
+                  On-time delivery without compromising quality
+                </p>
+              </div>
+            </div>
+
+            <div class="aboutus_feature-item">
+              <span class="aboutus_feature-icon material-symbols-outlined"
+                >eco</span
+              >
+              <div class="aboutus_feature-content">
+                <h4 class="aboutus_feature-title">Eco-Friendly</h4>
+                <p class="aboutus_feature-text">
+                  Sustainable practices and recyclable materials
+                </p>
+              </div>
+            </div>
+
+            <div class="aboutus_feature-item">
+              <span class="aboutus_feature-icon material-symbols-outlined"
+                >support_agent</span
+              >
+              <div class="aboutus_feature-content">
+                <h4 class="aboutus_feature-title">Dedicated Support</h4>
+                <p class="aboutus_feature-text">
+                  Expert advice and responsive customer service
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="aboutus_stats">
+            <div class="aboutus_stat-item">
+              <span class="aboutus_stat-number" data-target="1000"
+                >0<span class="aboutus_stat-plus">+</span></span
+              >
+              <p class="aboutus_stat-label">Happy Clients</p>
+            </div>
+
+            <div class="aboutus_stat-item">
+              <span class="aboutus_stat-number" data-target="1500"
+                >0<span class="aboutus_stat-plus">+</span></span
+              >
+              <p class="aboutus_stat-label">Projects Completed</p>
+            </div>
+
+            <div class="aboutus_stat-item">
+              <span class="aboutus_stat-number" data-target="5"
+                >0<span class="aboutus_stat-plus">+</span></span
+              >
+              <p class="aboutus_stat-label">Years Experience</p>
+            </div>
+
+            <div class="aboutus_stat-item">
+              <span class="aboutus_stat-number" data-target="98"
+                >0<span class="aboutus_stat-plus">%</span></span
+              >
+              <p class="aboutus_stat-label">Customer Satisfaction</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+ <section id="services" class="services_section">
+      <div class="services_container">
+        <h2 class="services_heading">SERVICES WE OFFER</h2>
+
+        <div class="services_grid">
+          <div class="services_item">
+            <span class="services_number">01</span>
+            <h3 class="services_title">
+              DIGITAL PRINTING
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </h3>
+            <div class="services_overlay"></div>
+          </div>
+
+          <div class="services_item">
+            <span class="services_number">02</span>
+            <h3 class="services_title">
+              COPY SERVICES
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </h3>
+            <div class="services_overlay"></div>
+          </div>
+
+          <div class="services_item">
+            <span class="services_number">03</span>
+            <h3 class="services_title">
+              GRAPHIC DESIGN
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </h3>
+            <div class="services_overlay"></div>
+          </div>
+
+          <div class="services_item">
+            <span class="services_number">04</span>
+            <h3 class="services_title">
+              LARGE-SCALE PROJECTS
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </h3>
+            <div class="services_overlay"></div>
+          </div>
+
+          <div class="services_item">
+            <span class="services_number">05</span>
+            <h3 class="services_title">
+              CUTTING SOLUTIONS
+              <span class="material-symbols-outlined"> chevron_right </span>
+            </h3>
+            <div class="services_overlay"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+ <section id="machines" class="ourmachines_section">
+      <h2 class="ourmachines_main-title">Our Machines</h2>
+
+      <div class="ourmachines_container">
+        <!-- Machine 1 -->
+        <div class="ourmachines_item">
+          <div class="ourmachines_content left">
+            <h3 class="ourmachines_title">ECO SOLVENT OUTDOOR</h3>
+          </div>
+          <div class="ourmachines_images right">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m1.png"
+                alt="ECO SOLVENT OUTDOOR Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 2 -->
+        <div class="ourmachines_item reverse">
+          <div class="ourmachines_content right">
+            <h3 class="ourmachines_title">ECO SOLVENT INDOOR</h3>
+          </div>
+          <div class="ourmachines_images left">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m2.png"
+                alt="ECO SOLVENT INDOOR Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 3 -->
+        <div class="ourmachines_item">
+          <div class="ourmachines_content left">
+            <h3 class="ourmachines_title">UV DTF</h3>
+          </div>
+          <div class="ourmachines_images right">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m3.png"
+                alt="UV DTF Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 4 -->
+        <div class="ourmachines_item reverse">
+          <div class="ourmachines_content right">
+            <h3 class="ourmachines_title">UV STICKERS ONLY ONE IN LEBANON</h3>
+          </div>
+          <div class="ourmachines_images left">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m4.png"
+                alt="UV STICKERS ONLY ONE IN LEBANON Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 5 -->
+        <div class="ourmachines_item">
+          <div class="ourmachines_content left">
+            <h3 class="ourmachines_title">SKYUT VYNIL PLOTTER</h3>
+          </div>
+          <div class="ourmachines_images right">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m5.png"
+                alt="SKYUT VYNIL PLOTTER Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 6 -->
+        <div class="ourmachines_item reverse">
+          <div class="ourmachines_content right">
+            <h3 class="ourmachines_title">CREASING MACHINE</h3>
+          </div>
+          <div class="ourmachines_images left">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m6.png"
+                alt="CREASING MACHINE Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 7 -->
+        <div class="ourmachines_item">
+          <div class="ourmachines_content left">
+            <h3 class="ourmachines_title">LASER CUTTING MACHINE</h3>
+          </div>
+          <div class="ourmachines_images right">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m7.png"
+                alt="LASER CUTTING MACHINE Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 8 -->
+        <div class="ourmachines_item reverse">
+          <div class="ourmachines_content right">
+            <h3 class="ourmachines_title">
+              CNC ROUTER THE BIGGEST IN THE MIDDLE EAST
+            </h3>
+          </div>
+          <div class="ourmachines_images left">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m8.png"
+                alt="CNC ROUTER THE BIGGEST IN THE MIDDLE EAST Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 9 -->
+        <div class="ourmachines_item">
+          <div class="ourmachines_content left">
+            <h3 class="ourmachines_title">LAMINATION TABLE</h3>
+          </div>
+          <div class="ourmachines_images right">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m9.png"
+                alt="LAMINATION TABLE Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 10 -->
+        <div class="ourmachines_item reverse">
+          <div class="ourmachines_content right">
+            <h3 class="ourmachines_title">LAMINATION ROLL</h3>
+          </div>
+          <div class="ourmachines_images left">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m10.png"
+                alt="LAMINATION ROLL Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 11 -->
+        <div class="ourmachines_item">
+          <div class="ourmachines_content left">
+            <h3 class="ourmachines_title">SKYCUTTING STICKERS</h3>
+          </div>
+          <div class="ourmachines_images right">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m11.png"
+                alt="SKYCUTTING STICKERS Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 12 -->
+        <div class="ourmachines_item reverse">
+          <div class="ourmachines_content right">
+            <h3 class="ourmachines_title">PLOTTER PRINTING MACHINE</h3>
+          </div>
+          <div class="ourmachines_images left">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m12.png"
+                alt="PLOTTER PRINTING MACHINE Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Machine 13 -->
+        <div class="ourmachines_item">
+          <div class="ourmachines_content left">
+            <h3 class="ourmachines_title">PRODUCTION PRINTING MACHINE</h3>
+          </div>
+          <div class="ourmachines_images right">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m14.png"
+                alt="PRODUCTION PRINTING MACHINE Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- Machine 14 -->
+        <div class="ourmachines_item reverse">
+          <div class="ourmachines_content right">
+            <h3 class="ourmachines_title">GRAPHIC DESIGNER TEAM</h3>
+          </div>
+          <div class="ourmachines_images left">
+            <div class="ourmachines_img-wrapper primary">
+              <img
+                src="images/m15.png"
+                alt="GRAPHIC DESIGNER TEAM Main View"
+                class="ourmachines_img"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+<section id="leaders" class="ourleaders_section">
+      <h2 class="ourleaders_main-title">Our Leaders</h2>
+
+      <div class="ourleaders_container">
+        <div class="ourleaders_item">
+          <div class="ourleaders_image-wrapper">
+            <div class="ourleaders_image-orbit">
+              <div class="ourleaders_orbit-dot dot1"></div>
+              <div class="ourleaders_orbit-dot dot2"></div>
+              <div class="ourleaders_orbit-dot dot3"></div>
+            </div>
+            <div class="ourleaders_image-inner">
+              <img
+                src="images/leader1.png"
+                alt="Leader 1"
+                class="ourleaders_image"
+              />
+            </div>
+          </div>
+          <div class="ourleaders_content">
+            <h3 class="ourleaders_name">Richard Hjeij</h3>
+            <p class="ourleaders_role">General Manager</p>
+            <div class="ourleaders_separator"></div>
+          </div>
+        </div>
+        <div class="ourleaders_item ourleaders_owner">
+          <div class="ourleaders_image-wrapper">
+            <div class="ourleaders_image-orbit">
+              <div class="ourleaders_orbit-dot dot1"></div>
+              <div class="ourleaders_orbit-dot dot2"></div>
+              <div class="ourleaders_orbit-dot dot3"></div>
+              <div class="ourleaders_orbit-dot dot4"></div>
+            </div>
+            <div class="ourleaders_image-inner">
+              <img
+                src="images/leader2.png"
+                alt="Leader 2 - Owner"
+                class="ourleaders_image"
+              />
+            </div>
+            <div class="ourleaders_owner-badge">
+              <span>Owner</span>
+            </div>
+          </div>
+          <div class="ourleaders_content">
+            <h3 class="ourleaders_name">Stephanie Bader</h3>
+            <p class="ourleaders_role">Owner</p>
+            <div class="ourleaders_separator"></div>
+          </div>
+        </div>
+        <div class="ourleaders_item">
+          <div class="ourleaders_image-wrapper">
+            <div class="ourleaders_image-orbit">
+              <div class="ourleaders_orbit-dot dot1"></div>
+              <div class="ourleaders_orbit-dot dot2"></div>
+              <div class="ourleaders_orbit-dot dot3"></div>
+            </div>
+            <div class="ourleaders_image-inner">
+              <img
+                src="images/leader3.png"
+                alt="Leader 3"
+                class="ourleaders_image"
+              />
+            </div>
+          </div>
+          <div class="ourleaders_content">
+            <h3 class="ourleaders_name">Dalia Bader</h3>
+            <p class="ourleaders_role">Sales Manager</p>
+            <div class="ourleaders_separator"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+ <section id="faq" class="faq_section">
+      <h2 class="faq_main-title">Frequently Asked Questions</h2>
+      <div class="faq_container">
+        <div class="faq_accordion">
+          <div class="faq_item">
+            <div class="faq_question-container">
+              <div class="faq_number">01</div>
+              <div class="faq_question">
+                What printing materials do you offer for billboards?
+              </div>
+              <div class="faq_arrow"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="faq_answer">
+              <p>
+                At ArchiArt, we offer premium quality vinyl, mesh, and
+                eco-friendly materials for billboard printing. Our vinyl options
+                include high-durability UV-resistant materials perfect for
+                outdoor advertisements, while our mesh options allow for better
+                airflow in windy locations. We also provide recyclable options
+                for environmentally conscious businesses.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq_item">
+            <div class="faq_question-container">
+              <div class="faq_number">02</div>
+              <div class="faq_question">
+                What is the turnaround time for wall murals?
+              </div>
+              <div class="faq_arrow"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="faq_answer">
+              <p>
+                Our standard turnaround time for wall murals is 5-7 business
+                days from final design approval to completion. For rush orders,
+                we offer expedited services that can deliver in as little as 48
+                hours depending on project complexity and size. Custom
+                installation timelines may vary based on location and mural
+                dimensions.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq_item">
+            <div class="faq_question-container">
+              <div class="faq_number">03</div>
+              <div class="faq_question">
+                How long do your vinyl prints typically last outdoors?
+              </div>
+              <div class="faq_arrow"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="faq_answer">
+              <p>
+                Our premium outdoor vinyl prints are designed to last 3-5 years
+                with full color vibrancy when properly installed. This includes
+                resistance to UV fading, water damage, and temperature
+                fluctuations. For extended durability, we offer special
+                lamination options that can increase lifespan to 7+ years even
+                in challenging weather conditions.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq_item">
+            <div class="faq_question-container">
+              <div class="faq_number">04</div>
+              <div class="faq_question">
+                Do you provide installation services for large format prints?
+              </div>
+              <div class="faq_arrow"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="faq_answer">
+              <p>
+                Yes, ArchiArt offers professional installation services for all
+                large format prints including billboards, wall murals, and
+                architectural wraps. Our certified installation team operates
+                nationwide and ensures perfect application with attention to
+                surface preparation, precision alignment, and bubble-free
+                results. Installation services can be added to any printing
+                order.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq_item">
+            <div class="faq_question-container">
+              <div class="faq_number">05</div>
+              <div class="faq_question">
+                What file formats do you accept for printing projects?
+              </div>
+              <div class="faq_arrow"><i class="fas fa-chevron-down"></i></div>
+            </div>
+            <div class="faq_answer">
+              <p>
+                We accept a wide range of file formats including AI, PDF, PSD,
+                TIFF, JPG, and EPS. For optimal print quality, we recommend
+                vector files (AI, PDF, EPS) for logos and graphics, and
+                high-resolution (300+ DPI) raster files for photographic
+                elements. Our design team can work with your existing files or
+                help convert them to print-ready formats at no additional
+                charge.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+<section id="contact" class="contactus_section">
+      <h2 class="contactus_main-title">Contact Us</h2>
+      <div class="contactus_container">
+        <div class="contactus_form-container">
+          <form class="contactus_form">
+            <div class="contactus_form-group">
+              <input
+                type="text"
+                id="name"
+                class="contactus_input"
+                placeholder="Your Name"
+                required
+              />
+            </div>
+            <div class="contactus_form-group">
+              <input
+                type="email"
+                id="email"
+                class="contactus_input"
+                placeholder="Your Email"
+                required
+              />
+            </div>
+            <div class="contactus_form-group">
+              <input
+                type="text"
+                id="subject"
+                class="contactus_input"
+                placeholder="Subject"
+                required
+              />
+            </div>
+            <div class="contactus_form-group">
+              <textarea
+                id="message"
+                class="contactus_textarea"
+                placeholder="Your Message"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="contactus_submit-btn">
+              Send Message <span> <i class="fas fa-paper-plane"></i> </span>
+            </button>
+          </form>
+        </div>
+        <div class="contactus_info-container">
+          <div class="contactus_info-widget">
+            <div class="contactus_info-item">
+              <div class="contactus_icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contactus_info-content">
+                <h3 class="contactus_info-title">Address</h3>
+                <p class="contactus_info-text">Jdeideh - Azzam Center</p>
+              </div>
+            </div>
+            <div class="contactus_info-item">
+              <div class="contactus_icon">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <div class="contactus_info-content">
+                <h3 class="contactus_info-title">Phone</h3>
+                <p class="contactus_info-text">81 882 662 | 01 881 885</p>
+              </div>
+            </div>
+            <div class="contactus_info-item">
+              <div class="contactus_icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contactus_info-content">
+                <h3 class="contactus_info-title">Email</h3>
+                <p class="contactus_info-text">
+                  Info@archiart.com.lb<br />Design@wrchiart.com.lb
+                  <br />Support@archiart.com.lb
+                </p>
+              </div>
+            </div>
+            <div class="contactus_social-media">
+              <h3 class="contactus_social-title">Follow Us</h3>
+              <div class="contactus_social-icons">
+                <a href="#" class="contactus_social-icon"
+                  ><i class="fab fa-facebook-f"></i
+                ></a>
+                <a href="#" class="contactus_social-icon"
+                  ><i class="fab fa-twitter"></i
+                ></a>
+                <a href="#" class="contactus_social-icon"
+                  ><i class="fab fa-instagram"></i
+                ></a>
+                <a href="#" class="contactus_social-icon"
+                  ><i class="fab fa-linkedin-in"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+<footer class="footer_section">
+      <div class="footer_container">
+        <div class="footer_column footer_brand-column">
+          <div class="footer_logo">
+            <a href="#hero">
+              <img src="images/logo.jpg" alt="ArchiArt Logo" />
+            </a>
+          </div>
+          <p class="footer_description">
+            ArchiArt delivers premium quality prints for businesses and
+            individuals. From billboards to wall murals, we bring your vision to
+            life with cutting-edge technology and exceptional service.
+          </p>
+          <a href="#contact" class="footer_cta-button">
+            Talk With Us
+            <span class="footer_cta-icon"><i class="fab fa-whatsapp"></i></span>
+          </a>
+        </div>
+        <div class="footer_column footer_links-column">
+          <h3 class="footer_column-title">Quick Links</h3>
+          <ul class="footer_links-list">
+            <li><a href="#hero" class="footer_link">Home</a></li>
+            <li><a href="#about" class="footer_link">About Us</a></li>
+            <li><a href="#services" class="footer_link">Services</a></li>
+            <li><a href="#portfolio" class="footer_link">Portfolio</a></li>
+            <li><a href="#machines" class="footer_link">Our Machines</a></li>
+            <li><a href="#leaders" class="footer_link">Our Leaders</a></li>
+            <li><a href="#faq" class="footer_link">FAQs</a></li>
+            <li><a href="#contact" class="footer_link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer_column footer_social-column">
+          <h3 class="footer_column-title">Connect With Us</h3>
+          <div class="footer_social-container">
+            <a href="#" class="footer_social-link">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="footer_social-link">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="footer_social-link">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="footer_social-link">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="footer_social-link">
+              <i class="fab fa-pinterest-p"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer_bottom">
+        <div class="footer_copyright">
+          <p>&copy; 2025 ArchiArt. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>

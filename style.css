@@ -480,6 +480,10 @@ h2 {
 }
 
 @media screen and (max-width: 576px) {
+    .hero_section {
+        max-height: 80vh;
+    }
+
     .hero_subheading {
         width: 70%;
     }
