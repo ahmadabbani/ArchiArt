@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Variables
   const header = document.querySelector(".header_container");
+
   const mobileToggle = document.querySelector(".header_mobile-toggle");
   const nav = document.querySelector(".header_nav");
   const navLinks = document.querySelectorAll(".header_nav-link");
@@ -174,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  document.addEventListener("DOMContentLoaded", function () {
+  /*document.addEventListener("DOMContentLoaded", function () {
     const leaderItems = document.querySelectorAll(".ourleaders_item");
 
     // Mouse follow effect for leader items
@@ -210,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
         this.style.transition = "transform 0.1s ease, box-shadow 0.4s ease";
       });
     });
-  });
+  }); */
   const carousel = document.querySelector(".clients_logo-carousel");
   const wrapper = document.querySelector(".clients_logo-wrapper");
   const allItems = document.querySelectorAll(".clients_logo-item");
@@ -333,4 +334,248 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initialize and handle resize
   setupCarousel();
   window.addEventListener("resize", setupCarousel);
+
+  // Handle dashboard page
+  if (window.location.pathname === "/dashboard") {
+    // Check if user is logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) {
+        // Not logged in, redirect to home
+        window.location.href = "/";
+      }
+    });
+
+    // Handle logout
+    const logoutButton = document.querySelector(".dashboard-logout");
+    if (logoutButton) {
+      logoutButton.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.href = "/";
+      });
+    }
+
+    // Handle signup modal
+    const createAdminButton = document.querySelector(".dashboard-create-admin");
+    const signupModal = document.getElementById("dashboard-signup-modal");
+    const closeModal = document.getElementById("dashboard-modal-close");
+    const signupForm = document.getElementById("dashboard-signup-form");
+    const emailError = document.getElementById("dashboard-email-error");
+    const passwordError = document.getElementById("dashboard-password-error");
+    const confirmPasswordError = document.getElementById(
+      "dashboard-confirm-password-error"
+    );
+    const successMessage = document.getElementById("dashboard-signup-success");
+
+    if (createAdminButton && signupModal && closeModal) {
+      // Open modal
+      createAdminButton.addEventListener("click", () => {
+        signupModal.style.display = "block";
+      });
+
+      // Close modal
+      closeModal.addEventListener("click", () => {
+        signupModal.style.display = "none";
+        // Reset form and messages
+        signupForm.reset();
+        emailError.style.display = "none";
+        passwordError.style.display = "none";
+        confirmPasswordError.style.display = "none";
+        successMessage.style.display = "none";
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener("click", (e) => {
+        if (e.target === signupModal) {
+          signupModal.style.display = "none";
+          signupForm.reset();
+          emailError.style.display = "none";
+          passwordError.style.display = "none";
+          confirmPasswordError.style.display = "none";
+          successMessage.style.display = "none";
+        }
+      });
+    }
+
+    // Handle signup form submission
+    if (signupForm) {
+      signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("signup-email").value.trim();
+        const password = document.getElementById("signup-password").value;
+        const confirmPassword = document.getElementById(
+          "signup-confirm-password"
+        ).value;
+
+        // Reset messages
+        emailError.style.display = "none";
+        passwordError.style.display = "none";
+        confirmPasswordError.style.display = "none";
+        successMessage.style.display = "none";
+
+        // Client-side validation
+        let isValid = true;
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+          emailError.textContent = "Email is required";
+          emailError.style.display = "block";
+          isValid = false;
+        } else if (!emailRegex.test(email)) {
+          emailError.textContent = "Please enter a valid email";
+          emailError.style.display = "block";
+          isValid = false;
+        }
+
+        if (!password) {
+          passwordError.textContent = "Password is required";
+          passwordError.style.display = "block";
+          isValid = false;
+        } else if (password.length < 6) {
+          passwordError.textContent = "Password must be at least 6 characters";
+          passwordError.style.display = "block";
+          isValid = false;
+        }
+
+        if (!confirmPassword) {
+          confirmPasswordError.textContent = "Please confirm your password";
+          confirmPasswordError.style.display = "block";
+          isValid = false;
+        } else if (password !== confirmPassword) {
+          confirmPasswordError.textContent = "Passwords do not match";
+          confirmPasswordError.style.display = "block";
+          isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // Proceed with Supabase signup
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+
+        if (error) {
+          emailError.textContent = error.message; // Show Supabase errors under email
+          emailError.style.display = "block";
+        } else {
+          successMessage.textContent = "Admin created successfully!";
+          successMessage.style.display = "block";
+          signupForm.reset();
+        }
+      });
+    }
+  }
+  const enquiryModal = document.getElementById("enquiry-modal");
+  const enquiryModalClose = document.getElementById("enquiry-modal-close");
+  const enquiryButtons = document.querySelectorAll(
+    ".hero_right_buttons button:nth-child(2), .cta_buttons .cta_button"
+  );
+  const enquiryForm = document.getElementById("enquiry-modal-form");
+
+  // Open modal
+  enquiryButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      enquiryModal.style.display = "flex";
+      enquiryForm
+        .querySelectorAll(".enquiry-success")
+        .forEach((el) => el.remove());
+    });
+  });
+
+  // Close modal
+  enquiryModalClose.addEventListener("click", () => {
+    enquiryModal.style.display = "none";
+    enquiryForm
+      .querySelectorAll(".enquiry-success")
+      .forEach((el) => el.remove());
+  });
+
+  // Form validation
+  enquiryForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const nameInput = document.getElementById("enquiry-name");
+    const emailInput = document.getElementById("enquiry-email");
+    const phoneInput = document.getElementById("enquiry-phone");
+    const descriptionInput = document.getElementById("enquiry-description");
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const description = descriptionInput.value.trim();
+
+    // Remove all previous error messages
+    enquiryForm.querySelectorAll(".enquiry-error").forEach((el) => el.remove());
+    enquiryForm
+      .querySelectorAll(".enquiry-success")
+      .forEach((el) => el.remove());
+
+    let isValid = true;
+
+    // Validate name
+    if (!name) {
+      const error = document.createElement("p");
+      error.textContent = "Name is required.";
+      error.classList.add("enquiry-error");
+      nameInput.parentElement.appendChild(error);
+      isValid = false;
+    }
+
+    // Validate email
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      const error = document.createElement("p");
+      error.textContent = "Please enter a valid email address.";
+      error.classList.add("enquiry-error");
+      emailInput.parentElement.appendChild(error);
+      isValid = false;
+    }
+
+    // Validate phone
+    if (!phone || !/^\+?\d{7,15}$/.test(phone)) {
+      const error = document.createElement("p");
+      error.textContent = "Please enter a valid phone number.";
+      error.classList.add("enquiry-error");
+      phoneInput.parentElement.appendChild(error);
+      isValid = false;
+    }
+
+    // Validate description
+    if (!description) {
+      const error = document.createElement("p");
+      error.textContent = "Description is required.";
+      error.classList.add("enquiry-error");
+      descriptionInput.parentElement.appendChild(error);
+      isValid = false;
+    }
+
+    // If valid, show success message
+    if (isValid) {
+      const successMessage = document.createElement("p");
+      successMessage.textContent = "Enquiry submitted successfully!";
+      successMessage.classList.add("enquiry-success");
+      enquiryForm.appendChild(successMessage);
+      enquiryForm.reset();
+    }
+  });
+
+  // Remove error message dynamically when input is corrected
+  enquiryForm.querySelectorAll("input, textarea").forEach((input) => {
+    input.addEventListener("input", () => {
+      const error = input.parentElement.querySelector(".enquiry-error");
+      if (error) {
+        error.remove();
+      }
+    });
+  });
+
+  // Clear success message when modal is reopened
+  enquiryModal.addEventListener("click", (event) => {
+    if (event.target === enquiryModalClose) {
+      // Only close when clicking the close button
+      enquiryModal.style.display = "none";
+      enquiryForm
+        .querySelectorAll(".enquiry-success")
+        .forEach((el) => el.remove());
+    }
+  });
 });

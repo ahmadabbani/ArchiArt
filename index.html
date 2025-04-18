@@ -19,7 +19,6 @@
     />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="script.js" defer></script>
   </head>
   <body>
     <header class="header_container">
@@ -57,13 +56,15 @@
                 Providing printing solution and marketing signs to boost your
                 business
               </p>
-              <a href="#contact" class="hero_cta-button">Get a Quote</a>
+              <a href="#portfolio" class="hero_cta-button">View Our Work</a>
               <div class="hero_right_buttons mobile_buttons">
                 <button data-aos="fade-up" data-aos-delay="100">
-                  LEARN MORE
-                  <span class="material-symbols-outlined">
-                    arrow_downward
-                  </span>
+                  <a href="#about"
+                    >LEARN MORE
+                    <span class="material-symbols-outlined">
+                      arrow_downward
+                    </span></a
+                  >
                 </button>
                 <button data-aos="fade-up" data-aos-delay="300">
                   ENQUIRE NOW
@@ -109,8 +110,12 @@
           <div class="hero_main-image">
             <div class="hero_right_buttons">
               <button>
-                LEARN MORE
-                <span class="material-symbols-outlined"> arrow_downward </span>
+                <a href="#about"
+                  >LEARN MORE
+                  <span class="material-symbols-outlined">
+                    arrow_downward
+                  </span></a
+                >
               </button>
               <button>
                 ENQUIRE NOW
@@ -358,8 +363,8 @@
           Contact us today for a free consultation and quote.
         </p>
         <div class="cta_buttons">
-          <a href="#contact" class="cta_button"
-            >REQUEST A QUOTE <span> <i class="fas fa-file-alt"></i> </span
+          <a class="cta_button"
+            >SEND ENQUIRY <span> <i class="fas fa-file-alt"></i> </span
           ></a>
         </div>
       </div>
@@ -792,7 +797,6 @@
                 id="name"
                 class="contactus_input"
                 placeholder="Your Name"
-                required
               />
             </div>
             <div class="contactus_form-group">
@@ -801,7 +805,6 @@
                 id="email"
                 class="contactus_input"
                 placeholder="Your Email"
-                required
               />
             </div>
             <div class="contactus_form-group">
@@ -810,7 +813,6 @@
                 id="subject"
                 class="contactus_input"
                 placeholder="Subject"
-                required
               />
             </div>
             <div class="contactus_form-group">
@@ -818,7 +820,6 @@
                 id="message"
                 class="contactus_textarea"
                 placeholder="Your Message"
-                required
               ></textarea>
             </div>
             <button type="submit" class="contactus_submit-btn">
@@ -832,18 +833,51 @@
               <div class="contactus_icon">
                 <i class="fas fa-map-marker-alt"></i>
               </div>
-              <div class="contactus_info-content">
-                <h3 class="contactus_info-title">Address</h3>
-                <p class="contactus_info-text">Jdeideh - Azzam Center</p>
-              </div>
+              <a
+                href="
+                https://maps.app.goo.gl/5n4YjnqNzTDzo5CC7?g_st=com.google.maps.preview.copy"
+                target="_blank"
+                style="display: block; text-decoration: none; color: inherit"
+                class="contactus_info-content"
+              >
+                <div class="contactus_info-content">
+                  <h3 class="contactus_info-title">Address</h3>
+                  <p class="contactus_info-text">Jdeideh - Azzam Center</p>
+                </div>
+              </a>
             </div>
             <div class="contactus_info-item">
               <div class="contactus_icon">
                 <i class="fas fa-phone-alt"></i>
               </div>
+
               <div class="contactus_info-content">
                 <h3 class="contactus_info-title">Phone</h3>
-                <p class="contactus_info-text">81 882 662 | 01 881 885</p>
+                <p class="contactus_info-text">
+                  <a
+                    href="https://wa.me/96181882662"
+                    target="_blank"
+                    style="
+                      display: inline-block;
+                      text-decoration: none;
+                      color: inherit;
+                    "
+                  >
+                    81 882 662
+                  </a>
+                  |
+                  <a
+                    href="https://wa.me/96101881885"
+                    target="_blank"
+                    style="
+                      display: inline-block;
+                      text-decoration: none;
+                      color: inherit;
+                    "
+                  >
+                    01 881 885
+                  </a>
+                </p>
               </div>
             </div>
             <div class="contactus_info-item">
@@ -853,24 +887,76 @@
               <div class="contactus_info-content">
                 <h3 class="contactus_info-title">Email</h3>
                 <p class="contactus_info-text">
-                  Info@archiart.com.lb<br />Design@wrchiart.com.lb
-                  <br />Support@archiart.com.lb
+                  <a
+                    href="mailto:
+                  Info@archiart.com.lb"
+                    style="
+                      display: block;
+                      text-decoration: none;
+                      color: inherit;
+                      padding: 0;
+                      margin: 0;
+                      width: fit-content;
+                    "
+                    >Info@archiart.com.lb</a
+                  >
+                  <a
+                    href="mailto:
+                  Design@wrchiart.com.lb"
+                    style="
+                      display: block;
+                      text-decoration: none;
+                      color: inherit;
+                      padding: 0;
+                      margin: 0;
+                      width: fit-content;
+                    "
+                  >
+                    Design@wrchiart.com.lb
+                  </a>
+                  <a
+                    href="mailto:
+                    Support@archiart.com.lb"
+                    style="
+                      display: block;
+                      text-decoration: none;
+                      color: inherit;
+                      padding: 0;
+                      margin: 0;
+                      width: fit-content;
+                    "
+                  >
+                    Support@archiart.com.lb
+                  </a>
                 </p>
               </div>
             </div>
             <div class="contactus_social-media">
               <h3 class="contactus_social-title">Follow Us</h3>
               <div class="contactus_social-icons">
-                <a href="#" class="contactus_social-icon"
+                <a
+                  href="https://www.facebook.com/profile.php?id=61569342242984"
+                  target="_blank"
+                  class="contactus_social-icon"
                   ><i class="fab fa-facebook-f"></i
                 ></a>
-                <a href="#" class="contactus_social-icon"
-                  ><i class="fab fa-twitter"></i
+                <a
+                  href="https://www.tiktok.com/@archiart.lb?_t=ZS-8vdLrobygEC&_r=1
+                "
+                  target="_blank"
+                  class="contactus_social-icon"
+                  ><i class="fab fa-tiktok"></i
                 ></a>
-                <a href="#" class="contactus_social-icon"
+                <a
+                  href="https://www.instagram.com/archiart.lb?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                  target="_blank"
+                  class="contactus_social-icon"
                   ><i class="fab fa-instagram"></i
                 ></a>
-                <a href="#" class="contactus_social-icon"
+                <a
+                  href="https://www.linkedin.com/company/archiart-lb/"
+                  target="_blank"
+                  class="contactus_social-icon"
                   ><i class="fab fa-linkedin-in"></i
                 ></a>
               </div>
@@ -983,13 +1069,40 @@
             life with cutting-edge technology and exceptional service.
           </p>
           <a
-            href="#contact"
+            href="https://wa.me/96181882662"
+            target="_blank"
             class="footer_cta-button"
             data-aos="fade-right"
             data-aos-delay="400"
           >
             Talk With Us
             <span class="footer_cta-icon"><i class="fab fa-whatsapp"></i></span>
+          </a>
+          <a
+            href="mailto:
+        Info@archiart.com.lb"
+            class="footer_email"
+            data-aos="fade-right"
+            data-aos-delay="600"
+            >Info@archiart.com.lb</a
+          >
+          <a
+            href="mailto:
+        Design@wrchiart.com.lb"
+            class="footer_email"
+            data-aos="fade-right"
+            data-aos-delay="600"
+          >
+            Design@wrchiart.com.lb
+          </a>
+          <a
+            href="mailto:
+          Support@archiart.com.lb"
+            class="footer_email"
+            data-aos="fade-right"
+            data-aos-delay="600"
+          >
+            Support@archiart.com.lb
           </a>
         </div>
 
@@ -1026,20 +1139,30 @@
         <div class="footer_column footer_social-column" data-aos="fade-left">
           <h3 class="footer_column-title">Connect With Us</h3>
           <div class="footer_social-container">
-            <a href="#" class="footer_social-link"
+            <a
+              href="https://www.facebook.com/profile.php?id=61569342242984"
+              target="_blank"
+              class="footer_social-link"
               ><i class="fab fa-facebook-f"></i
             ></a>
-            <a href="#" class="footer_social-link"
-              ><i class="fab fa-twitter"></i
+            <a
+              href="https://www.tiktok.com/@archiart.lb?_t=ZS-8vdLrobygEC&_r=1
+            "
+              target="_blank"
+              class="footer_social-link"
+              ><i class="fab fa-tiktok"></i
             ></a>
-            <a href="#" class="footer_social-link"
+            <a
+              href="https://www.instagram.com/archiart.lb?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              target="_blank"
+              class="footer_social-link"
               ><i class="fab fa-instagram"></i
             ></a>
-            <a href="#" class="footer_social-link"
+            <a
+              href="https://www.linkedin.com/company/archiart-lb/"
+              target="_blank"
+              class="footer_social-link"
               ><i class="fab fa-linkedin-in"></i
-            ></a>
-            <a href="#" class="footer_social-link"
-              ><i class="fab fa-pinterest-p"></i
             ></a>
           </div>
         </div>
@@ -1051,5 +1174,57 @@
         </div>
       </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js" defer></script>
+
+    <!-- Inquiry Form Modal -->
+    <div id="enquiry-modal" class="enquiry-modal" style="display: none">
+      <div class="enquiry-modal-content">
+        <span id="enquiry-modal-close" class="enquiry-modal-close"
+          >&times;</span
+        >
+        <h2 class="enquiry-modal-title">Enquiry</h2>
+        <form id="enquiry-modal-form" class="enquiry-modal-form">
+          <div class="enquiry-modal-field">
+            <label for="enquiry-name" class="enquiry-modal-label">Name</label>
+            <input type="text" id="enquiry-name" class="enquiry-modal-input" />
+          </div>
+          <div class="enquiry-modal-field">
+            <label for="enquiry-email" class="enquiry-modal-label">Email</label>
+            <input
+              type="email"
+              id="enquiry-email"
+              class="enquiry-modal-input"
+            />
+          </div>
+          <div class="enquiry-modal-field">
+            <label for="enquiry-company" class="enquiry-modal-label"
+              >Company (Optional)</label
+            >
+            <input
+              type="text"
+              id="enquiry-company"
+              class="enquiry-modal-input"
+            />
+          </div>
+          <div class="enquiry-modal-field">
+            <label for="enquiry-phone" class="enquiry-modal-label"
+              >Phone Number</label
+            >
+            <input type="tel" id="enquiry-phone" class="enquiry-modal-input" />
+          </div>
+          <div class="enquiry-modal-field">
+            <label for="enquiry-description" class="enquiry-modal-label"
+              >Enquiry Description</label
+            >
+            <textarea
+              id="enquiry-description"
+              class="enquiry-modal-input"
+            ></textarea>
+          </div>
+          <button type="submit" class="enquiry-modal-submit">Submit</button>
+        </form>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Your CSS file -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard-content">
+      <div class="dashboard-main-items">
+        <div class="dashboard-container">
+          <h2 class="dashboard-title">Admin Dashboard</h2>
+          <div class="dashboard-actions">
+            <button class="dashboard-button dashboard-create-admin">
+              Create New Admin <span>+</span>
+            </button>
+
+            <button class="dashboard-button dashboard-add-project">
+              Add New Project <span>+</span>
+            </button>
+            <button class="dashboard-button dashboard-reset-password">
+              Reset Password
+            </button>
+            <button class="dashboard-button dashboard-logout">Logout</button>
+          </div>
+        </div>
+
+        <!-- Projects Display Section -->
+        <div class="projects-display">
+          <h3 class="projects-title">Your Projects</h3>
+          <div class="projects-grid" id="projects-grid">
+            <!-- Projects will be dynamically added here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Details Modal -->
+      <div
+        id="project-details-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content project-details-content">
+          <span id="project-details-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <div class="project-details-header">
+            <h3 class="project-details-title"></h3>
+            <p class="project-details-description"></p>
+          </div>
+          <div class="project-details-main-image">
+            <img src="" alt="Main project image" />
+          </div>
+          <div class="project-details-gallery">
+            <h4>Gallery Images</h4>
+            <div class="project-gallery-grid">
+              <!-- Gallery images will be dynamically added here -->
+            </div>
+            <button class="dashboard-button delete-project-btn">
+              <i class="fas fa-trash"></i> Delete Project
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Confirmation Modal -->
+      <div
+        id="delete-confirmation-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content delete-confirmation-content">
+          <h3>Confirm Deletion</h3>
+          <p>
+            Are you sure you want to delete this project? This action cannot be
+            undone.
+          </p>
+          <div class="delete-confirmation-buttons">
+            <button class="dashboard-button cancel-delete-btn">Cancel</button>
+            <button class="dashboard-button confirm-delete-btn">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Preview Modal -->
+      <div
+        id="image-preview-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content image-preview-content">
+          <span id="image-preview-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <img src="" alt="Preview" class="preview-image" />
+        </div>
+      </div>
+
+      <!-- Add Project Modal -->
+      <div
+        id="dashboard-project-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content">
+          <span id="project-modal-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <h3 class="dashboard-modal-title">Add New Project</h3>
+          <form id="dashboard-project-form" class="dashboard-form">
+            <div class="dashboard-field">
+              <label for="project-title" class="dashboard-label"
+                >Project Title</label
+              >
+              <input type="text" id="project-title" class="dashboard-input" />
+              <p
+                id="project-title-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="project-description" class="dashboard-label"
+                >Description</label
+              >
+              <textarea
+                id="project-description"
+                class="dashboard-input"
+              ></textarea>
+              <p
+                id="project-description-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="project-main-image" class="dashboard-label"
+                >Main Image</label
+              >
+              <div id="project-main-image-wrapper" class="file-input-wrapper">
+                <label for="project-main-image" class="file-input-label">
+                  <i class="fas fa-image"></i> Choose Main Image
+                  <span class="file-name"></span>
+                </label>
+                <input
+                  type="file"
+                  id="project-main-image"
+                  class="dashboard-input"
+                  accept="image/*"
+                />
+                <img class="image-preview" id="main-image-preview" />
+              </div>
+              <p
+                id="project-main-image-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label class="dashboard-label">Gallery Images (Optional)</label>
+              <div id="gallery-inputs">
+                <div class="gallery-input-container">
+                  <div class="file-input-wrapper">
+                    <label for="gallery-image-0" class="file-input-label">
+                      <i class="fas fa-image"></i> Choose Image
+                      <span class="file-name"></span>
+                    </label>
+                    <input
+                      type="file"
+                      id="gallery-image-0"
+                      class="gallery-image-input"
+                      accept="image/*"
+                    />
+                    <img class="image-preview" />
+                  </div>
+                  <button type="button" class="remove-gallery-btn">
+                    &times;
+                  </button>
+                </div>
+              </div>
+              <button
+                type="button"
+                id="add-gallery-input"
+                class="dashboard-button"
+              >
+                Add More
+              </button>
+            </div>
+            <button type="submit" class="dashboard-button dashboard-submit">
+              Create Project
+            </button>
+          </form>
+          <p
+            id="project-success"
+            class="dashboard-success"
+            style="display: none"
+          ></p>
+        </div>
+      </div>
+
+      <!-- Signup Modal -->
+      <div
+        id="dashboard-signup-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content">
+          <span id="dashboard-modal-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <h3 class="dashboard-modal-title">Create New Admin</h3>
+          <form id="dashboard-signup-form" class="dashboard-form">
+            <div class="dashboard-field">
+              <label for="signup-email" class="dashboard-label">Email</label>
+              <input type="email" id="signup-email" class="dashboard-input" />
+              <p
+                id="dashboard-email-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="signup-password" class="dashboard-label"
+                >Password</label
+              >
+              <input
+                type="password"
+                id="signup-password"
+                class="dashboard-input"
+              />
+              <p
+                id="dashboard-password-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="signup-confirm-password" class="dashboard-label"
+                >Confirm Password</label
+              >
+              <input
+                type="password"
+                id="signup-confirm-password"
+                class="dashboard-input"
+              />
+              <p
+                id="dashboard-confirm-password-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <button type="submit" class="dashboard-button dashboard-submit">
+              Create Admin
+            </button>
+          </form>
+          <p
+            id="dashboard-signup-success"
+            class="dashboard-success"
+            style="display: none"
+          ></p>
+        </div>
+      </div>
+      <!-- Reset Password Modal -->
+      <div
+        id="dashboard-reset-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content">
+          <span id="reset-modal-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <h3 class="dashboard-modal-title">Reset Your Password</h3>
+          <form id="dashboard-reset-form" class="dashboard-form">
+            <div class="dashboard-field">
+              <label for="reset-new-password" class="dashboard-label"
+                >New Password</label
+              >
+              <input
+                type="password"
+                id="reset-new-password"
+                class="dashboard-input"
+              />
+              <p
+                id="reset-new-password-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="reset-confirm-password" class="dashboard-label"
+                >Confirm New Password</label
+              >
+              <input
+                type="password"
+                id="reset-confirm-password"
+                class="dashboard-input"
+              />
+              <p
+                id="reset-confirm-password-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <button type="submit" class="dashboard-button dashboard-submit">
+              Update Password
+            </button>
+          </form>
+          <p
+            id="reset-password-success"
+            class="dashboard-success"
+            style="display: none"
+          ></p>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="dashboard.js"></script>
+  </body>
+</html>
