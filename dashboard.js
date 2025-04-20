@@ -322,6 +322,45 @@ document.addEventListener("DOMContentLoaded", function () {
       projectModal.style.display = "block";
     });
 
+    // Add this function to fetch sections
+    async function fetchProjectSections() {
+      try {
+        const { data: sections, error } = await supabaseClient
+          .from("projects")
+          .select("section")
+          .not("section", "is", null);
+
+        if (error) throw error;
+
+        // Get unique sections
+        const uniqueSections = [
+          ...new Set(sections.map((item) => item.section).filter(Boolean)),
+        ];
+
+        // Populate the dropdown
+        const sectionDropdown = document.getElementById("project-section");
+        // Clear previous options except the first one
+        sectionDropdown.innerHTML =
+          '<option value="">Select an existing section</option>';
+
+        // Add options for each section
+        uniqueSections.forEach((section) => {
+          const option = document.createElement("option");
+          option.value = section;
+          option.textContent = section;
+          sectionDropdown.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Error fetching sections:", error);
+      }
+    }
+
+    // Modify your modal open event listener
+    addProjectButton.addEventListener("click", () => {
+      projectModal.style.display = "block";
+      fetchProjectSections(); // Fetch sections when opening the modal
+    });
+
     // Close modal
     closeProjectModal.addEventListener("click", () => {
       projectModal.style.display = "none";
@@ -338,6 +377,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .querySelectorAll(".dashboard-error")
         .forEach((el) => (el.style.display = "none"));
       document.getElementById("project-success").style.display = "none";
+      // Add these lines to reset section fields
+      document.getElementById("project-section").value = "";
+      document.getElementById("new-project-section").value = "";
     });
   }
 
@@ -469,6 +511,20 @@ document.addEventListener("DOMContentLoaded", function () {
         isValid = false;
       }
 
+      // Section validation
+      const sectionDropdown = document.getElementById("project-section");
+      const newSection = document
+        .getElementById("new-project-section")
+        .value.trim();
+
+      if (sectionDropdown.value && newSection) {
+        document.getElementById("project-section-error").textContent =
+          "Please choose either an existing section or create a new one, not both";
+        document.getElementById("project-section-error").style.display =
+          "block";
+        isValid = false;
+      }
+
       if (!mainImage) {
         document.getElementById("project-main-image-error").textContent =
           "Main image is required";
@@ -509,7 +565,11 @@ document.addEventListener("DOMContentLoaded", function () {
             `Main image upload failed: ${mainImageError.message}`
           );
         }
-
+        // Add this code here - determine which section to use
+        const sectionToUse =
+          document.getElementById("project-section").value ||
+          document.getElementById("new-project-section").value.trim() ||
+          null;
         // Insert project into database
         const { data: projectData, error: projectError } = await supabaseClient
           .from("projects")
@@ -518,6 +578,7 @@ document.addEventListener("DOMContentLoaded", function () {
               title,
               description,
               image: mainImagePath,
+              section: sectionToUse, // Add this line to include the section
             },
           ])
           .select()
@@ -571,6 +632,10 @@ document.addEventListener("DOMContentLoaded", function () {
           "Project created successfully!";
         document.getElementById("project-success").style.display = "block";
         projectForm.reset();
+
+        document.getElementById("project-section").value = "";
+        document.getElementById("new-project-section").value = "";
+
         // Reset gallery inputs to just one
         galleryInputsContainer.innerHTML = `
           <div class="gallery-input-container">
@@ -685,6 +750,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const description = projectDetailsModal.querySelector(
         ".project-details-description"
       );
+      const sectionElement = projectDetailsModal.querySelector(
+        ".project-details-section"
+      );
+
       const mainImage = projectDetailsModal.querySelector(
         ".project-details-main-image img"
       );
@@ -695,6 +764,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Set project details
       title.textContent = project.title;
       description.textContent = project.description;
+
+      // Add this code to display the section
+      if (project.section) {
+        sectionElement.textContent = `in ${project.section}`;
+        sectionElement.style.display = "block";
+      } else {
+        sectionElement.style.display = "none";
+      }
 
       // Set main image
       const mainImageUrl = supabaseClient.storage

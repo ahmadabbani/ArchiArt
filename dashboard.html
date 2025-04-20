@@ -55,7 +55,11 @@
             >&times;</span
           >
           <div class="project-details-header">
-            <h3 class="project-details-title"></h3>
+            <div class="project-details-header-flex">
+              <h3 class="project-details-title"></h3>
+              <p class="project-details-section"></p>
+            </div>
+            <p class="project-details-section"></p>
             <p class="project-details-description"></p>
           </div>
           <div class="project-details-main-image">
@@ -139,6 +143,37 @@
               ></textarea>
               <p
                 id="project-description-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="project-section" class="dashboard-label"
+                >Project Section</label
+              >
+              <select id="project-section" class="dashboard-input">
+                <option value="">Select an existing section</option>
+                <!-- Options will be populated by JavaScript -->
+              </select>
+              <p
+                id="project-section-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+
+            <div class="dashboard-field">
+              <label for="new-project-section" class="dashboard-label"
+                >Or Create New Section</label
+              >
+              <input
+                type="text"
+                id="new-project-section"
+                class="dashboard-input"
+                placeholder="Enter new section name"
+              />
+              <p
+                id="new-project-section-error"
                 class="dashboard-error"
                 style="display: none"
               ></p>

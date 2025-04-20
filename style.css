@@ -35,12 +35,12 @@ h2 {
     left: 0;
     width: 100%;
     height: 80px;
-    background-color: #fff;
+    background-color: #fe0000;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 5%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgb(254, 0, 0, 0.4);
     z-index: 1000;
 }
 
@@ -76,7 +76,7 @@ h2 {
 
 .header_nav-link {
     text-decoration: none;
-    color: #333;
+    color: #fff;
     font-weight: 700;
     font-size: 16px;
     padding: 8px 0;
@@ -85,7 +85,7 @@ h2 {
 }
 
 .header_nav-link:hover {
-    color: #fe0000;
+    color: #fff;
 }
 
 .header_nav-link::after {
@@ -95,7 +95,7 @@ h2 {
     left: 0;
     width: 0;
     height: 2px;
-    background-color: #fe0000;
+    background-color: #fff;
     transition: width 0.3s ease;
 }
 
@@ -104,7 +104,7 @@ h2 {
 }
 
 .header_active {
-    color: #fe0000;
+    color: #fff;
 }
 
 .header_active::after {
@@ -119,7 +119,7 @@ h2 {
 .header_menu-icon,
 .header_close-icon {
     font-size: 35px !important;
-    color: #333;
+    color: #fff;
 }
 
 .header_close-icon {
@@ -137,10 +137,10 @@ h2 {
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #fff;
+        background-color: #fe0000;
         overflow: hidden;
         transition: height 0.3s ease;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 10px rgb(254, 0, 0, 0.4);
         z-index: 999;
     }
 
@@ -3278,10 +3278,23 @@ h2 {
     margin-bottom: 20px;
 }
 
+.project-details-header-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
 .project-details-title {
     font-size: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     color: #333;
+}
+
+.project-details-section {
+    font-style: italic;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
 }
 
 .project-details-description {
