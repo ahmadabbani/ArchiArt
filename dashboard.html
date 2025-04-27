@@ -161,7 +161,6 @@
                 style="display: none"
               ></p>
             </div>
-
             <div class="dashboard-field">
               <label for="new-project-section" class="dashboard-label"
                 >Or Create New Section</label
@@ -178,6 +177,39 @@
                 style="display: none"
               ></p>
             </div>
+
+            <!--sub sections-->
+            <div class="dashboard-field">
+              <label for="project-subsection" class="dashboard-label"
+                >Project subsection</label
+              >
+              <select id="project-subsection" class="dashboard-input">
+                <option value="">Select an existing subsection</option>
+                <!-- Options will be populated by JavaScript -->
+              </select>
+              <p
+                id="project-subsection-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="new-project-subsection" class="dashboard-label"
+                >Or Create New Subsection</label
+              >
+              <input
+                type="text"
+                id="new-project-subsection"
+                class="dashboard-input"
+                placeholder="Enter new subssection name"
+              />
+              <p
+                id="new-project-subsection-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+
             <div class="dashboard-field">
               <label for="project-main-image" class="dashboard-label"
                 >Main Image</label

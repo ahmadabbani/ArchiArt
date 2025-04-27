@@ -21,14 +21,14 @@ try {
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Dashboard page DOM loaded");
 
-  // Check if user is logged in
+  /* Check if user is logged in
   supabaseClient.auth.getSession().then(({ data: { session } }) => {
     if (!session) {
       window.location.href = "/";
     } else {
       document.getElementById("dashboard-content").style.display = "block";
     }
-  });
+  });*/
 
   // Handle logout
   const logoutButton = document.querySelector(".dashboard-logout");
@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
       projectModal.style.display = "block";
     });
 
-    // Add this function to fetch sections
+    // function to fetch sections
     async function fetchProjectSections() {
       try {
         const { data: sections, error } = await supabaseClient
@@ -355,10 +355,46 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
+    // function to fetch subsections
+    async function fetchProjectSubSections() {
+      try {
+        const { data: subsections, error } = await supabaseClient
+          .from("projects")
+          .select("subsection")
+          .not("subsection", "is", null);
+
+        if (error) throw error;
+
+        // Get unique sections
+        const uniqueSections = [
+          ...new Set(
+            subsections.map((item) => item.subsection).filter(Boolean)
+          ),
+        ];
+
+        // Populate the dropdown
+        const sectionDropdown = document.getElementById("project-subsection");
+        // Clear previous options except the first one
+        sectionDropdown.innerHTML =
+          '<option value="">Select an existing subsection</option>';
+
+        // Add options for each section
+        uniqueSections.forEach((subsection) => {
+          const option = document.createElement("option");
+          option.value = subsection;
+          option.textContent = subsection;
+          sectionDropdown.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Error fetching subsections:", error);
+      }
+    }
+
     // Modify your modal open event listener
     addProjectButton.addEventListener("click", () => {
       projectModal.style.display = "block";
       fetchProjectSections(); // Fetch sections when opening the modal
+      fetchProjectSubSections(); // Fetch subsections when opening the modal
     });
 
     // Close modal
@@ -380,6 +416,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // Add these lines to reset section fields
       document.getElementById("project-section").value = "";
       document.getElementById("new-project-section").value = "";
+      document.getElementById("project-subsection").value = "";
+      document.getElementById("new-project-subsection").value = "";
     });
   }
 
@@ -513,14 +551,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Section validation
       const sectionDropdown = document.getElementById("project-section");
+      const subsectionDropdown = document.getElementById("project-subsection");
       const newSection = document
         .getElementById("new-project-section")
         .value.trim();
-
+      const newSubSection = document
+        .getElementById("new-project-subsection")
+        .value.trim();
+      //sections
       if (sectionDropdown.value && newSection) {
         document.getElementById("project-section-error").textContent =
           "Please choose either an existing section or create a new one, not both";
         document.getElementById("project-section-error").style.display =
+          "block";
+        isValid = false;
+      }
+
+      //subsections
+      if (subsectionDropdown.value && newSubSection) {
+        document.getElementById("project-subsection-error").textContent =
+          "Please choose either an existing subsection or create a new one, not both";
+        document.getElementById("project-subsection-error").style.display =
           "block";
         isValid = false;
       }
@@ -570,6 +621,12 @@ document.addEventListener("DOMContentLoaded", function () {
           document.getElementById("project-section").value ||
           document.getElementById("new-project-section").value.trim() ||
           null;
+
+        //determine which subsection to use
+        const subsectionToUse =
+          document.getElementById("project-subsection").value ||
+          document.getElementById("new-project-subsection").value.trim() ||
+          null;
         // Insert project into database
         const { data: projectData, error: projectError } = await supabaseClient
           .from("projects")
@@ -578,7 +635,8 @@ document.addEventListener("DOMContentLoaded", function () {
               title,
               description,
               image: mainImagePath,
-              section: sectionToUse, // Add this line to include the section
+              section: sectionToUse,
+              subsection: subsectionToUse,
             },
           ])
           .select()
@@ -635,6 +693,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.getElementById("project-section").value = "";
         document.getElementById("new-project-section").value = "";
+        document.getElementById("project-subsection").value = "";
+        document.getElementById("new-project-subsection").value = "";
 
         // Reset gallery inputs to just one
         galleryInputsContainer.innerHTML = `
