@@ -3271,6 +3271,20 @@ h2 {
     overflow-y: auto;
 }
 
+#project-details-close {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    font-size: 28px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#project-details-close:hover {
+    color: #fe0000;
+}
+
 .project-details-header {
     margin-bottom: 20px;
 }
@@ -3730,16 +3744,16 @@ h2 {
 
 .portfolio-modal-close {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    color: #fe0000;
+    top: 5px;
+    right: 17px;
+    font-size: 28px;
+    color: #333;
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
 .portfolio-modal-close:hover {
-    color: #d50000;
+    color: #fe0000;
 }
 
 .portfolio-modal-main-image {
@@ -3766,7 +3780,7 @@ h2 {
 }
 
 .portfolio-modal-gallery-image:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
 /* Gallery Modal Styles */
