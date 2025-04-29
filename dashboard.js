@@ -534,7 +534,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Client-side validation
       let isValid = true;
 
-      if (!title) {
+      /*if (!title) {
         document.getElementById("project-title-error").textContent =
           "Title is required";
         document.getElementById("project-title-error").style.display = "block";
@@ -547,7 +547,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("project-description-error").style.display =
           "block";
         isValid = false;
-      }
+      }*/
 
       // Section validation
       const sectionDropdown = document.getElementById("project-section");
@@ -575,14 +575,14 @@ document.addEventListener("DOMContentLoaded", function () {
           "block";
         isValid = false;
       }
-
-      if (!mainImage) {
+      //validation images
+      /*if (!mainImage) {
         document.getElementById("project-main-image-error").textContent =
           "Main image is required";
         document.getElementById("project-main-image-error").style.display =
           "block";
         isValid = false;
-      }
+      }*/
 
       if (!isValid) {
         submitButton.innerHTML = "Create Project";
@@ -601,7 +601,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Upload main image to Supabase storage
-        const mainImagePath = `project-images/${Date.now()}-${mainImage.name}`;
+        const mainImagePath = `project-images/${Date.now()}-${mainImage?.name}`;
         const { data: mainImageData, error: mainImageError } =
           await supabaseClient.storage
             .from("project-images")
