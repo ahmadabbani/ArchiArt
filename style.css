@@ -3704,9 +3704,10 @@ h2 {
 }
 
 .portfolio_main-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
     color: #333;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-bottom: 50px;
     position: relative;
 }
 
