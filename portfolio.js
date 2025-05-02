@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Show project modal
   function showProjectModal(project) {
-    // Get the public URL for the main image, just like you did in filterProjects
+    // Get the public URL for the main image
     const mainImageUrl = supabaseClient.storage
       .from("project-images")
       .getPublicUrl(project.image).data.publicUrl;
@@ -244,18 +244,56 @@ document.addEventListener("DOMContentLoaded", async function () {
   function showGalleryImageModal(imageSrc) {
     const galleryModal = document.createElement("div");
     galleryModal.className = "portfolio-gallery-modal";
+    // Get all gallery images to enable navigation
+    const allGalleryImages = Array.from(
+      document.querySelectorAll(".portfolio-modal-gallery-image")
+    ).map((img) => img.src);
+    const currentIndex = allGalleryImages.indexOf(imageSrc);
     galleryModal.innerHTML = `
-      <div class="portfolio-gallery-modal-content">
-        <span class="portfolio-gallery-modal-close">&times;</span>
+    <div class="portfolio-gallery-modal-content">
+      <span class="portfolio-gallery-modal-close">&times;</span>
+      <div class="portfolio-gallery-navigation">
+        <button class="gallery-nav-btn prev-btn" ${
+          currentIndex === 0 ? "disabled" : ""
+        }><i class="fas fa-chevron-left"></i></button>
         <img src="${imageSrc}" alt="Full size gallery image" class="portfolio-gallery-modal-image" />
+        <button class="gallery-nav-btn next-btn" ${
+          currentIndex === allGalleryImages.length - 1 ? "disabled" : ""
+        }><i class="fas fa-chevron-right"></i></button>
       </div>
-    `;
+      <div class="gallery-counter">${currentIndex + 1} / ${
+      allGalleryImages.length
+    }</div>
+    </div>
+  `;
 
     galleryModal
       .querySelector(".portfolio-gallery-modal-close")
       .addEventListener("click", () => {
         galleryModal.remove();
       });
+
+    // Handle previous button click
+    const prevBtn = galleryModal.querySelector(".prev-btn");
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        if (currentIndex > 0) {
+          galleryModal.remove();
+          showGalleryImageModal(allGalleryImages[currentIndex - 1]);
+        }
+      });
+    }
+
+    // Handle next button click
+    const nextBtn = galleryModal.querySelector(".next-btn");
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        if (currentIndex < allGalleryImages.length - 1) {
+          galleryModal.remove();
+          showGalleryImageModal(allGalleryImages[currentIndex + 1]);
+        }
+      });
+    }
 
     // Also close modal when clicking outside the image
     galleryModal.addEventListener("click", (e) => {
