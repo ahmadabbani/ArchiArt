@@ -4204,6 +4204,15 @@ h2 {
     .portfolio-modal-gallery-image {
         height: 80px;
     }
+
+    .portfolio-gallery-modal-image {
+        height: 90vh;
+    }
+
+    .portfolio-gallery-modal-close {
+        font-size: 25px;
+    }
+
 }
 
 @media (max-width: 420px) {
