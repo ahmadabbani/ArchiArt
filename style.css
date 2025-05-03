@@ -3930,8 +3930,8 @@ h2 {
 }
 
 .gallery-nav-btn {
-    background-color: white;
-    color: black;
+    background-color: transparent;
+    color: white;
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -4097,7 +4097,7 @@ h2 {
 }
 
 .subsection-button.active {
-    background-color: #fe0000;
+    background-color: #333;
     color: #fff;
 }
 
@@ -4169,5 +4169,57 @@ h2 {
         font-size: 45px;
         top: -35px;
     }
+}
 
+@media (max-width: 992px) {
+    .portfolio-buttons {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .subsection-buttons {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 575px) {
+
+    .portfolio-modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .portfolio-modal-content p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .portfolio-modal-main-image {
+        width: 90%;
+        max-height: 220px;
+        margin: 10px 0;
+    }
+
+    .portfolio-modal-gallery-image {
+        height: 80px;
+    }
+}
+
+@media (max-width: 420px) {
+    .portfolio-button {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+    .portfolio-modal-close {
+        font-size: 25px;
+        top: 0;
+        right: 10px;
+    }
+
+    .subsection-button {
+        padding: 6px 10px;
+        font-size: 0.86rem;
+    }
 }
