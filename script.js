@@ -145,7 +145,342 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Modal functionality
+  const modal = document.querySelector(".services_modal");
+  const modalContent = document.querySelector(".services_modal_content");
+  const modalClose = document.querySelector(".services_modal_close");
+  const modalTitle = document.querySelector(".services_modal_title");
+  const modalBody = document.querySelector(".services_modal_body");
+  const modalIcon = document.querySelector(".services_modal_icon");
   const serviceItems = document.querySelectorAll(".services_item");
+
+  // Service data
+  const servicesData = {
+    "vehicle-branding": {
+      title: "Vehicle Branding",
+      icon: "car-icon.png",
+      description:
+        "We transform cars into moving billboards, whether full car wraps, window see-through graphics, or partial vinyl branding.",
+      services: [
+        {
+          name: "Car Wrapping",
+          description: "Full vehicle wraps with custom designs",
+        },
+        {
+          name: "Car Wrap Printing",
+          description: "High-quality vinyl prints for vehicle exteriors",
+        },
+        {
+          name: "Window Graphics",
+          description: "See-through window graphics for maximum visibility",
+        },
+        {
+          name: "Partial Branding",
+          description: "Strategic vinyl placement for targeted messaging",
+        },
+      ],
+    },
+    signage: {
+      title: "Signage & Outdoor Advertising",
+      icon: "signage-icon.png",
+      description:
+        "We print and produce everything you need to be seen. Flex billboards, cold neon signs, flags, and vinyl cutouts.",
+      services: [
+        {
+          name: "Flex Billboards",
+          description: "Large format outdoor advertising displays",
+        },
+        {
+          name: "Flags",
+          description: "Custom printed flags for events and storefronts",
+        },
+        {
+          name: "Cold Neon",
+          description: "Energy-efficient LED neon-like signage",
+        },
+        {
+          name: "Signs",
+          description: "Professional business and directional signage",
+        },
+        {
+          name: "Vinyl Cut",
+          description: "Precision cut vinyl lettering and graphics",
+        },
+        {
+          name: "Sand Blasting",
+          description: "Etched glass and surface designs",
+        },
+        {
+          name: "Door & Wall Printing",
+          description: "Custom graphics for interior and exterior surfaces",
+        },
+      ],
+    },
+    printing: {
+      title: "Printing Services",
+      icon: "printing-icon.png",
+      description:
+        "We handle a wide range of printing needs with advanced techniques like UV DTF, photo paper prints, and sticker creation. From custom canvas pieces and pillows to professional business cards and napkins.",
+      services: [
+        {
+          name: "UV DTF Printing",
+          description: "Direct-to-film printing with UV protection",
+        },
+        {
+          name: "UV Stickers",
+          description: "Durable stickers with UV-resistant inks",
+        },
+        {
+          name: "Canvas Printing",
+          description: "High-quality art reproduction on canvas",
+        },
+        {
+          name: "Pillow Printing",
+          description: "Custom designs on decorative pillows",
+        },
+        {
+          name: "Business Cards",
+          description: "Professional card printing with premium finishes",
+        },
+        {
+          name: "Napkin Printing",
+          description: "Custom printed napkins for events and businesses",
+        },
+        {
+          name: "Custom QR Code & Barcode Printing",
+          description: "Scannable codes for marketing and inventory",
+        },
+        {
+          name: "Photo Paper Printing",
+          description: "High-resolution photo reproduction",
+        },
+      ],
+    },
+    engraving: {
+      title: "Engraving & Cutting",
+      icon: "laser-icon.jpeg",
+      description:
+        "We offer precise engraving and cutting on materials such as wood, plexiglass, alucobond, PVC, and foamboard. Perfect for custom signs, branding pieces, and high-end visual elements.",
+      services: [
+        {
+          name: "Laser Cutting",
+          description: "Precision cutting for intricate designs",
+        },
+        {
+          name: "Router Cutting",
+          description: "CNC routing for thicker materials",
+        },
+        {
+          name: "Wood Engraving",
+          description: "Custom wood signs and decorative elements",
+        },
+        {
+          name: "Plexi Engraving",
+          description: "Clear and colored plexiglass engraving",
+        },
+        {
+          name: "Alucobond Engraving",
+          description: "Aluminum composite panel customization",
+        },
+        {
+          name: "PVC Engraving",
+          description: "Durable plastic signage and displays",
+        },
+        {
+          name: "Foamboard Cutting",
+          description: "Lightweight displays and presentation materials",
+        },
+      ],
+    },
+    gadgets: {
+      title: "Customized Gadgets",
+      icon: "gadget-icon.jpg",
+      description:
+        "Personalize items from tote bags and notebooks to water bottles and rubber bracelets. We help you create branded merchandise and giveaways that leave a lasting impression.",
+      services: [
+        {
+          name: "Water Bottle Printing",
+          description: "Custom designs on reusable water bottles",
+        },
+        {
+          name: "Tote Bag Printing",
+          description: "Eco-friendly branded shopping bags",
+        },
+        {
+          name: "Notebook Printing",
+          description: "Personalized notebooks and journals",
+        },
+        {
+          name: "Customized Rubber Bracelets",
+          description: "Silicone wristbands with custom messaging",
+        },
+        {
+          name: "Danglers",
+          description: "Hanging promotional pieces for retail environments",
+        },
+      ],
+    },
+    educational: {
+      title: "Educational & Office Essentials",
+      icon: "education-icon.svg",
+      description:
+        "We supply notebooks, folders, name tags, and more. Functional and beautifully designed to enhance any educational environment.",
+      services: [
+        {
+          name: "School Stationery",
+          description: "Complete range of educational supplies",
+        },
+        {
+          name: "Library Essentials",
+          description:
+            "Organization and identification materials for libraries",
+        },
+        {
+          name: "Name Tags",
+          description: "Professional identification badges",
+        },
+        {
+          name: "Folders & Binders",
+          description: "Customized organizational tools",
+        },
+      ],
+    },
+    branding: {
+      title: "Branding & Graphic Design",
+      icon: "design-icon.png",
+      description:
+        "Our design team provides offline campaign materials for municipalities, events, and institutions looking for impactful, large-scale communication.",
+      services: [
+        {
+          name: "Business Branding",
+          description: "Complete visual identity development",
+        },
+        {
+          name: "Graphic Design",
+          description: "Professional design services for print and display",
+        },
+        {
+          name: "Municipality Campaigns",
+          description: "Large-scale public information campaigns",
+        },
+        {
+          name: "Offline Materials",
+          description: "Printed collateral for marketing efforts",
+        },
+        {
+          name: "Signage Solutions",
+          description: "Integrated visual communication systems",
+        },
+      ],
+    },
+  };
+
+  // Open modal when clicking on a service item
+  serviceItems.forEach((item) => {
+    item.addEventListener("click", function () {
+      const category = this.getAttribute("data-category");
+      const serviceData = servicesData[category];
+
+      // Set modal content
+      modalTitle.textContent = serviceData.title;
+      modalIcon.innerHTML = `<img src="images/${serviceData.icon}" alt="${serviceData.title} Icon">`;
+
+      // Generate modal body content
+      let modalHtml = `
+          <div class="services_description">${serviceData.description}</div>
+          <h4 class="services_list_title">Our ${serviceData.title} Services:</h4>
+          <div class="services_list">
+        `;
+
+      serviceData.services.forEach((service) => {
+        modalHtml += `
+            <div class="services_list_item">
+              <div class="services_list_item_icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12L9 16L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="services_list_item_text">
+                <strong>${service.name}</strong> - ${service.description}
+              </div>
+            </div>
+          `;
+      });
+
+      modalHtml += `</div>`;
+      modalBody.innerHTML = modalHtml;
+
+      // Reset any previous animations
+      modalContent.style.animation = "";
+
+      // Show modal with animation
+      setTimeout(() => {
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden"; // Prevent scrolling
+
+        // Add entrance animation
+        modalContent.style.animation = "modalEnter 0.4s forwards";
+      }, 10);
+    });
+  });
+
+  // Close modal
+  modalClose.addEventListener("click", closeModal);
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  function closeModal() {
+    // First remove the active class after animation completes
+    modalContent.style.animation = "modalExit 0.3s forwards";
+
+    setTimeout(() => {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }, 300); // Match the animation duration
+  }
+
+  // Add hover effects with JS for additional interactivity
+  serviceItems.forEach((item) => {
+    item.addEventListener("mouseenter", function () {
+      const number = this.querySelector(".services_number");
+      number.style.animation = "pulse 1s infinite";
+    });
+
+    item.addEventListener("mouseleave", function () {
+      const number = this.querySelector(".services_number");
+      number.style.animation = "";
+    });
+  });
+
+  // Add animations
+  const style = document.createElement("style");
+  style.innerHTML = `
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      
+      @keyframes modalEnter {
+        from { transform: translateY(30px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      
+      @keyframes modalExit {
+        from { transform: translateY(0); opacity: 1; }
+        to { transform: translateY(30px); opacity: 0; }
+      }
+      
+      .services_item {
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+    `;
+  document.head.appendChild(style);
+
+  /*const serviceItems = document.querySelectorAll(".services_item");
 
   const descriptions = {
     "01": "Posters, flyers, business cards, custom notebooks, mugs...",
@@ -173,7 +508,7 @@ document.addEventListener("DOMContentLoaded", function () {
         titleElement.innerHTML = originalHTML;
       });
     }
-  });
+  }); */
 
   /*document.addEventListener("DOMContentLoaded", function () {
     const leaderItems = document.querySelectorAll(".ourleaders_item");
