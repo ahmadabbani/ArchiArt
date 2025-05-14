@@ -28,6 +28,40 @@ h2 {
     font-weight: 700;
 }
 
+.whatsapp-fixed {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25D366;
+    color: white;
+    font-size: 25px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-fixed:hover {
+    transform: scale(1.1);
+}
+
+@media (max-width: 480px) {
+    .whatsapp-fixed {
+        font-size: 20px;
+        width: 45px;
+        height: 45px;
+    }
+}
+
+
 /* Header styles with prefixed classes */
 .header_container {
     position: fixed;
@@ -700,13 +734,13 @@ h2 {
 .aboutus_mosaic-1 {
     grid-column: 1 / 4;
     grid-row: 1 / 5;
-    background-image: url('images/hero10.png');
+    background-image: url('images/jano1.jpeg');
 }
 
 .aboutus_mosaic-2 {
     grid-column: 4 / 7;
     grid-row: 2 / 7;
-    background-image: url('images/s1.jpg');
+    background-image: url('images/lrc1.jpg');
     background-size: cover;
     background-repeat: no-repeat;
 }
