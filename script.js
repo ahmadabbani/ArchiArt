@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     educational: {
       title: "Educational & Office Essentials",
-      icon: "education-icon.svg",
+      icon: "archisrt_icon_50.jpg",
       description:
         "We supply notebooks, folders, name tags, and more. Functional and beautifully designed to enhance any educational environment.",
       services: [

@@ -1294,8 +1294,8 @@ h2 {
 }
 
 .services_modal_icon img {
-    width: 110px;
-    height: 110px;
+    width: 125px;
+    height: 125px;
     border-radius: 50%;
     object-fit: cover;
 }
@@ -1410,8 +1410,8 @@ h2 {
     }
 
     .services_modal_icon img {
-        width: 100px;
-        height: 100px;
+        width: 115px;
+        height: 115px;
     }
 }
 
@@ -1453,8 +1453,8 @@ h2 {
     }
 
     .services_modal_icon img {
-        width: 90px;
-        height: 90px;
+        width: 105px;
+        height: 105px;
     }
 }
 
