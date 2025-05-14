@@ -21,14 +21,14 @@ try {
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Dashboard page DOM loaded");
 
-  /* Check if user is logged in
+  //Check if user is logged in
   supabaseClient.auth.getSession().then(({ data: { session } }) => {
     if (!session) {
       window.location.href = "/";
     } else {
       document.getElementById("dashboard-content").style.display = "block";
     }
-  });*/
+  });
 
   // Handle logout
   const logoutButton = document.querySelector(".dashboard-logout");
