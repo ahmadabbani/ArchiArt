@@ -5,8 +5,47 @@ const supabaseKey =
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const portfolioSection = document.querySelector(".portfolio_section");
+  AOS.init({
+    // Global settings
+    startEvent: "DOMContentLoaded",
+    offset: 120, // Offset (in px) from the original trigger point
+    easing: "ease",
+    once: false, // Whether animation should happen only once
+    mirror: false,
+  });
+  const mobileToggle = document.querySelector(".header_mobile-toggle");
+  const nav = document.querySelector(".header_nav");
+  const navLinks = document.querySelectorAll(".header_nav-link");
 
+  // Mobile menu toggle
+  mobileToggle.addEventListener("click", function () {
+    nav.classList.toggle("header_open");
+
+    // Update icons visibility
+    const menuIcon = document.querySelector(".header_menu-icon");
+    const closeIcon = document.querySelector(".header_close-icon");
+
+    if (nav.classList.contains("header_open")) {
+      menuIcon.style.display = "none";
+      closeIcon.style.display = "block";
+    } else {
+      menuIcon.style.display = "block";
+      closeIcon.style.display = "none";
+    }
+  });
+
+  // Close mobile menu when a link is clicked
+  navLinks.forEach((link) => {
+    link.addEventListener("click", function () {
+      nav.classList.remove("header_open");
+      const menuIcon = document.querySelector(".header_menu-icon");
+      const closeIcon = document.querySelector(".header_close-icon");
+      menuIcon.style.display = "block";
+      closeIcon.style.display = "none";
+    });
+  });
+
+  const portfolioSection = document.querySelector(".portfolio_section");
   // Fetch projects and galleries
   async function fetchProjects() {
     try {
@@ -208,19 +247,34 @@ document.addEventListener("DOMContentLoaded", async function () {
             ? "<h3>Gallery</h3>"
             : ""
         }
-        <div class="portfolio-modal-gallery">
-          ${project.gallery
-            .map((img) => {
-              // Get public URL for each gallery image
-              const galleryImageUrl = supabaseClient.storage
-                .from("project-images")
-                .getPublicUrl(img.img).data.publicUrl;
-              return `
-                  <img src="${galleryImageUrl}" alt="Gallery Image" class="portfolio-modal-gallery-image" />
-                `;
-            })
-            .join("")}
-        </div>
+<div class="portfolio-modal-gallery">
+  ${
+    project.gallery.length > 0
+      ? `<div class="gallery-placeholder-container">
+      ${Array(Math.min(4, project.gallery.length))
+        .fill()
+        .map(() => `<div class="gallery-image-placeholder"></div>`)
+        .join("")}
+    </div>`
+      : ""
+  }
+  ${project.gallery
+    .map((img) => {
+      // Get public URL for each gallery image
+      const galleryImageUrl = supabaseClient.storage
+        .from("project-images")
+        .getPublicUrl(img.img).data.publicUrl;
+      return `
+        <img 
+          src="${galleryImageUrl}" 
+          alt="Gallery Image" 
+          class="portfolio-modal-gallery-image" 
+          onload="this.parentNode.querySelector('.gallery-placeholder-container')?.remove()"
+        />
+      `;
+    })
+    .join("")}
+</div>
       </div>
     `;
 
@@ -307,4 +361,126 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Fetch and render projects
   const projects = await fetchProjects();
   renderPortfolio(projects);
+  const carousel = document.querySelector(".clients_logo-carousel");
+  const wrapper = document.querySelector(".clients_logo-wrapper");
+  const allItems = document.querySelectorAll(".clients_logo-item");
+  const uniqueItemCount = allItems.length / 2; // Original items without duplicates
+  const prevBtn = document.querySelector(".clients_prev-btn");
+  const nextBtn = document.querySelector(".clients_next-btn");
+  const dotsContainer = document.querySelector(".clients_dots");
+
+  let currentIndex = 0;
+  let itemWidth = 0;
+  let itemsPerView = 4;
+  let isTransitioning = false;
+
+  function setupCarousel() {
+    const wrapperWidth = wrapper.offsetWidth;
+
+    // Determine items per view based on screen size
+    if (window.innerWidth > 992) {
+      itemsPerView = 4;
+    } else if (window.innerWidth > 768) {
+      itemsPerView = 3;
+    } else if (window.innerWidth > 480) {
+      itemsPerView = 2;
+    } else {
+      itemsPerView = 1;
+    }
+
+    itemWidth = wrapperWidth / itemsPerView;
+
+    // Size all items
+    allItems.forEach((item) => {
+      item.style.minWidth = `${itemWidth}px`;
+      item.style.maxWidth = `${itemWidth}px`;
+    });
+
+    // Create or update dots
+    dotsContainer.innerHTML = "";
+    for (let i = 0; i < uniqueItemCount; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("clients_dot");
+      if (i === currentIndex) dot.classList.add("active");
+
+      dot.addEventListener("click", () => {
+        if (!isTransitioning) {
+          moveToSlide(i);
+        }
+      });
+
+      dotsContainer.appendChild(dot);
+    }
+
+    // Apply initial position
+    updateCarouselPosition(false);
+  }
+
+  function moveToSlide(targetIndex) {
+    // Prevent rapid clicks
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    currentIndex = targetIndex;
+    updateCarouselPosition(true);
+
+    // Reset transition lock after animation completes
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 500);
+  }
+
+  function updateCarouselPosition(animate) {
+    // Apply the transform
+    const offset = -currentIndex * itemWidth;
+    carousel.style.transition = animate ? "transform 0.5s ease" : "none";
+    carousel.style.transform = `translateX(${offset}px)`;
+
+    // Update dots
+    document.querySelectorAll(".clients_dot").forEach((dot, i) => {
+      dot.classList.toggle("active", i === currentIndex);
+    });
+  }
+
+  function nextSlide() {
+    if (isTransitioning) return;
+
+    currentIndex++;
+    // If we're about to show the duplicated items, instead reset to beginning
+    if (currentIndex >= uniqueItemCount) {
+      currentIndex = 0;
+    }
+    moveToSlide(currentIndex);
+  }
+
+  function prevSlide() {
+    if (isTransitioning) return;
+
+    currentIndex--;
+    // If we go before the first item, go to the last real item
+    if (currentIndex < 0) {
+      currentIndex = uniqueItemCount - 1;
+    }
+    moveToSlide(currentIndex);
+  }
+
+  // Button listeners
+  nextBtn.addEventListener("click", nextSlide);
+  prevBtn.addEventListener("click", prevSlide);
+
+  // Auto slide every 5 seconds
+  let autoSlideTimer = setInterval(nextSlide, 3000);
+
+  // Pause autoSlide on hover
+  wrapper.addEventListener("mouseenter", () => {
+    clearInterval(autoSlideTimer);
+  });
+
+  wrapper.addEventListener("mouseleave", () => {
+    autoSlideTimer = setInterval(nextSlide, 3000);
+  });
+
+  // Initialize and handle resize
+  setupCarousel();
+  window.addEventListener("resize", setupCarousel);
 });

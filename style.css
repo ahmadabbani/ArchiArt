@@ -55,11 +55,10 @@ h2 {
     display: block;
     margin: 0;
     padding: 0;
-    width: 75px;
-    height: 75px;
-    max-width: 75px;
-    border-radius: 50%;
-    max-height: 75px;
+    width: 110px;
+    height: 100px;
+    max-width: 110px;
+    max-height: 100px;
     object-fit: cover;
 }
 
@@ -491,7 +490,7 @@ h2 {
 
 @media screen and (max-width: 576px) {
     .hero_section {
-        max-height: 85vh;
+        max-height: 75vh;
     }
 
     .hero_subheading {
@@ -2005,12 +2004,10 @@ h2 {
     max-width: 100%;
     height: 80px;
     object-fit: contain;
-    filter: grayscale(100%) opacity(0.7);
     transition: all 0.3s ease;
 }
 
 .clients_logo-item:hover .clients_logo {
-    filter: grayscale(0%) opacity(1);
     transform: scale(1.05);
 }
 
@@ -2891,8 +2888,26 @@ h2 {
     background-color: #f0f0f0;
     display: flex;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     padding: 4rem 2rem 2rem 2rem;
+}
+
+.admin-panel-gohome {
+    display: block;
+    background-color: #fe0000;
+    color: white;
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+    margin: 0;
+    font-weight: 700;
+}
+
+.admin-panel-gohome:hover {
+    background-color: #e50000;
 }
 
 .dashboard-main-items {
@@ -2913,17 +2928,19 @@ h2 {
     text-align: center;
 }
 
+
 .dashboard-title {
     color: #333;
     font-size: 2rem;
     margin-bottom: 1.8rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .dashboard-actions {
     display: flex;
     gap: 1rem;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .logout-spinner {
@@ -3086,6 +3103,29 @@ h2 {
 
 .dashboard-button.dashboard-logout:hover {
     background-color: #e50000;
+}
+
+.admin-panel-goportfolio {
+    background-color: #c4c4c4;
+    color: #333;
+    font-weight: 700;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 6px 24px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 1rem;
+    line-height: normal;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.admin-panel-goportfolio:hover {
+    background-color: #bebebe;
+    transform: translateY(-2px);
 }
 
 .dashboard-error {
@@ -3529,6 +3569,12 @@ h2 {
     grid-column: 1 / -1;
 }
 
+@media (max-width: 400px) {
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
 
 /* Project Details Modal Styles */
 .project-details-content {
@@ -3966,7 +4012,10 @@ h2 {
     padding: 100px 5% 80px;
     background-color: #f9f9f9;
     text-align: center;
+    height: 100%;
+
 }
+
 
 .portfolio_main-title {
     font-size: 3rem;
@@ -4033,6 +4082,7 @@ h2 {
     display: flex;
     justify-content: center;
     gap: 15px;
+    flex-wrap: wrap;
     margin-bottom: 15px;
 }
 
@@ -4061,6 +4111,7 @@ h2 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
+
 }
 
 .portfolio-project-card {
@@ -4157,6 +4208,38 @@ h2 {
 
 .portfolio-modal-gallery-image:hover {
     transform: scale(1.03);
+}
+
+.gallery-placeholder-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    width: 100%;
+    position: absolute;
+    padding-bottom: 10px;
+    bottom: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    left: 0;
+    overflow: hidden;
+}
+
+.gallery-image-placeholder {
+    height: 90px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 /* Gallery Modal Styles */
@@ -4495,4 +4578,11 @@ h2 {
         padding: 6px 10px;
         font-size: 0.86rem;
     }
+}
+
+.portfolio_clients_section {
+    padding: 100px 5% 80px;
+    display: block;
+    clear: both;
+    /* Ensure it starts after any floated elements */
 }
