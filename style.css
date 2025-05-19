@@ -241,9 +241,9 @@ h2 {
 .hero_top-content {
     height: 70%;
     position: relative;
-    background-image: url('images/home2.png');
+    background-image: url('images/hero-neon-main3_3_optimized.png');
     background-size: cover;
-    background-position: bottom;
+    background-position: center;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -367,16 +367,16 @@ h2 {
     width: 100%;
     display: flex;
     align-items: end;
-    background-image: url('images/home1.jpg');
+    background-image: url('images/hero-neon2_1_optimized.png');
     background-size: cover;
-    background-position: calc(30% - 20px) calc(30% - 20px);
+    background-position: calc(30% - 5px) calc(30% - 43px);
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .hero_right_buttons {
     margin-left: auto;
-    padding: 0 20px 20px 0;
+    padding: 0 20px 6px 0;
     display: flex;
     gap: 20px;
 }
@@ -399,10 +399,10 @@ h2 {
     gap: 40px;
     background-color: white;
     color: black;
-    padding: 5px 5px 5px 15px;
+    padding: 3px 5px 3px 15px;
     border: none;
     border-radius: 30px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     cursor: pointer;
 }
@@ -465,6 +465,7 @@ h2 {
 
     .hero_top-content {
         height: 100%;
+        background-position: top;
     }
 
     .hero_top-content::before {
