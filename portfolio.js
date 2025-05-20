@@ -51,7 +51,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     try {
       const { data: projects, error: projectsError } = await supabaseClient
         .from("projects")
-        .select("*, gallery(*)");
+        .select("*, gallery(*)")
+        .order("created_at", { ascending: false }); // Order by created_at descending (newest first)
 
       if (projectsError) {
         console.error("Error fetching projects:", projectsError);
