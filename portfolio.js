@@ -46,6 +46,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   const portfolioSection = document.querySelector(".portfolio_section");
+  // Add this line to show the loading indicator
+  const loadingElement = document.createElement("div");
+  loadingElement.className = "portfolio-loading-container";
+  loadingElement.innerHTML = "Loading...";
+  portfolioSection.appendChild(loadingElement);
+
   // Fetch projects and galleries
   async function fetchProjects() {
     try {
@@ -68,6 +74,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Render portfolio layout
   function renderPortfolio(projects) {
+    // Add this line to remove the loading element
+    document.querySelector(".portfolio-loading-container")?.remove();
     const sections = [
       "All",
       ...new Set(projects.map((p) => p.section || "Others")),
