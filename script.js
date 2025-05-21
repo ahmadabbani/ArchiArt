@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
       title: "Vehicle Branding",
       icon: "car-icon.png",
       description:
-        "We transform cars into moving billboards, whether full car wraps, window see-through graphics, or partial vinyl branding.",
+        "We transform cars into moving billboards, whether full car wraps, window see-through graphics, or partial vinyl cast.",
       services: [
         {
           name: "Car Wrapping",
@@ -176,7 +176,8 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         {
           name: "Partial Branding",
-          description: "Strategic vinyl placement for targeted messaging",
+          description:
+            "Strategic placement of cast vinyl for targeted messaging",
         },
       ],
     },
