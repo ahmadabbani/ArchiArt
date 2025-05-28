@@ -8,10 +8,11 @@ try {
     throw new Error("Supabase library not loaded");
   }
 
-  supabaseClient = supabase.createClient(
-    SUPABASE_CONFIG.url,
-    SUPABASE_CONFIG.key
-  );
+  const supabaseUrl = "https://iupipboqnmtzulhvabil.supabase.co";
+  const supabaseKey =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1cGlwYm9xbm10enVsaHZhYmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzMTI2NDIsImV4cCI6MjA1OTg4ODY0Mn0.nchOl1HSDYHBg_Crzam-DY1ZWop8QC5SNgvuUeADxM4";
+
+  supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
   console.log("Supabase initialized:", supabaseClient);
 } catch (error) {
   console.error("Failed to initialize Supabase:", error.message);
@@ -20,7 +21,7 @@ try {
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Dashboard page DOM loaded");
 
-  //Check if user is logged in
+  // Check if user is logged in
   supabaseClient.auth.getSession().then(({ data: { session } }) => {
     if (!session) {
       window.location.href = "/";
@@ -321,81 +322,6 @@ document.addEventListener("DOMContentLoaded", function () {
       projectModal.style.display = "block";
     });
 
-    // function to fetch sections
-    async function fetchProjectSections() {
-      try {
-        const { data: sections, error } = await supabaseClient
-          .from("projects")
-          .select("section")
-          .not("section", "is", null);
-
-        if (error) throw error;
-
-        // Get unique sections
-        const uniqueSections = [
-          ...new Set(sections.map((item) => item.section).filter(Boolean)),
-        ];
-
-        // Populate the dropdown
-        const sectionDropdown = document.getElementById("project-section");
-        // Clear previous options except the first one
-        sectionDropdown.innerHTML =
-          '<option value="">Select an existing section</option>';
-
-        // Add options for each section
-        uniqueSections.forEach((section) => {
-          const option = document.createElement("option");
-          option.value = section;
-          option.textContent = section;
-          sectionDropdown.appendChild(option);
-        });
-      } catch (error) {
-        console.error("Error fetching sections:", error);
-      }
-    }
-
-    // function to fetch subsections
-    async function fetchProjectSubSections() {
-      try {
-        const { data: subsections, error } = await supabaseClient
-          .from("projects")
-          .select("subsection")
-          .not("subsection", "is", null);
-
-        if (error) throw error;
-
-        // Get unique sections
-        const uniqueSections = [
-          ...new Set(
-            subsections.map((item) => item.subsection).filter(Boolean)
-          ),
-        ];
-
-        // Populate the dropdown
-        const sectionDropdown = document.getElementById("project-subsection");
-        // Clear previous options except the first one
-        sectionDropdown.innerHTML =
-          '<option value="">Select an existing subsection</option>';
-
-        // Add options for each section
-        uniqueSections.forEach((subsection) => {
-          const option = document.createElement("option");
-          option.value = subsection;
-          option.textContent = subsection;
-          sectionDropdown.appendChild(option);
-        });
-      } catch (error) {
-        console.error("Error fetching subsections:", error);
-      }
-    }
-
-    // Modify your modal open event listener
-    addProjectButton.addEventListener("click", () => {
-      projectModal.style.display = "block";
-      fetchProjectSections(); // Fetch sections when opening the modal
-      fetchProjectSubSections(); // Fetch subsections when opening the modal
-    });
-
     // Close modal
     closeProjectModal.addEventListener("click", () => {
       projectModal.style.display = "none";
@@ -412,11 +338,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .querySelectorAll(".dashboard-error")
         .forEach((el) => (el.style.display = "none"));
       document.getElementById("project-success").style.display = "none";
-      // Add these lines to reset section fields
-      document.getElementById("project-section").value = "";
-      document.getElementById("new-project-section").value = "";
-      document.getElementById("project-subsection").value = "";
-      document.getElementById("new-project-subsection").value = "";
     });
   }
 
@@ -533,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Client-side validation
       let isValid = true;
 
-      /*if (!title) {
+      if (!title) {
         document.getElementById("project-title-error").textContent =
           "Title is required";
         document.getElementById("project-title-error").style.display = "block";
@@ -546,42 +467,15 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("project-description-error").style.display =
           "block";
         isValid = false;
-      }*/
-
-      // Section validation
-      const sectionDropdown = document.getElementById("project-section");
-      const subsectionDropdown = document.getElementById("project-subsection");
-      const newSection = document
-        .getElementById("new-project-section")
-        .value.trim();
-      const newSubSection = document
-        .getElementById("new-project-subsection")
-        .value.trim();
-      //sections
-      if (sectionDropdown.value && newSection) {
-        document.getElementById("project-section-error").textContent =
-          "Please choose either an existing section or create a new one, not both";
-        document.getElementById("project-section-error").style.display =
-          "block";
-        isValid = false;
       }
 
-      //subsections
-      if (subsectionDropdown.value && newSubSection) {
-        document.getElementById("project-subsection-error").textContent =
-          "Please choose either an existing subsection or create a new one, not both";
-        document.getElementById("project-subsection-error").style.display =
-          "block";
-        isValid = false;
-      }
-      //validation images
-      /*if (!mainImage) {
+      if (!mainImage) {
         document.getElementById("project-main-image-error").textContent =
           "Main image is required";
         document.getElementById("project-main-image-error").style.display =
           "block";
         isValid = false;
-      }*/
+      }
 
       if (!isValid) {
         submitButton.innerHTML = "Create Project";
@@ -600,7 +494,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Upload main image to Supabase storage
-        const mainImagePath = `project-images/${Date.now()}-${mainImage?.name}`;
+        const mainImagePath = `project-images/${Date.now()}-${mainImage.name}`;
         const { data: mainImageData, error: mainImageError } =
           await supabaseClient.storage
             .from("project-images")
@@ -615,17 +509,7 @@ document.addEventListener("DOMContentLoaded", function () {
             `Main image upload failed: ${mainImageError.message}`
           );
         }
-        // Add this code here - determine which section to use
-        const sectionToUse =
-          document.getElementById("project-section").value ||
-          document.getElementById("new-project-section").value.trim() ||
-          null;
 
-        //determine which subsection to use
-        const subsectionToUse =
-          document.getElementById("project-subsection").value ||
-          document.getElementById("new-project-subsection").value.trim() ||
-          null;
         // Insert project into database
         const { data: projectData, error: projectError } = await supabaseClient
           .from("projects")
@@ -634,8 +518,6 @@ document.addEventListener("DOMContentLoaded", function () {
               title,
               description,
               image: mainImagePath,
-              section: sectionToUse,
-              subsection: subsectionToUse,
             },
           ])
           .select()
@@ -689,12 +571,6 @@ document.addEventListener("DOMContentLoaded", function () {
           "Project created successfully!";
         document.getElementById("project-success").style.display = "block";
         projectForm.reset();
-
-        document.getElementById("project-section").value = "";
-        document.getElementById("new-project-section").value = "";
-        document.getElementById("project-subsection").value = "";
-        document.getElementById("new-project-subsection").value = "";
-
         // Reset gallery inputs to just one
         galleryInputsContainer.innerHTML = `
           <div class="gallery-input-container">
@@ -809,10 +685,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const description = projectDetailsModal.querySelector(
         ".project-details-description"
       );
-      const sectionElement = projectDetailsModal.querySelector(
-        ".project-details-section"
-      );
-
       const mainImage = projectDetailsModal.querySelector(
         ".project-details-main-image img"
       );
@@ -823,14 +695,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // Set project details
       title.textContent = project.title;
       description.textContent = project.description;
-
-      // Add this code to display the section
-      if (project.section) {
-        sectionElement.textContent = `in ${project.section}`;
-        sectionElement.style.display = "block";
-      } else {
-        sectionElement.style.display = "none";
-      }
 
       // Set main image
       const mainImageUrl = supabaseClient.storage
