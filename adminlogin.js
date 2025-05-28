@@ -8,11 +8,10 @@ try {
     throw new Error("Supabase library not loaded");
   }
 
-  const supabaseUrl = "https://iupipboqnmtzulhvabil.supabase.co";
-  const supabaseKey =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1cGlwYm9xbm10enVsaHZhYmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzMTI2NDIsImV4cCI6MjA1OTg4ODY0Mn0.nchOl1HSDYHBg_Crzam-DY1ZWop8QC5SNgvuUeADxM4";
-
-  supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+  supabaseClient = supabase.createClient(
+    SUPABASE_CONFIG.url,
+    SUPABASE_CONFIG.key
+  );
   console.log("Supabase initialized:", supabaseClient);
 } catch (error) {
   console.error("Failed to initialize Supabase:", error.message);

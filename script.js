@@ -585,14 +585,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Create or update dots
     dotsContainer.innerHTML = "";
-    for (let i = 0; i < uniqueItemCount; i++) {
+    const totalDots = Math.ceil(uniqueItemCount / itemsPerView);
+    for (let i = 0; i < totalDots; i++) {
       const dot = document.createElement("div");
       dot.classList.add("clients_dot");
       if (i === currentIndex) dot.classList.add("active");
 
       dot.addEventListener("click", () => {
         if (!isTransitioning) {
-          moveToSlide(i);
+          moveToSlide(i * itemsPerView);
         }
       });
 
@@ -625,7 +626,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Update dots
     document.querySelectorAll(".clients_dot").forEach((dot, i) => {
-      dot.classList.toggle("active", i === currentIndex);
+      dot.classList.toggle(
+        "active",
+        i === Math.floor(currentIndex / itemsPerView)
+      );
     });
   }
 
@@ -827,16 +831,18 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Form validation
-  enquiryForm.addEventListener("submit", (event) => {
+  enquiryForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const nameInput = document.getElementById("enquiry-name");
     const emailInput = document.getElementById("enquiry-email");
+    const companyInput = document.getElementById("enquiry-company");
     const phoneInput = document.getElementById("enquiry-phone");
     const descriptionInput = document.getElementById("enquiry-description");
 
     const name = nameInput.value.trim();
     const email = emailInput.value.trim();
+    const company = companyInput.value.trim();
     const phone = phoneInput.value.trim();
     const description = descriptionInput.value.trim();
 
@@ -884,13 +890,39 @@ document.addEventListener("DOMContentLoaded", function () {
       isValid = false;
     }
 
-    // If valid, show success message
+    // If valid, submit the form
     if (isValid) {
-      const successMessage = document.createElement("p");
-      successMessage.textContent = "Enquiry submitted successfully!";
-      successMessage.classList.add("enquiry-success");
-      enquiryForm.appendChild(successMessage);
-      enquiryForm.reset();
+      try {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("company", company);
+        formData.append("phone", phone);
+        formData.append("description", description);
+
+        const response = await fetch("send_enquiry.php", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          const successMessage = document.createElement("p");
+          successMessage.textContent = result.message;
+          successMessage.classList.add("enquiry-success");
+          enquiryForm.appendChild(successMessage);
+          enquiryForm.reset();
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (error) {
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent =
+          error.message || "Failed to send enquiry. Please try again later.";
+        errorMessage.classList.add("enquiry-error");
+        enquiryForm.appendChild(errorMessage);
+      }
     }
   });
 
@@ -914,4 +946,10 @@ document.addEventListener("DOMContentLoaded", function () {
         .forEach((el) => el.remove());
     }
   });
+
+  // Initialize Supabase client
+  const supabaseClient = supabase.createClient(
+    SUPABASE_CONFIG.url,
+    SUPABASE_CONFIG.key
+  );
 });

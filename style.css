@@ -4542,14 +4542,15 @@ h2 {
 
     .portfolio-modal-content {
         width: 90%;
-        height: 80vh;
-        max-height: 90vh;
+        height: 100%;
+        max-height: 100%;
         max-width: 1440px;
+        overflow-y: auto;
     }
 
     .portfolio-modal-main-image {
-        width: 90%;
-        max-height: 600px;
+        width: 70%;
+        max-height: 400px;
         margin: 50px 0;
     }
 

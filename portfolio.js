@@ -1,8 +1,8 @@
 // Initialize Supabase client
-const supabaseUrl = "https://iupipboqnmtzulhvabil.supabase.co";
-const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1cGlwYm9xbm10enVsaHZhYmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzMTI2NDIsImV4cCI6MjA1OTg4ODY0Mn0.nchOl1HSDYHBg_Crzam-DY1ZWop8QC5SNgvuUeADxM4"; // Replace with your actual Supabase key
-const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseClient = supabase.createClient(
+  SUPABASE_CONFIG.url,
+  SUPABASE_CONFIG.key
+);
 
 document.addEventListener("DOMContentLoaded", async function () {
   AOS.init({
@@ -407,14 +407,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Create or update dots
     dotsContainer.innerHTML = "";
-    for (let i = 0; i < uniqueItemCount; i++) {
+    const totalDots = Math.ceil(uniqueItemCount / itemsPerView);
+    for (let i = 0; i < totalDots; i++) {
       const dot = document.createElement("div");
       dot.classList.add("clients_dot");
       if (i === currentIndex) dot.classList.add("active");
 
       dot.addEventListener("click", () => {
         if (!isTransitioning) {
-          moveToSlide(i);
+          moveToSlide(i * itemsPerView);
         }
       });
 
@@ -447,7 +448,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Update dots
     document.querySelectorAll(".clients_dot").forEach((dot, i) => {
-      dot.classList.toggle("active", i === currentIndex);
+      dot.classList.toggle(
+        "active",
+        i === Math.floor(currentIndex / itemsPerView)
+      );
     });
   }
 

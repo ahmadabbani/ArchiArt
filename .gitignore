@@ -1,0 +1,9 @@
+# Ignore config file with sensitive data
+config.js
+
+# Ignore other common files
+.DS_Store
+node_modules/
+.env
+.env.local
+.env.*.local 
