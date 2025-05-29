@@ -318,8 +318,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (addProjectButton && projectModal && closeProjectModal) {
     // Open modal
-    addProjectButton.addEventListener("click", () => {
+    addProjectButton.addEventListener("click", async () => {
       projectModal.style.display = "block";
+
+      // Fetch existing sections and subsections
+      try {
+        const { data: projects, error } = await supabaseClient
+          .from("projects")
+          .select("section, subsection")
+          .not("section", "is", null);
+
+        if (error) throw error;
+
+        // Get unique sections and subsections
+        const sections = [
+          ...new Set(projects.map((p) => p.section).filter(Boolean)),
+        ];
+        const subsections = [
+          ...new Set(projects.map((p) => p.subsection).filter(Boolean)),
+        ];
+
+        // Populate section dropdown
+        const sectionSelect = document.getElementById("project-section");
+        sectionSelect.innerHTML =
+          '<option value="">Select an existing section</option>';
+        sections.forEach((section) => {
+          const option = document.createElement("option");
+          option.value = section;
+          option.textContent = section;
+          sectionSelect.appendChild(option);
+        });
+
+        // Populate subsection dropdown
+        const subsectionSelect = document.getElementById("project-subsection");
+        subsectionSelect.innerHTML =
+          '<option value="">Select an existing subsection</option>';
+        subsections.forEach((subsection) => {
+          const option = document.createElement("option");
+          option.value = subsection;
+          option.textContent = subsection;
+          subsectionSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Error fetching sections and subsections:", error);
+      }
     });
 
     // Close modal
@@ -518,6 +560,8 @@ document.addEventListener("DOMContentLoaded", function () {
               title,
               description,
               image: mainImagePath,
+              section: document.getElementById("project-section").value,
+              subsection: document.getElementById("project-subsection").value,
             },
           ])
           .select()

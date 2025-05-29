@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - Archiart</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="script.js" defer></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Contact ArchiArt for all your printing and signage needs. Get in touch with our team for professional solutions."
+    />
+    <meta
+      name="keywords"
+      content="contact ArchiArt, printing services contact, signage contact, Lebanon printing services"
+    />
+    <meta name="author" content="ArchiArt" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Contact Us - ArchiArt" />
+    <meta
+      property="og:description"
+      content="Contact ArchiArt for all your printing and signage needs. Get in touch with our team for professional solutions."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://archiart.com.lb/contact" />
+    <meta
+      property="og:image"
+      content="https://archiart.com.lb/images/logo.jpg"
+    />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="ArchiArt Lebanon" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Contact Us - ArchiArt" />
+    <meta
+      name="twitter:description"
+      content="Contact ArchiArt for all your printing and signage needs. Get in touch with our team for professional solutions."
+    />
+    <meta
+      name="twitter:image"
+      content="https://archiart.com.lb/images/logo.jpg"
+    />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://archiart.com.lb/contact" />
+
+    <!-- Robots Meta Tag -->
+    <meta name="robots" content="index, follow" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  </head>
+  <body>
+    <header class="header_container">
+      <div class="header_logo">
+        <a href="index.html">
+          <img src="images/logo-header-removebg.png" alt="Archiart Logo" />
+        </a>
+      </div>
+      <nav class="header_nav">
+        <ul class="header_nav-list">
+          <li data-aos="fade-up">
+            <a href="index.html" class="header_nav-link">Home</a>
+          </li>
+          <li data-aos="fade-up" data-aos-delay="100">
+            <a href="portfolio.html" class="header_nav-link">Portfolio</a>
+          </li>
+          <li data-aos="fade-up" data-aos-delay="200">
+            <a href="contact.html" class="header_nav-link header_active"
+              >Contact</a
+            >
+          </li>
+        </ul>
+      </nav>
+      <div class="header_mobile-toggle">
+        <span class="material-symbols-outlined header_menu-icon">menu</span>
+        <span class="material-symbols-outlined header_close-icon">close</span>
+      </div>
+    </header>
+
+    <section id="contact" class="contactus_section">
+      <h2 class="contactus_main-title">Contact Us</h2>
+      <div class="contactus_container">
+        <div class="contactus_form-container" data-aos="fade-right">
+          <form class="contactus_form">
+            <div class="contactus_form-group">
+              <input
+                type="text"
+                id="name"
+                class="contactus_input"
+                placeholder="Your Name"
+              />
+            </div>
+            <div class="contactus_form-group">
+              <input
+                type="email"
+                id="email"
+                class="contactus_input"
+                placeholder="Your Email"
+              />
+            </div>
+            <div class="contactus_form-group">
+              <input
+                type="text"
+                id="subject"
+                class="contactus_input"
+                placeholder="Subject"
+              />
+            </div>
+            <div class="contactus_form-group">
+              <textarea
+                id="message"
+                class="contactus_textarea"
+                placeholder="Your Message"
+              ></textarea>
+            </div>
+            <button type="submit" class="contactus_submit-btn">
+              Send Message <span> <i class="fas fa-paper-plane"></i> </span>
+            </button>
+          </form>
+        </div>
+        <div class="contactus_info-container" data-aos="fade-left">
+          <div class="contactus_info-widget">
+            <div class="contactus_info-item">
+              <div class="contactus_icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <a
+                href="https://maps.app.goo.gl/5n4YjnqNzTDzo5CC7?g_st=com.google.maps.preview.copy"
+                target="_blank"
+                style="display: block; text-decoration: none; color: inherit"
+                class="contactus_info-content"
+              >
+                <div class="contactus_info-content">
+                  <h3 class="contactus_info-title">Address</h3>
+                  <p class="contactus_info-text">Jdeideh - Azzam Center</p>
+                </div>
+              </a>
+            </div>
+            <div class="contactus_info-item">
+              <div class="contactus_icon">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+
+              <div class="contactus_info-content">
+                <h3 class="contactus_info-title">Phone</h3>
+                <p class="contactus_info-text">
+                  <a
+                    href="https://wa.me/96181882662"
+                    target="_blank"
+                    style="
+                      display: inline-block;
+                      text-decoration: none;
+                      color: inherit;
+                    "
+                  >
+                    81 882 662
+                  </a>
+                  |
+                  <a
+                    href="https://wa.me/96101881885"
+                    target="_blank"
+                    style="
+                      display: inline-block;
+                      text-decoration: none;
+                      color: inherit;
+                    "
+                  >
+                    01 881 885
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div class="contactus_info-item">
+              <div class="contactus_icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contactus_info-content">
+                <h3 class="contactus_info-title">Email</h3>
+                <p class="contactus_info-text">
+                  <a
+                    href="mailto:Info@archiart.com.lb"
+                    style="
+                      display: block;
+                      text-decoration: none;
+                      color: inherit;
+                      padding: 0;
+                      margin: 0;
+                      width: fit-content;
+                    "
+                    >Info@archiart.com.lb</a
+                  >
+                  <a
+                    href="mailto:Design@archiart.com.lb"
+                    style="
+                      display: block;
+                      text-decoration: none;
+                      color: inherit;
+                      padding: 0;
+                      margin: 0;
+                      width: fit-content;
+                    "
+                  >
+                    Design@archiart.com.lb
+                  </a>
+                  <a
+                    href="mailto:Support@archiart.com.lb"
+                    style="
+                      display: block;
+                      text-decoration: none;
+                      color: inherit;
+                      padding: 0;
+                      margin: 0;
+                      width: fit-content;
+                    "
+                  >
+                    Support@archiart.com.lb
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div class="contactus_social-media">
+              <h3 class="contactus_social-title">Follow Us</h3>
+              <div class="contactus_social-icons">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61569342242984"
+                  target="_blank"
+                  class="contactus_social-icon"
+                  ><i class="fab fa-facebook-f"></i
+                ></a>
+                <a
+                  href="https://www.tiktok.com/@archiart.lb?_t=ZS-8vdLrobygEC&_r=1"
+                  target="_blank"
+                  class="contactus_social-icon"
+                  ><i class="fab fa-tiktok"></i
+                ></a>
+                <a
+                  href="https://www.instagram.com/archiart.lb?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                  target="_blank"
+                  class="contactus_social-icon"
+                  ><i class="fab fa-instagram"></i
+                ></a>
+                <a
+                  href="https://www.linkedin.com/company/archiart-lb/"
+                  target="_blank"
+                  class="contactus_social-icon"
+                  ><i class="fab fa-linkedin-in"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer_section">
+      <div class="footer_container">
+        <div class="footer_column footer_brand-column">
+          <div class="footer_logo" data-aos="fade-right">
+            <a href="index.html">
+              <img src="images/logo.jpg" alt="ArchiArt Logo" />
+            </a>
+          </div>
+          <p
+            class="footer_description"
+            data-aos="fade-right"
+            data-aos-delay="200"
+          >
+            ArchiArt delivers premium quality prints for businesses and
+            individuals. From billboards to wall murals, we bring your vision to
+            life with cutting-edge technology and exceptional service.
+          </p>
+          <a
+            href="https://wa.me/96181882662"
+            target="_blank"
+            class="footer_cta-button"
+            data-aos="fade-right"
+            data-aos-delay="400"
+          >
+            Talk With Us
+            <span class="footer_cta-icon"><i class="fab fa-whatsapp"></i></span>
+          </a>
+          <a
+            href="mailto:Info@archiart.com.lb"
+            class="footer_email"
+            data-aos="fade-right"
+            data-aos-delay="600"
+            >Info@archiart.com.lb</a
+          >
+          <a
+            href="mailto:Design@archiart.com.lb"
+            class="footer_email"
+            data-aos="fade-right"
+            data-aos-delay="600"
+          >
+            Design@archiart.com.lb
+          </a>
+          <a
+            href="mailto:Support@archiart.com.lb"
+            class="footer_email"
+            data-aos="fade-right"
+            data-aos-delay="600"
+          >
+            Support@archiart.com.lb
+          </a>
+        </div>
+
+        <div class="footer_column footer_links-column">
+          <h3 class="footer_column-title">Quick Links</h3>
+          <ul class="footer_links-list">
+            <li data-aos="zoom-in" data-aos-delay="100">
+              <a href="index.html" class="footer_link">Home</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="200">
+              <a href="portfolio.html" class="footer_link">Portfolio</a>
+            </li>
+            <li data-aos="zoom-in" data-aos-delay="300">
+              <a href="contact.html" class="footer_link">Contact</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer_column footer_social-column" data-aos="fade-left">
+          <h3 class="footer_column-title">Connect With Us</h3>
+          <div class="footer_social-container">
+            <a
+              href="https://www.facebook.com/profile.php?id=61569342242984"
+              target="_blank"
+              class="footer_social-link"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a
+              href="https://www.tiktok.com/@archiart.lb?_t=ZS-8vdLrobygEC&_r=1"
+              target="_blank"
+              class="footer_social-link"
+              ><i class="fab fa-tiktok"></i
+            ></a>
+            <a
+              href="https://www.instagram.com/archiart.lb?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              target="_blank"
+              class="footer_social-link"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a
+              href="https://www.linkedin.com/company/archiart-lb/"
+              target="_blank"
+              class="footer_social-link"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer_bottom">
+        <div class="footer_copyright">
+          <p>&copy; 2025 ArchiArt. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <a href="https://wa.me/96181882662" target="_blank" class="whatsapp-fixed">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </body>
+</html>
