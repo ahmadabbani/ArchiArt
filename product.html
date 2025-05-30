@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Details</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header_container">
+        <a href="index.html" class="header_logo">
+          <img src="images/logo-header-removebg.png" alt="Archiart Logo" />
+        </a>
+        <nav class="header_nav">
+          <ul class="header_nav-list">
+            <li><a href="index.html" class="header_nav-link">Home</a></li>
+
+            <li>
+              <a href="portfolio.html" class="header_nav-link">Portfolio</a>
+            </li>
+            <li>
+              <a href="shop.html" class="header_nav-link header_active">Shop</a>
+            </li>
+            <li><a href="contact.html" class="header_nav-link">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header_mobile-toggle">
+          <span class="material-symbols-outlined header_menu-icon">menu</span>
+          <span class="material-symbols-outlined header_close-icon">close</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Breadcrumb Navigation -->
+    <div class="singleproduct_breadcrumb">
+      <div class="singleproduct_container">
+        <nav class="singleproduct_breadcrumb-nav">
+          <a href="shop.html" class="singleproduct_breadcrumb-link">Shop</a>
+          <span class="singleproduct_breadcrumb-separator">/</span>
+          <span
+            class="singleproduct_breadcrumb-current"
+            id="breadcrumb-product-name"
+          ></span>
+        </nav>
+      </div>
+    </div>
+
+    <section class="singleproduct_section">
+      <div class="singleproduct_container">
+        <div class="singleproduct_content">
+          <div class="singleproduct_image">
+            <div class="singleproduct_image-placeholder"></div>
+            <img src="" alt="Product Image" id="product-image" />
+          </div>
+          <div class="singleproduct_info">
+            <h1 class="singleproduct_title" id="product-title"></h1>
+            <p class="singleproduct_category" id="product-category"></p>
+            <p class="singleproduct_description" id="product-description"></p>
+            <p class="singleproduct_price" id="product-price"></p>
+            <button class="singleproduct_inquiry-btn" id="inquiry-btn">
+              Send Inquiry
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Products Section -->
+    <section class="singleproduct_related-section">
+      <div class="singleproduct_container">
+        <h2 class="singleproduct_related-title">Related Products</h2>
+        <div class="singleproduct_related-grid" id="related-products-grid">
+          <!-- Related products will be dynamically added here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Inquiry Modal -->
+    <div class="singleproduct_modal" id="inquiry-modal">
+      <div class="singleproduct_modal-content">
+        <span class="singleproduct_modal-close">&times;</span>
+        <h2 class="singleproduct_modal-title">Send Inquiry</h2>
+        <form class="singleproduct_form" id="inquiry-form">
+          <div class="singleproduct_form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" required />
+          </div>
+          <div class="singleproduct_form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required />
+          </div>
+          <div class="singleproduct_form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="singleproduct_submit-btn">
+            Send Inquiry
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="product.js"></script>
+  </body>
+</html>

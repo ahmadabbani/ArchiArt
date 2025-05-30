@@ -30,6 +30,10 @@
               Add New Project <span>+</span>
             </button>
 
+            <button class="dashboard-button dashboard-add-product">
+              Create New Product <span>+</span>
+            </button>
+
             <a href="portfolio.html" class="admin-panel-goportfolio"
               >Portfolio</a
             >
@@ -42,9 +46,26 @@
 
         <!-- Projects Display Section -->
         <div class="projects-display">
-          <h3 class="projects-title">Your Projects</h3>
+          <div class="projects-header">
+            <h3 class="projects-title">Your Projects</h3>
+            <button class="dashboard-button toggle-view-btn">
+              Show Products
+            </button>
+          </div>
           <div class="projects-grid" id="projects-grid">
             <!-- Projects will be dynamically added here -->
+          </div>
+        </div>
+
+        <div class="products-display" style="display: none">
+          <div class="projects-header">
+            <h3 class="projects-title">Your Products</h3>
+            <button class="dashboard-button toggle-view-btn">
+              Show Projects
+            </button>
+          </div>
+          <div class="projects-grid" id="products-grid">
+            <!-- Products will be dynamically added here -->
           </div>
         </div>
       </div>
@@ -89,8 +110,8 @@
       >
         <div class="dashboard-modal-content delete-confirmation-content">
           <h3>Confirm Deletion</h3>
-          <p>
-            Are you sure you want to delete this project? This action cannot be
+          <p id="delete-confirmation-text">
+            Are you sure you want to delete this item? This action cannot be
             undone.
           </p>
           <div class="delete-confirmation-buttons">
@@ -392,6 +413,152 @@
             class="dashboard-success"
             style="display: none"
           ></p>
+        </div>
+      </div>
+
+      <!-- Add Product Modal -->
+      <div
+        id="dashboard-product-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content">
+          <span id="product-modal-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <h3 class="dashboard-modal-title">Add New Product</h3>
+          <form id="dashboard-product-form" class="dashboard-form">
+            <div class="dashboard-field">
+              <label for="product-title" class="dashboard-label"
+                >Product Title</label
+              >
+              <input type="text" id="product-title" class="dashboard-input" />
+              <p
+                id="product-title-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="product-description" class="dashboard-label"
+                >Description</label
+              >
+              <textarea
+                id="product-description"
+                class="dashboard-input"
+              ></textarea>
+              <p
+                id="product-description-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="product-section" class="dashboard-label"
+                >Product Section</label
+              >
+              <select id="product-section" class="dashboard-input">
+                <option value="">Select an existing section</option>
+                <!-- Options will be populated by JavaScript -->
+              </select>
+              <p
+                id="product-section-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="new-product-section" class="dashboard-label"
+                >Or Create New Section</label
+              >
+              <input
+                type="text"
+                id="new-product-section"
+                class="dashboard-input"
+                placeholder="Enter new section name"
+              />
+              <p
+                id="new-product-section-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="product-price" class="dashboard-label"
+                >Price (Optional)</label
+              >
+              <input
+                type="number"
+                id="product-price"
+                class="dashboard-input"
+                min="0"
+                step="0.01"
+              />
+              <p
+                id="product-price-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="product-image" class="dashboard-label"
+                >Product Image</label
+              >
+              <div id="product-image-wrapper" class="file-input-wrapper">
+                <label for="product-image" class="file-input-label">
+                  <i class="fas fa-image"></i> Choose Image
+                  <span class="file-name"></span>
+                </label>
+                <input
+                  type="file"
+                  id="product-image"
+                  class="dashboard-input"
+                  accept="image/*"
+                />
+                <img class="image-preview" id="product-image-preview" />
+              </div>
+              <p
+                id="product-image-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <button type="submit" class="dashboard-button dashboard-submit">
+              Create Product
+            </button>
+          </form>
+          <p
+            id="product-success"
+            class="dashboard-success"
+            style="display: none"
+          ></p>
+        </div>
+      </div>
+
+      <!-- Product Details Modal -->
+      <div
+        id="product-details-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content product-details-content">
+          <span id="product-details-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <div class="project-details-header">
+            <div class="project-details-header-flex">
+              <h3 class="project-details-title"></h3>
+              <p class="project-details-section"></p>
+              <p class="project-details-price"></p>
+            </div>
+            <p class="project-details-description"></p>
+          </div>
+          <div class="project-details-main-image">
+            <img src="" alt="Main product image" />
+          </div>
+          <button class="dashboard-button delete-product-btn">
+            <i class="fas fa-trash"></i> Delete Product
+          </button>
         </div>
       </div>
     </div>

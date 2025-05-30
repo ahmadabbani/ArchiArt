@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop - Archiart</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header_container">
+      <div class="header_logo">
+        <a href="index.html">
+          <img src="images/logo-header-removebg.png" alt="Archiart Logo" />
+        </a>
+      </div>
+      <nav class="header_nav">
+        <ul class="header_nav-list">
+          <li><a href="index.html" class="header_nav-link">Home</a></li>
+          <li>
+            <a href="portfolio.html" class="header_nav-link">Portfolio</a>
+          </li>
+          <li>
+            <a href="shop.html" class="header_nav-link header_active">Shop</a>
+          </li>
+          <li><a href="contact.html" class="header_nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header_mobile-toggle">
+        <span class="material-symbols-outlined header_menu-icon">menu</span>
+        <span class="material-symbols-outlined header_close-icon">close</span>
+      </div>
+    </header>
+
+    <!-- Shop Section -->
+    <section class="shop_section">
+      <div class="shop_container">
+        <!-- Filters Sidebar -->
+        <aside class="shop_filters">
+          <div class="shop_filter-group">
+            <h3 class="shop_filter-title">Price Range</h3>
+            <div class="shop_price-slider">
+              <input
+                type="range"
+                id="price-min"
+                min="0"
+                max="1000"
+                value="0"
+                class="shop_range-input"
+              />
+              <input
+                type="range"
+                id="price-max"
+                min="0"
+                max="1000"
+                value="1000"
+                class="shop_range-input"
+              />
+              <div class="shop_price-inputs">
+                <div class="shop_price-input">
+                  <label for="min-price">Min</label>
+                  <input
+                    type="number"
+                    id="min-price"
+                    value="0"
+                    min="0"
+                    max="1000"
+                  />
+                </div>
+                <div class="shop_price-input">
+                  <label for="max-price">Max</label>
+                  <input
+                    type="number"
+                    id="max-price"
+                    value="1000"
+                    min="0"
+                    max="1000"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="shop_filter-group">
+            <h3 class="shop_filter-title">Categories</h3>
+            <div class="shop_categories">
+              <label class="shop_category">
+                <input type="checkbox" value="all" checked />
+                <span>All Products</span>
+              </label>
+              <!-- Categories will be populated dynamically -->
+            </div>
+          </div>
+        </aside>
+
+        <!-- Products Grid -->
+        <div class="shop_products">
+          <div class="shop_products-grid" id="products-grid">
+            <!-- Products will be populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Details Modal -->
+    <div id="product-details-modal" class="shop_modal">
+      <div class="shop_modal-content">
+        <span class="shop_modal-close">&times;</span>
+        <div class="shop_product-details">
+          <div class="shop_product-image">
+            <img src="" alt="Product Image" />
+          </div>
+          <div class="shop_product-info">
+            <h2 class="shop_product-title"></h2>
+            <p class="shop_product-category"></p>
+            <p class="shop_product-description"></p>
+            <p class="shop_product-price"></p>
+            <button class="shop_inquiry-btn">Send Inquiry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inquiry Form Modal -->
+    <div id="inquiry-modal" class="shop_modal">
+      <div class="shop_modal-content">
+        <span class="shop_modal-close">&times;</span>
+        <h3 class="shop_modal-title">Send Inquiry</h3>
+        <form id="inquiry-form" class="shop_inquiry-form">
+          <div class="shop_form-group">
+            <label for="inquiry-name">Name</label>
+            <input type="text" id="inquiry-name" required />
+          </div>
+          <div class="shop_form-group">
+            <label for="inquiry-email">Email</label>
+            <input type="email" id="inquiry-email" required />
+          </div>
+          <div class="shop_form-group">
+            <label for="inquiry-message">Message</label>
+            <textarea id="inquiry-message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="shop_submit-btn">Send Inquiry</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="shop.js"></script>
+  </body>
+</html>

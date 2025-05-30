@@ -316,6 +316,216 @@ document.addEventListener("DOMContentLoaded", function () {
   const addGalleryButton = document.getElementById("add-gallery-input");
   const galleryInputsContainer = document.getElementById("gallery-inputs");
 
+  // Handle product creation
+  const addProductButton = document.querySelector(".dashboard-add-product");
+  const productModal = document.getElementById("dashboard-product-modal");
+  const closeProductModal = document.getElementById("product-modal-close");
+  const productForm = document.getElementById("dashboard-product-form");
+
+  if (addProductButton && productModal && closeProductModal) {
+    // Open modal
+    addProductButton.addEventListener("click", async () => {
+      productModal.style.display = "block";
+
+      // Fetch existing sections
+      try {
+        const { data: products, error } = await supabaseClient
+          .from("products")
+          .select("section")
+          .not("section", "is", null);
+
+        if (error) throw error;
+
+        // Get unique sections
+        const sections = [
+          ...new Set(products.map((p) => p.section).filter(Boolean)),
+        ];
+
+        // Populate section dropdown
+        const sectionSelect = document.getElementById("product-section");
+        sectionSelect.innerHTML =
+          '<option value="">Select an existing section</option>';
+        sections.forEach((section) => {
+          const option = document.createElement("option");
+          option.value = section;
+          option.textContent = section;
+          sectionSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Error fetching sections:", error);
+      }
+    });
+
+    // Close modal
+    closeProductModal.addEventListener("click", () => {
+      productModal.style.display = "none";
+      productForm.reset();
+      // Reset error messages
+      document
+        .querySelectorAll(".dashboard-error")
+        .forEach((el) => (el.style.display = "none"));
+      document.getElementById("product-success").style.display = "none";
+      // Reset image preview
+      const preview = document.getElementById("product-image-preview");
+      preview.classList.remove("visible");
+      preview.src = "";
+      // Reset file name
+      document.querySelector("#product-image-wrapper .file-name").textContent =
+        "";
+    });
+  }
+
+  // Handle product form submission
+  if (productForm) {
+    productForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const title = document.getElementById("product-title").value.trim();
+      const description = document
+        .getElementById("product-description")
+        .value.trim();
+      const price = document.getElementById("product-price").value;
+      const image = document.getElementById("product-image").files[0];
+      const section = document.getElementById("product-section").value;
+      const newSection = document
+        .getElementById("new-product-section")
+        .value.trim();
+
+      // Get button element
+      const submitButton = productForm.querySelector(".dashboard-submit");
+
+      // Show loading spinner on submit
+      submitButton.innerHTML = '<span class="submit-spinner"></span>';
+      submitButton.disabled = true;
+
+      // Reset messages
+      document
+        .querySelectorAll(".dashboard-error")
+        .forEach((el) => (el.style.display = "none"));
+      document.getElementById("product-success").style.display = "none";
+
+      // Client-side validation
+      let isValid = true;
+
+      if (!title) {
+        document.getElementById("product-title-error").textContent =
+          "Title is required";
+        document.getElementById("product-title-error").style.display = "block";
+        isValid = false;
+      }
+
+      if (!description) {
+        document.getElementById("product-description-error").textContent =
+          "Description is required";
+        document.getElementById("product-description-error").style.display =
+          "block";
+        isValid = false;
+      }
+
+      if (!image) {
+        document.getElementById("product-image-error").textContent =
+          "Product image is required";
+        document.getElementById("product-image-error").style.display = "block";
+        isValid = false;
+      }
+
+      // Validate section selection
+      if (section && newSection) {
+        document.getElementById("product-section-error").textContent =
+          "Please select either an existing section or create a new one, not both";
+        document.getElementById("product-section-error").style.display =
+          "block";
+        isValid = false;
+      }
+
+      if (!isValid) {
+        submitButton.innerHTML = "Create Product";
+        submitButton.disabled = false;
+        return;
+      }
+
+      try {
+        // Check if user is authenticated
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabaseClient.auth.getSession();
+        if (sessionError || !session) {
+          throw new Error("You must be logged in to create a product");
+        }
+
+        // Upload image to Supabase storage
+        const imagePath = `project-images/${Date.now()}-${image.name}`;
+        const { data: imageData, error: imageError } =
+          await supabaseClient.storage
+            .from("project-images")
+            .upload(imagePath, image, {
+              cacheControl: "3600",
+              upsert: false,
+            });
+
+        if (imageError) {
+          console.error("Image upload error:", imageError);
+          throw new Error(`Image upload failed: ${imageError.message}`);
+        }
+
+        // Insert product into database
+        const { data: productData, error: productError } = await supabaseClient
+          .from("products")
+          .insert([
+            {
+              title,
+              description,
+              price: price ? parseFloat(price) : null,
+              image: imagePath,
+              section: newSection || section || null,
+            },
+          ])
+          .select()
+          .single();
+
+        if (productError) {
+          console.error("Product insert error:", productError);
+          throw new Error(`Product creation failed: ${productError.message}`);
+        }
+
+        // Show success message
+        document.getElementById("product-success").textContent =
+          "Product created successfully!";
+        document.getElementById("product-success").style.display = "block";
+        productForm.reset();
+        // Reset image preview
+        const preview = document.getElementById("product-image-preview");
+        preview.classList.remove("visible");
+        preview.src = "";
+        // Reset file name
+        document.querySelector(
+          "#product-image-wrapper .file-name"
+        ).textContent = "";
+
+        // If products view is currently visible, refresh the products list
+        if (productsDisplay.style.display !== "none") {
+          await fetchAndDisplayProducts();
+        }
+      } catch (error) {
+        console.error("Error creating product:", error);
+        document.getElementById("product-image-error").textContent =
+          error.message || "An error occurred while creating the product";
+        document.getElementById("product-image-error").style.display = "block";
+      } finally {
+        submitButton.innerHTML = "Create Product";
+        submitButton.disabled = false;
+      }
+    });
+  }
+
+  // Initialize product image preview
+  const productImageInput = document.getElementById("product-image");
+  const productImagePreview = document.getElementById("product-image-preview");
+  const productFileNameSpan =
+    productImageInput.previousElementSibling.querySelector(".file-name");
+  handleFileInput(productImageInput, productImagePreview, productFileNameSpan);
+
   if (addProjectButton && projectModal && closeProjectModal) {
     // Open modal
     addProjectButton.addEventListener("click", async () => {
@@ -808,11 +1018,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize event listeners for deletion
   const projectDetailsModal = document.getElementById("project-details-modal");
+  const productDetailsModal = document.getElementById("product-details-modal");
   const deleteConfirmationModal = document.getElementById(
     "delete-confirmation-modal"
   );
   const deleteProjectBtn = projectDetailsModal.querySelector(
     ".delete-project-btn"
+  );
+  const deleteProductBtn = productDetailsModal.querySelector(
+    ".delete-product-btn"
   );
   const cancelDeleteBtn =
     deleteConfirmationModal.querySelector(".cancel-delete-btn");
@@ -823,7 +1037,20 @@ document.addEventListener("DOMContentLoaded", function () {
   // Show confirmation modal when delete button is clicked
   if (deleteProjectBtn) {
     deleteProjectBtn.addEventListener("click", () => {
-      console.log("Delete button clicked");
+      console.log("Delete project button clicked");
+      deleteConfirmationModal.dataset.deleteType = "project";
+      document.getElementById("delete-confirmation-text").textContent =
+        "Are you sure you want to delete this project? This action cannot be undone.";
+      deleteConfirmationModal.style.display = "block";
+    });
+  }
+
+  if (deleteProductBtn) {
+    deleteProductBtn.addEventListener("click", () => {
+      console.log("Delete product button clicked");
+      deleteConfirmationModal.dataset.deleteType = "product";
+      document.getElementById("delete-confirmation-text").textContent =
+        "Are you sure you want to delete this product? This action cannot be undone.";
       deleteConfirmationModal.style.display = "block";
     });
   }
@@ -832,139 +1059,292 @@ document.addEventListener("DOMContentLoaded", function () {
   if (cancelDeleteBtn) {
     cancelDeleteBtn.addEventListener("click", () => {
       deleteConfirmationModal.style.display = "none";
+      deleteConfirmationModal.dataset.deleteType = "";
     });
   }
 
   // Confirm deletion
   if (confirmDeleteBtn) {
     confirmDeleteBtn.addEventListener("click", async () => {
+      const deleteType = deleteConfirmationModal.dataset.deleteType;
       const projectId = projectDetailsModal.dataset.projectId;
-      if (projectId) {
-        await deleteProject(projectId);
+      const productId = productDetailsModal.dataset.productId;
+
+      // Show loading spinner
+      confirmDeleteBtn.innerHTML = '<span class="delete-spinner"></span>';
+      confirmDeleteBtn.disabled = true;
+
+      try {
+        if (deleteType === "project" && projectId) {
+          await deleteProject(projectId);
+        } else if (deleteType === "product" && productId) {
+          await deleteProduct(productId);
+        }
+      } catch (error) {
+        console.error("Error during deletion:", error);
+      } finally {
+        // Reset button state
+        confirmDeleteBtn.innerHTML = "Delete";
+        confirmDeleteBtn.disabled = false;
+        // Close the confirmation modal
+        deleteConfirmationModal.style.display = "none";
+        deleteConfirmationModal.dataset.deleteType = "";
       }
     });
   }
 
-  // Close confirmation modal when clicking outside
-  window.addEventListener("click", (e) => {
-    if (e.target === deleteConfirmationModal) {
-      deleteConfirmationModal.style.display = "none";
-    }
-  });
-
-  // Handle project deletion
+  // Delete project function
   async function deleteProject(projectId) {
-    const confirmDeleteBtn = document.querySelector(".confirm-delete-btn");
-    const originalBtnText = confirmDeleteBtn.innerHTML;
-
     try {
-      console.log("Starting deletion process for project:", projectId);
-
-      // Show spinner on delete button
-      confirmDeleteBtn.innerHTML = '<span class="delete-spinner"></span>';
-      confirmDeleteBtn.disabled = true;
-
-      // First, get the project to get the main image path
-      const { data: project, error: projectFetchError } = await supabaseClient
+      // Get the project to find its image path
+      const { data: project, error: fetchError } = await supabaseClient
         .from("projects")
         .select("image")
         .eq("id", projectId)
         .single();
 
-      if (projectFetchError) {
-        console.error("Error fetching project:", projectFetchError);
-        throw new Error(
-          `Failed to fetch project: ${projectFetchError.message}`
-        );
+      if (fetchError) throw fetchError;
+
+      // Delete the main image from storage
+      if (project.image) {
+        const { error: imageError } = await supabaseClient.storage
+          .from("project-images")
+          .remove([project.image]);
+
+        if (imageError) throw imageError;
       }
 
-      // Get all gallery images for this project
+      // Get gallery images
       const { data: galleryImages, error: galleryError } = await supabaseClient
         .from("gallery")
         .select("img")
         .eq("project_id", projectId);
 
-      if (galleryError) {
-        console.error("Error fetching gallery images:", galleryError);
-        throw new Error(
-          `Failed to fetch gallery images: ${galleryError.message}`
-        );
-      }
+      if (galleryError) throw galleryError;
 
-      console.log("Found gallery images:", galleryImages);
-
-      // Delete main project image from storage
-      if (project.image) {
-        console.log("Deleting main project image from storage:", project.image);
-        const { error: mainImageDeleteError } = await supabaseClient.storage
-          .from("project-images")
-          .remove([project.image]);
-
-        if (mainImageDeleteError) {
-          console.error("Error deleting main image:", mainImageDeleteError);
-          throw new Error(
-            `Failed to delete main image: ${mainImageDeleteError.message}`
-          );
-        }
-      }
-
-      // Delete all gallery images from storage
+      // Delete gallery images from storage
       if (galleryImages && galleryImages.length > 0) {
-        console.log("Deleting gallery images from storage...");
-        const deletePromises = galleryImages.map((image) => {
-          console.log("Deleting image:", image.img);
-          return supabaseClient.storage
-            .from("project-images")
-            .remove([image.img]);
-        });
+        const imagePaths = galleryImages.map((img) => img.img);
+        const { error: galleryImageError } = await supabaseClient.storage
+          .from("project-images")
+          .remove(imagePaths);
 
-        const results = await Promise.all(deletePromises);
-        console.log("Storage deletion results:", results);
+        if (galleryImageError) throw galleryImageError;
       }
 
-      // Delete gallery entries from database
-      console.log("Deleting gallery entries from database...");
-      const { error: galleryDeleteError } = await supabaseClient
+      // Delete gallery entries
+      const { error: deleteGalleryError } = await supabaseClient
         .from("gallery")
         .delete()
         .eq("project_id", projectId);
 
-      if (galleryDeleteError) {
-        console.error("Error deleting gallery entries:", galleryDeleteError);
-        throw new Error(
-          `Failed to delete gallery entries: ${galleryDeleteError.message}`
-        );
-      }
+      if (deleteGalleryError) throw deleteGalleryError;
 
-      // Delete the project from the database
-      console.log("Deleting project from database...");
-      const { error: projectError } = await supabaseClient
+      // Delete the project
+      const { error: deleteError } = await supabaseClient
         .from("projects")
         .delete()
         .eq("id", projectId);
 
-      if (projectError) {
-        console.error("Error deleting project:", projectError);
-        throw new Error(`Failed to delete project: ${projectError.message}`);
-      }
+      if (deleteError) throw deleteError;
 
-      console.log("Project deleted successfully");
-
-      // Close both modals
-      projectDetailsModal.style.display = "none";
-      deleteConfirmationModal.style.display = "none";
+      // Close the project details modal
+      document.getElementById("project-details-modal").style.display = "none";
 
       // Refresh the projects list
       await fetchAndDisplayProjects();
     } catch (error) {
-      console.error("Detailed error in deleteProject:", error);
-      alert(`Error deleting project: ${error.message}`);
-    } finally {
-      // Restore button state
-      confirmDeleteBtn.innerHTML = originalBtnText;
-      confirmDeleteBtn.disabled = false;
+      console.error("Error deleting project:", error);
+      throw error;
     }
   }
+
+  // Delete product function
+  async function deleteProduct(productId) {
+    try {
+      // Get the product to find its image path
+      const { data: product, error: fetchError } = await supabaseClient
+        .from("products")
+        .select("image")
+        .eq("id", productId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Delete the image from storage
+      if (product.image) {
+        const { error: imageError } = await supabaseClient.storage
+          .from("project-images")
+          .remove([product.image]);
+
+        if (imageError) throw imageError;
+      }
+
+      // Delete the product
+      const { error: deleteError } = await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id", productId);
+
+      if (deleteError) throw deleteError;
+
+      // Close the product details modal
+      document.getElementById("product-details-modal").style.display = "none";
+
+      // Refresh the products list
+      await fetchAndDisplayProducts();
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      throw error;
+    }
+  }
+
+  // Handle toggle between projects and products
+  const toggleButtons = document.querySelectorAll(".toggle-view-btn");
+  const projectsDisplay = document.querySelector(".projects-display");
+  const productsDisplay = document.querySelector(".products-display");
+
+  toggleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (projectsDisplay.style.display !== "none") {
+        // Switch to products view
+        projectsDisplay.style.display = "none";
+        productsDisplay.style.display = "block";
+        fetchAndDisplayProducts();
+      } else {
+        // Switch to projects view
+        productsDisplay.style.display = "none";
+        projectsDisplay.style.display = "block";
+        fetchAndDisplayProjects();
+      }
+    });
+  });
+
+  // Fetch and display products
+  async function fetchAndDisplayProducts() {
+    try {
+      console.log("Starting to fetch products...");
+
+      const { data: products, error: productsError } = await supabaseClient
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (productsError) {
+        console.error("Error fetching products:", productsError);
+        throw productsError;
+      }
+
+      console.log("Products fetched:", products);
+
+      const productsGrid = document.getElementById("products-grid");
+      if (!productsGrid) {
+        console.error("Products grid element not found");
+        return;
+      }
+
+      productsGrid.innerHTML = "";
+
+      if (!products || products.length === 0) {
+        console.log("No products found");
+        productsGrid.innerHTML =
+          '<p class="no-projects">No products available</p>';
+        return;
+      }
+
+      for (const product of products) {
+        console.log("Processing product:", product);
+
+        const mainImageUrl = supabaseClient.storage
+          .from("project-images")
+          .getPublicUrl(product.image).data.publicUrl;
+
+        console.log("Main image URL:", mainImageUrl);
+
+        const productCard = document.createElement("div");
+        productCard.className = "project-card";
+        productCard.dataset.productId = product.id;
+
+        productCard.innerHTML = `
+          <img src="${mainImageUrl}" alt="${
+          product.title
+        }" class="project-card-image" />
+          <div class="project-card-content">
+            <h3 class="project-card-title">${product.title}</h3>
+            <p class="project-card-description">${product.description}</p>
+            ${
+              product.price
+                ? `<p class="project-card-price">$${product.price}</p>`
+                : ""
+            }
+          </div>
+        `;
+
+        productCard.addEventListener("click", () =>
+          showProductDetails(product)
+        );
+        productsGrid.appendChild(productCard);
+      }
+    } catch (error) {
+      console.error("Error in fetchAndDisplayProducts:", error);
+    }
+  }
+
+  // Show product details modal
+  async function showProductDetails(product) {
+    try {
+      console.log("Showing details for product:", product);
+
+      const productDetailsModal = document.getElementById(
+        "product-details-modal"
+      );
+      productDetailsModal.dataset.productId = product.id;
+
+      const title = productDetailsModal.querySelector(".project-details-title");
+      const description = productDetailsModal.querySelector(
+        ".project-details-description"
+      );
+      const price = productDetailsModal.querySelector(".project-details-price");
+      const section = productDetailsModal.querySelector(
+        ".project-details-section"
+      );
+      const mainImage = productDetailsModal.querySelector(
+        ".project-details-main-image img"
+      );
+
+      // Set product details
+      title.textContent = product.title;
+      description.textContent = product.description;
+      price.textContent = product.price ? `$${product.price}` : "";
+      section.textContent = product.section || "";
+
+      // Set main image
+      const mainImageUrl = supabaseClient.storage
+        .from("project-images")
+        .getPublicUrl(product.image).data.publicUrl;
+      mainImage.src = mainImageUrl;
+
+      // Show modal
+      productDetailsModal.style.display = "block";
+    } catch (error) {
+      console.error("Error in showProductDetails:", error);
+    }
+  }
+
+  // Close product details modal
+  document
+    .getElementById("product-details-close")
+    .addEventListener("click", () => {
+      document.getElementById("product-details-modal").style.display = "none";
+    });
+
+  // Close product details modal when clicking outside
+  window.addEventListener("click", (e) => {
+    const productModal = document.getElementById("product-details-modal");
+    if (e.target === productModal) {
+      productModal.style.display = "none";
+    }
+  });
 
   fetchAndDisplayProjects();
   // Initialize AOS if available
