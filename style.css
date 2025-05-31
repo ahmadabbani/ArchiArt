@@ -4191,14 +4191,16 @@ h2 {
     font-size: 12px;
 }
 
-/* Make sure your project detail modal has an edit button styled properly */
 .project-edit-button {
     background-color: #4CAF50;
     color: white;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
     margin-right: 8px;
 }
 

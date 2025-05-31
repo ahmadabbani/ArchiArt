@@ -962,7 +962,7 @@ document.addEventListener("DOMContentLoaded", function () {
             galleryItem.innerHTML = `
               <div class="edit-gallery-thumbnail">
                 <img src="${imageUrl.publicUrl}" alt="Gallery image" />
-              </div>
+          </div>
               <button type="button" class="remove-gallery-image" data-image-path="${image.img}">×</button>
             `;
             currentGalleryGrid.appendChild(galleryItem);
@@ -1317,6 +1317,76 @@ document.addEventListener("DOMContentLoaded", function () {
         preview.src = data.publicUrl;
         preview.style.display = "block";
       }
+    };
+
+    // Add click handler for delete button
+    const deleteButton = modal.querySelector(".delete-product-btn");
+    deleteButton.onclick = () => {
+      const deleteModal = document.getElementById("delete-confirmation-modal");
+      const confirmDeleteBtn = deleteModal.querySelector(".confirm-delete-btn");
+      const cancelDeleteBtn = deleteModal.querySelector(".cancel-delete-btn");
+
+      deleteModal.style.display = "block";
+      modal.style.display = "none";
+
+      const handleConfirm = async () => {
+        try {
+          // Add loading state to confirm button
+          const originalText = confirmDeleteBtn.innerHTML;
+          confirmDeleteBtn.disabled = true;
+          confirmDeleteBtn.innerHTML = '<div class="delete-spinner"></div>';
+
+          // Delete product image from storage if it exists
+          if (product.image) {
+            const { error: storageError } = await supabaseClient.storage
+              .from("project-images")
+              .remove([product.image]);
+
+            if (storageError) {
+              console.error("Error deleting image from storage:", storageError);
+              throw storageError;
+            }
+          }
+
+          // Delete product from database
+          const { error: productDeleteError } = await supabaseClient
+            .from("products")
+            .delete()
+            .eq("id", product.id);
+
+          if (productDeleteError) {
+            console.error("Error deleting product:", productDeleteError);
+            throw productDeleteError;
+          }
+
+          // Close all modals
+          document.getElementById("product-details-modal").style.display =
+            "none";
+          deleteModal.style.display = "none";
+
+          // Refresh products list
+          await fetchAndDisplayProducts();
+        } catch (error) {
+          console.error("Error in delete confirmation:", error);
+        } finally {
+          // Reset button state
+          confirmDeleteBtn.disabled = false;
+          confirmDeleteBtn.innerHTML = "Delete";
+          // Clean up event listeners
+          confirmDeleteBtn.removeEventListener("click", handleConfirm);
+          cancelDeleteBtn.removeEventListener("click", handleCancel);
+        }
+      };
+
+      const handleCancel = () => {
+        deleteModal.style.display = "none";
+        // Clean up event listeners
+        confirmDeleteBtn.removeEventListener("click", handleConfirm);
+        cancelDeleteBtn.removeEventListener("click", handleCancel);
+      };
+
+      confirmDeleteBtn.addEventListener("click", handleConfirm);
+      cancelDeleteBtn.addEventListener("click", handleCancel);
     };
   }
 
@@ -1746,6 +1816,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const editModal = document.getElementById("edit-project-modal");
     if (e.target === editModal) {
       editModal.style.display = "none";
+    }
+  });
+
+  // Close image preview modal
+  document
+    .getElementById("image-preview-close")
+    .addEventListener("click", () => {
+      document.getElementById("image-preview-modal").style.display = "none";
+    });
+
+  // Close image preview modal when clicking outside
+  window.addEventListener("click", (e) => {
+    const imagePreviewModal = document.getElementById("image-preview-modal");
+    if (e.target === imagePreviewModal) {
+      imagePreviewModal.style.display = "none";
     }
   });
 });
