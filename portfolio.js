@@ -55,19 +55,43 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Fetch projects and galleries
   async function fetchProjects() {
     try {
+      // First fetch all projects
       const { data: projects, error: projectsError } = await supabaseClient
         .from("projects")
-        .select("*, gallery(*)")
-        .order("created_at", { ascending: false }); // Order by created_at descending (newest first)
+        .select("*")
+        .order("created_at", { ascending: false });
 
-      if (projectsError) {
-        console.error("Error fetching projects:", projectsError);
-        return [];
-      }
+      if (projectsError) throw projectsError;
 
-      return projects;
+      // For each project, fetch its gallery images
+      const projectsWithImages = await Promise.all(
+        projects.map(async (project) => {
+          const { data: galleryImages, error: galleryError } =
+            await supabaseClient
+              .from("gallery")
+              .select("img")
+              .eq("project_id", project.id);
+
+          if (galleryError) throw galleryError;
+
+          // Get all image URLs for the project
+          const imageUrls = galleryImages.map((img) => {
+            const { data } = supabaseClient.storage
+              .from("project-images")
+              .getPublicUrl(img.img);
+            return data.publicUrl;
+          });
+
+          return {
+            ...project,
+            images: imageUrls,
+          };
+        })
+      );
+
+      return projectsWithImages;
     } catch (error) {
-      console.error("Unexpected error fetching projects:", error);
+      console.error("Error fetching projects:", error);
       return [];
     }
   }
@@ -76,297 +100,192 @@ document.addEventListener("DOMContentLoaded", async function () {
   function renderPortfolio(projects) {
     // Add this line to remove the loading element
     document.querySelector(".portfolio-loading-container")?.remove();
-    const sections = [
-      "All",
-      ...new Set(projects.map((p) => p.section || "Others")),
-    ];
+    const sections = [...new Set(projects.map((project) => project.section))];
+
     // Create section buttons
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.className = "portfolio-buttons";
+    const sectionButtons = document.createElement("div");
+    sectionButtons.className = "portfolio-buttons";
+
+    // Add "All" button
+    const allButton = document.createElement("button");
+    allButton.className = "portfolio-button active";
+    allButton.textContent = "All";
+    allButton.onclick = () => renderProjects(projects);
+    sectionButtons.appendChild(allButton);
+
+    // Add section buttons
     sections.forEach((section) => {
       const button = document.createElement("button");
       button.className = "portfolio-button";
-      button.textContent = section === null ? "Others" : section;
-      button.dataset.section = section;
-      if (section === "All") button.classList.add("active");
-      button.addEventListener("click", () => {
+      button.textContent = section;
+      button.onclick = () => {
+        // Update active button
         document
           .querySelectorAll(".portfolio-button")
           .forEach((btn) => btn.classList.remove("active"));
         button.classList.add("active");
-        filterProjects(section, projects);
-      });
-      buttonsContainer.appendChild(button);
+
+        // Filter and render projects for this section
+        const sectionProjects = projects.filter(
+          (project) => project.section === section
+        );
+        renderProjects(sectionProjects);
+      };
+      sectionButtons.appendChild(button);
     });
-    portfolioSection.appendChild(buttonsContainer);
 
-    // Create subsection buttons container
-    const subsectionButtonsContainer = document.createElement("div");
-    subsectionButtonsContainer.className = "subsection-buttons hide";
-    //subsectionButtonsContainer.style.display = "none";
-    portfolioSection.appendChild(subsectionButtonsContainer);
+    // Clear and update portfolio section while preserving the title
+    const portfolioSection = document.querySelector(".portfolio_section");
+    const title = portfolioSection.querySelector(".portfolio_main-title");
+    portfolioSection.innerHTML = "";
+    portfolioSection.appendChild(title);
+    portfolioSection.appendChild(sectionButtons);
 
-    // Create projects container
-    const projectsContainer = document.createElement("div");
-    projectsContainer.className = "portfolio-projects";
-    portfolioSection.appendChild(projectsContainer);
-
-    // Show all projects by default
-    filterProjects("All", projects);
-  }
-
-  // Filter and display projects
-  function filterProjects(section, projects) {
-    const projectsContainer = document.querySelector(".portfolio-projects");
-    const subsectionButtonsContainer = document.querySelector(
-      ".subsection-buttons"
-    );
-    projectsContainer.innerHTML = "";
-    subsectionButtonsContainer.innerHTML = "";
-    subsectionButtonsContainer.className = "subsection-buttons hide";
-
-    let filteredProjects;
-    if (section === "All") {
-      filteredProjects = projects;
-    } else {
-      filteredProjects = projects.filter(
-        (project) =>
-          project.section === section ||
-          (section === "Others" && !project.section)
-      );
-
-      // Check if this section has any subsections
-      const subsectionsWithValues = filteredProjects
-        .filter((project) => project.subsection)
-        .map((project) => project.subsection);
-
-      // Check if there are projects without subsections
-      const hasProjectsWithoutSubsection = filteredProjects.some(
-        (project) => !project.subsection
-      );
-
-      // Create the subsections array
-      const subsections = ["All", ...new Set(subsectionsWithValues)];
-
-      // Add "Others" option if needed
-      if (hasProjectsWithoutSubsection && subsectionsWithValues.length > 0) {
-        subsections.push("Others");
-      }
-
-      if (subsections.length > 1) {
-        // More than just "All"
-        subsectionButtonsContainer.className = "subsection-buttons show";
-
-        // Create subsection buttons
-        subsections.forEach((subsection) => {
-          const subButton = document.createElement("button");
-          subButton.className = "subsection-button";
-          subButton.textContent = subsection;
-          subButton.dataset.subsection = subsection;
-          if (subsection === "All") subButton.classList.add("active");
-
-          subButton.addEventListener("click", () => {
-            document
-              .querySelectorAll(".subsection-button")
-              .forEach((btn) => btn.classList.remove("active"));
-            subButton.classList.add("active");
-
-            // Filter projects by subsection
-            renderProjectsBySubsection(section, subsection, projects);
-          });
-
-          subsectionButtonsContainer.appendChild(subButton);
-        });
-      }
-    }
-
-    // Display projects
-    renderProjects(filteredProjects);
-  }
-
-  // Render projects by subsection
-  function renderProjectsBySubsection(section, subsection, projects) {
-    const projectsContainer = document.querySelector(".portfolio-projects");
-    projectsContainer.innerHTML = "";
-
-    let filteredProjects;
-    if (section === "Others") {
-      filteredProjects = projects.filter((project) => !project.section);
-    } else {
-      filteredProjects = projects.filter(
-        (project) => project.section === section
-      );
-    }
-
-    if (subsection === "All") {
-      // Show all projects for this section - no additional filtering
-    } else if (subsection === "Others") {
-      // Show only projects without a subsection
-      filteredProjects = filteredProjects.filter(
-        (project) => !project.subsection
-      );
-    } else {
-      // Show projects with the specific subsection
-      filteredProjects = filteredProjects.filter(
-        (project) => project.subsection === subsection
-      );
-    }
-
-    renderProjects(filteredProjects);
+    // Initial render of all projects
+    renderProjects(projects);
   }
 
   // Helper function to render projects
   function renderProjects(projects) {
-    const projectsContainer = document.querySelector(".portfolio-projects");
+    const portfolioSection = document.querySelector(".portfolio_section");
+    const projectsContainer = document.createElement("div");
+    projectsContainer.className = "portfolio-projects";
+
+    // Create a grid container
+    const grid = document.createElement("div");
+    grid.className = "portfolio-grid";
 
     projects.forEach((project) => {
-      const projectCard = document.createElement("div");
-      projectCard.className = "portfolio-project-card";
-      const mainImageUrl = supabaseClient.storage
-        .from("project-images")
-        .getPublicUrl(project.image).data.publicUrl;
-      projectCard.innerHTML = `
-      <img src="${mainImageUrl}" alt="${project.title}" class="portfolio-project-image" />
-      <h3 class="portfolio-project-title">${project.title}</h3>
-    `;
-      projectCard.addEventListener("click", () => showProjectModal(project));
-      projectsContainer.appendChild(projectCard);
+      // Create a card for each image in the project
+      project.images.forEach((imageUrl, index) => {
+        const projectCard = document.createElement("div");
+        projectCard.className = "portfolio-project-card";
+
+        // Determine size based on image dimensions
+        const img = new Image();
+        img.onload = () => {
+          const aspectRatio = img.width / img.height;
+          if (aspectRatio > 1.5) {
+            projectCard.classList.add("size-3"); // Wide image
+          } else if (aspectRatio < 0.7) {
+            projectCard.classList.add("size-2"); // Tall image
+          } else {
+            projectCard.classList.add("size-1"); // Square-ish image
+          }
+        };
+        img.src = imageUrl;
+
+        const imageWrapper = document.createElement("div");
+        imageWrapper.className = "portfolio-project-image";
+
+        const displayImg = document.createElement("img");
+        displayImg.src = imageUrl;
+        displayImg.alt = project.section;
+        displayImg.loading = "lazy";
+
+        // Add click handler to show gallery with the clicked image index
+        imageWrapper.onclick = () => showGallery(project, index);
+
+        imageWrapper.appendChild(displayImg);
+        projectCard.appendChild(imageWrapper);
+        grid.appendChild(projectCard);
+      });
     });
+
+    projectsContainer.appendChild(grid);
+
+    // Remove existing projects container if any
+    const existingContainer = portfolioSection.querySelector(
+      ".portfolio-projects"
+    );
+    if (existingContainer) {
+      existingContainer.remove();
+    }
+
+    portfolioSection.appendChild(projectsContainer);
   }
 
-  // Show project modal
-  function showProjectModal(project) {
-    // Get the public URL for the main image
-    const mainImageUrl = supabaseClient.storage
-      .from("project-images")
-      .getPublicUrl(project.image).data.publicUrl;
-
+  function showGallery(project, clickedImageIndex = 0) {
     const modal = document.createElement("div");
     modal.className = "portfolio-modal";
-    modal.innerHTML = `
-      <div class="portfolio-modal-content">
-        <span class="portfolio-modal-close">&times;</span>
-        <h2 class='portfolio-modal-title'>${project.title}</h2>
-        <p>${project.description}</p>
-        <img src="${mainImageUrl}" alt="${
-      project.title
-    }" class="portfolio-modal-main-image" />
-        ${
-          project.gallery && project.gallery.length > 0
-            ? "<h3>Gallery</h3>"
-            : ""
-        }
-<div class="portfolio-modal-gallery">
-  ${
-    project.gallery.length > 0
-      ? `<div class="gallery-placeholder-container">
-      ${Array(Math.min(4, project.gallery.length))
-        .fill()
-        .map(() => `<div class="gallery-image-placeholder"></div>`)
-        .join("")}
-    </div>`
-      : ""
-  }
-  ${project.gallery
-    .map((img) => {
-      // Get public URL for each gallery image
-      const galleryImageUrl = supabaseClient.storage
-        .from("project-images")
-        .getPublicUrl(img.img).data.publicUrl;
-      return `
-        <img 
-          src="${galleryImageUrl}" 
-          alt="Gallery Image" 
-          class="portfolio-modal-gallery-image" 
-          onload="this.parentNode.querySelector('.gallery-placeholder-container')?.remove()"
-        />
-      `;
-    })
-    .join("")}
-</div>
-      </div>
-    `;
 
-    // Add click event to all gallery images
-    modal.querySelectorAll(".portfolio-modal-gallery-image").forEach((img) => {
-      img.addEventListener("click", function () {
-        showGalleryImageModal(this.src);
-      });
+    const modalContent = document.createElement("div");
+    modalContent.className = "portfolio-modal-content";
+
+    // Create close button
+    const closeBtn = document.createElement("button");
+    closeBtn.className = "portfolio-modal-close";
+    closeBtn.innerHTML = "&times;";
+    closeBtn.onclick = () => {
+      modal.remove();
+      document.body.style.overflow = "auto";
+    };
+
+    // Create main image
+    const mainImage = document.createElement("img");
+    mainImage.className = "portfolio-modal-main-image";
+    mainImage.src = project.images[clickedImageIndex];
+    mainImage.alt = project.section;
+
+    // Create gallery grid
+    const galleryGrid = document.createElement("div");
+    galleryGrid.className = "portfolio-modal-gallery";
+
+    // Add all images to gallery
+    project.images.forEach((imageUrl, index) => {
+      const galleryImage = document.createElement("img");
+      galleryImage.className = "portfolio-modal-gallery-image";
+      galleryImage.src = imageUrl;
+      galleryImage.alt = `${project.section} - Image ${index + 1}`;
+      if (index === clickedImageIndex) {
+        galleryImage.classList.add("active");
+      }
+      galleryImage.onclick = () => {
+        mainImage.src = imageUrl;
+        // Update active state
+        galleryGrid
+          .querySelectorAll(".portfolio-modal-gallery-image")
+          .forEach((img) => {
+            img.classList.remove("active");
+          });
+        galleryImage.classList.add("active");
+      };
+      galleryGrid.appendChild(galleryImage);
     });
 
-    modal
-      .querySelector(".portfolio-modal-close")
-      .addEventListener("click", () => {
-        modal.remove();
-      });
+    // Assemble modal
+    modalContent.appendChild(closeBtn);
+    modalContent.appendChild(mainImage);
+    modalContent.appendChild(galleryGrid);
+    modal.appendChild(modalContent);
 
+    // Add modal to body and prevent scrolling
     document.body.appendChild(modal);
-  }
+    document.body.style.overflow = "hidden";
 
-  // Function to show a full-size gallery image modal
-  function showGalleryImageModal(imageSrc) {
-    const galleryModal = document.createElement("div");
-    galleryModal.className = "portfolio-gallery-modal";
-    // Get all gallery images to enable navigation
-    const allGalleryImages = Array.from(
-      document.querySelectorAll(".portfolio-modal-gallery-image")
-    ).map((img) => img.src);
-    const currentIndex = allGalleryImages.indexOf(imageSrc);
-    galleryModal.innerHTML = `
-    <div class="portfolio-gallery-modal-content">
-      <span class="portfolio-gallery-modal-close">&times;</span>
-      <div class="portfolio-gallery-navigation">
-        <button class="gallery-nav-btn prev-btn" ${
-          currentIndex === 0 ? "disabled" : ""
-        }><i class="fas fa-chevron-left"></i></button>
-        <img src="${imageSrc}" alt="Full size gallery image" class="portfolio-gallery-modal-image" />
-        <button class="gallery-nav-btn next-btn" ${
-          currentIndex === allGalleryImages.length - 1 ? "disabled" : ""
-        }><i class="fas fa-chevron-right"></i></button>
-      </div>
-      <div class="gallery-counter">${currentIndex + 1} / ${
-      allGalleryImages.length
-    }</div>
-    </div>
-  `;
+    // Show modal with animation
+    requestAnimationFrame(() => {
+      modal.style.display = "block";
+    });
 
-    galleryModal
-      .querySelector(".portfolio-gallery-modal-close")
-      .addEventListener("click", () => {
-        galleryModal.remove();
-      });
+    // Close modal when clicking outside
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.remove();
+        document.body.style.overflow = "auto";
+      }
+    };
 
-    // Handle previous button click
-    const prevBtn = galleryModal.querySelector(".prev-btn");
-    if (prevBtn) {
-      prevBtn.addEventListener("click", () => {
-        if (currentIndex > 0) {
-          galleryModal.remove();
-          showGalleryImageModal(allGalleryImages[currentIndex - 1]);
-        }
-      });
-    }
-
-    // Handle next button click
-    const nextBtn = galleryModal.querySelector(".next-btn");
-    if (nextBtn) {
-      nextBtn.addEventListener("click", () => {
-        if (currentIndex < allGalleryImages.length - 1) {
-          galleryModal.remove();
-          showGalleryImageModal(allGalleryImages[currentIndex + 1]);
-        }
-      });
-    }
-
-    // Also close modal when clicking outside the image
-    galleryModal.addEventListener("click", (e) => {
-      if (e.target === galleryModal) {
-        galleryModal.remove();
+    // Close modal with Escape key
+    document.addEventListener("keydown", function closeOnEscape(e) {
+      if (e.key === "Escape") {
+        modal.remove();
+        document.body.style.overflow = "auto";
+        document.removeEventListener("keydown", closeOnEscape);
       }
     });
-
-    document.body.appendChild(galleryModal);
   }
+
   // Fetch and render projects
   const projects = await fetchProjects();
   renderPortfolio(projects);

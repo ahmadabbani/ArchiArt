@@ -85,7 +85,6 @@
               <h3 class="project-details-title"></h3>
               <p class="project-details-section"></p>
             </div>
-            <p class="project-details-description"></p>
           </div>
           <div class="project-details-main-image">
             <img src="" alt="Main project image" />
@@ -95,10 +94,113 @@
             <div class="project-gallery-grid">
               <!-- Gallery images will be dynamically added here -->
             </div>
-            <button class="dashboard-button delete-project-btn">
-              <i class="fas fa-trash"></i> Delete Project
-            </button>
+            <div class="project-details-actions">
+              <button class="dashboard-button project-edit-button">
+                <i class="fas fa-edit"></i> Edit Project
+              </button>
+              <button class="dashboard-button delete-project-btn">
+                <i class="fas fa-trash"></i> Delete Project
+              </button>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Edit Project Modal -->
+      <div
+        id="edit-project-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content">
+          <span id="edit-project-modal-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <h3 class="dashboard-modal-title">Edit Project</h3>
+          <form id="edit-project-form" class="dashboard-form">
+            <div class="dashboard-field">
+              <label for="edit-project-section" class="dashboard-label"
+                >Project Section</label
+              >
+              <select id="edit-project-section" class="dashboard-input">
+                <option value="">Select an existing section</option>
+                <!-- Options will be populated by JavaScript -->
+              </select>
+              <p
+                id="edit-project-section-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="edit-new-project-section" class="dashboard-label"
+                >Or Create New Section</label
+              >
+              <input
+                type="text"
+                id="edit-new-project-section"
+                class="dashboard-input"
+                placeholder="Enter new section name"
+              />
+              <p
+                id="edit-new-project-section-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+
+            <div class="dashboard-field">
+              <label class="dashboard-label">Add More Gallery Images</label>
+              <div id="edit-gallery-inputs">
+                <div class="gallery-input-container">
+                  <div class="file-input-wrapper">
+                    <label for="edit-gallery-image-0" class="file-input-label">
+                      <i class="fas fa-image"></i> Choose Image
+                      <span class="file-name"></span>
+                    </label>
+                    <input
+                      type="file"
+                      id="edit-gallery-image-0"
+                      class="gallery-image-input"
+                      accept="image/*"
+                    />
+                    <img class="image-preview" />
+                  </div>
+                  <button type="button" class="remove-gallery-btn">
+                    &times;
+                  </button>
+                </div>
+              </div>
+              <button
+                type="button"
+                id="edit-add-gallery-input"
+                class="dashboard-button"
+              >
+                Add More
+              </button>
+              <p
+                id="edit-gallery-images-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+
+            <div class="dashboard-field">
+              <label class="dashboard-label">Current Gallery Images</label>
+              <div class="edit-gallery-grid" id="edit-current-gallery">
+                <!-- Current gallery images will be displayed here -->
+              </div>
+            </div>
+
+            <button type="submit" class="dashboard-button dashboard-submit">
+              Update Project
+            </button>
+          </form>
+          <p
+            id="edit-project-success"
+            class="dashboard-success"
+            style="display: none"
+          ></p>
         </div>
       </div>
 
@@ -148,31 +250,6 @@
           <h3 class="dashboard-modal-title">Add New Project</h3>
           <form id="dashboard-project-form" class="dashboard-form">
             <div class="dashboard-field">
-              <label for="project-title" class="dashboard-label"
-                >Project Title</label
-              >
-              <input type="text" id="project-title" class="dashboard-input" />
-              <p
-                id="project-title-error"
-                class="dashboard-error"
-                style="display: none"
-              ></p>
-            </div>
-            <div class="dashboard-field">
-              <label for="project-description" class="dashboard-label"
-                >Description</label
-              >
-              <textarea
-                id="project-description"
-                class="dashboard-input"
-              ></textarea>
-              <p
-                id="project-description-error"
-                class="dashboard-error"
-                style="display: none"
-              ></p>
-            </div>
-            <div class="dashboard-field">
               <label for="project-section" class="dashboard-label"
                 >Project Section</label
               >
@@ -203,63 +280,8 @@
               ></p>
             </div>
 
-            <!--sub sections-->
             <div class="dashboard-field">
-              <label for="project-subsection" class="dashboard-label"
-                >Project subsection</label
-              >
-              <select id="project-subsection" class="dashboard-input">
-                <option value="">Select an existing subsection</option>
-                <!-- Options will be populated by JavaScript -->
-              </select>
-              <p
-                id="project-subsection-error"
-                class="dashboard-error"
-                style="display: none"
-              ></p>
-            </div>
-            <div class="dashboard-field">
-              <label for="new-project-subsection" class="dashboard-label"
-                >Or Create New Subsection</label
-              >
-              <input
-                type="text"
-                id="new-project-subsection"
-                class="dashboard-input"
-                placeholder="Enter new subssection name"
-              />
-              <p
-                id="new-project-subsection-error"
-                class="dashboard-error"
-                style="display: none"
-              ></p>
-            </div>
-
-            <div class="dashboard-field">
-              <label for="project-main-image" class="dashboard-label"
-                >Main Image</label
-              >
-              <div id="project-main-image-wrapper" class="file-input-wrapper">
-                <label for="project-main-image" class="file-input-label">
-                  <i class="fas fa-image"></i> Choose Main Image
-                  <span class="file-name"></span>
-                </label>
-                <input
-                  type="file"
-                  id="project-main-image"
-                  class="dashboard-input"
-                  accept="image/*"
-                />
-                <img class="image-preview" id="main-image-preview" />
-              </div>
-              <p
-                id="project-main-image-error"
-                class="dashboard-error"
-                style="display: none"
-              ></p>
-            </div>
-            <div class="dashboard-field">
-              <label class="dashboard-label">Gallery Images (Optional)</label>
+              <label class="dashboard-label">Gallery Images (Required)</label>
               <div id="gallery-inputs">
                 <div class="gallery-input-container">
                   <div class="file-input-wrapper">
@@ -287,6 +309,11 @@
               >
                 Add More
               </button>
+              <p
+                id="gallery-images-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
             </div>
             <button type="submit" class="dashboard-button dashboard-submit">
               Create Project
@@ -556,9 +583,137 @@
           <div class="project-details-main-image">
             <img src="" alt="Main product image" />
           </div>
-          <button class="dashboard-button delete-product-btn">
-            <i class="fas fa-trash"></i> Delete Product
-          </button>
+          <div class="project-details-actions">
+            <button class="dashboard-button project-edit-button">
+              <i class="fas fa-edit"></i> Edit Product
+            </button>
+            <button class="dashboard-button delete-product-btn">
+              <i class="fas fa-trash"></i> Delete Product
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Product Modal -->
+      <div
+        id="edit-product-modal"
+        class="dashboard-modal"
+        style="display: none"
+      >
+        <div class="dashboard-modal-content">
+          <span id="edit-product-modal-close" class="dashboard-modal-close"
+            >&times;</span
+          >
+          <h3 class="dashboard-modal-title">Edit Product</h3>
+          <form id="edit-product-form" class="dashboard-form">
+            <div class="dashboard-field">
+              <label for="edit-product-title" class="dashboard-label"
+                >Product Title</label
+              >
+              <input
+                type="text"
+                id="edit-product-title"
+                class="dashboard-input"
+              />
+              <p
+                id="edit-product-title-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="edit-product-description" class="dashboard-label"
+                >Description</label
+              >
+              <textarea
+                id="edit-product-description"
+                class="dashboard-input"
+              ></textarea>
+              <p
+                id="edit-product-description-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="edit-product-section" class="dashboard-label"
+                >Product Section</label
+              >
+              <select id="edit-product-section" class="dashboard-input">
+                <option value="">Select an existing section</option>
+                <!-- Options will be populated by JavaScript -->
+              </select>
+              <p
+                id="edit-product-section-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="edit-new-product-section" class="dashboard-label"
+                >Or Create New Section</label
+              >
+              <input
+                type="text"
+                id="edit-new-product-section"
+                class="dashboard-input"
+                placeholder="Enter new section name"
+              />
+              <p
+                id="edit-new-product-section-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="edit-product-price" class="dashboard-label"
+                >Price (Optional)</label
+              >
+              <input
+                type="number"
+                id="edit-product-price"
+                class="dashboard-input"
+                min="0"
+                step="0.01"
+              />
+              <p
+                id="edit-product-price-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="edit-product-image" class="dashboard-label"
+                >Product Image</label
+              >
+              <div id="edit-product-image-wrapper" class="file-input-wrapper">
+                <label for="edit-product-image" class="file-input-label">
+                  <i class="fas fa-image"></i> Choose New Image
+                  <span class="file-name"></span>
+                </label>
+                <input
+                  type="file"
+                  id="edit-product-image"
+                  class="dashboard-input"
+                  accept="image/*"
+                />
+                <img class="image-preview" id="edit-product-image-preview" />
+              </div>
+              <p
+                id="edit-product-image-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <button type="submit" class="dashboard-button dashboard-submit">
+              Update Product
+            </button>
+          </form>
+          <p
+            id="edit-product-success"
+            class="dashboard-success"
+            style="display: none"
+          ></p>
         </div>
       </div>
     </div>
