@@ -110,7 +110,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     const allButton = document.createElement("button");
     allButton.className = "portfolio-button active";
     allButton.textContent = "All";
-    allButton.onclick = () => renderProjects(projects);
+    allButton.onclick = () => {
+      // Update active button
+      document
+        .querySelectorAll(".portfolio-button")
+        .forEach((btn) => btn.classList.remove("active"));
+      allButton.classList.add("active");
+      renderProjects(projects);
+    };
     sectionButtons.appendChild(allButton);
 
     // Add section buttons
