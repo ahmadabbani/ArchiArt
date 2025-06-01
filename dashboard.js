@@ -326,6 +326,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Open modal
     addProductButton.addEventListener("click", async () => {
       productModal.style.display = "block";
+      // Reset success message when opening modal
+      document.getElementById("product-success").style.display = "none";
 
       // Fetch existing sections
       try {

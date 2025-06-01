@@ -34,6 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedCategories = new Set(["all"]);
   let minPrice = 0;
   let maxPrice = 1000;
+  let currentPage = 1;
+  const itemsPerPage = 12;
 
   // Mobile menu functionality
   const mobileToggle = document.querySelector(".header_mobile-toggle");
@@ -70,37 +72,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Fetch and display products
   async function fetchAndDisplayProducts() {
+    const loadingElement = document.querySelector(".shop_loading");
     try {
-      const { data, error } = await supabaseClient
+      loadingElement.classList.add("active");
+      const { data: fetchedProducts, error } = await supabaseClient
         .from("products")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("*");
 
       if (error) throw error;
 
-      products = data;
-
-      // Extract unique categories
-      categories = new Set(
-        products
-          .map((product) => product.section)
-          .filter(Boolean)
-          .concat("Others")
-      );
-
-      // Populate categories
+      products = fetchedProducts || [];
       populateCategories();
-
-      // Display products
       displayProducts();
     } catch (error) {
       console.error("Error fetching products:", error);
+    } finally {
+      loadingElement.classList.remove("active");
     }
   }
 
   // Populate categories in the filter
   function populateCategories() {
+    // Extract unique categories from products
+    categories = new Set(
+      products.map((product) => product.section || "Others").filter(Boolean)
+    );
+
     const categoriesHTML = Array.from(categories)
+      .sort() // Sort categories alphabetically
       .map(
         (category) => `
         <label class="shop_category">
@@ -131,33 +130,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Handle category selection
   function handleCategoryChange(e) {
-    const value = e.target.value;
+    const checkbox = e.target;
+    const value = checkbox.value;
 
     if (value === "all") {
-      if (e.target.checked) {
-        selectedCategories = new Set(["all"]);
-        document.querySelectorAll(".shop_category input").forEach((input) => {
-          if (input.value !== "all") input.checked = false;
-        });
+      if (checkbox.checked) {
+        selectedCategories.clear();
+        selectedCategories.add("all");
+        // Uncheck all other checkboxes
+        document
+          .querySelectorAll(
+            '.shop_category input[type="checkbox"]:not([value="all"])'
+          )
+          .forEach((cb) => {
+            cb.checked = false;
+          });
+      } else {
+        checkbox.checked = true; // Prevent unchecking "all"
       }
     } else {
-      if (e.target.checked) {
+      if (checkbox.checked) {
         selectedCategories.delete("all");
         selectedCategories.add(value);
-        document.querySelector(
-          '.shop_category input[value="all"]'
-        ).checked = false;
+        // Uncheck "all" checkbox
+        document.querySelector('input[value="all"]').checked = false;
       } else {
         selectedCategories.delete(value);
         if (selectedCategories.size === 0) {
           selectedCategories.add("all");
-          document.querySelector(
-            '.shop_category input[value="all"]'
-          ).checked = true;
+          document.querySelector('input[value="all"]').checked = true;
         }
       }
     }
 
+    currentPage = 1; // Reset to first page when filters change
     displayProducts();
   }
 
@@ -174,7 +180,20 @@ document.addEventListener("DOMContentLoaded", function () {
       return matchesCategory && matchesPrice;
     });
 
-    productsGrid.innerHTML = filteredProducts
+    // Calculate pagination
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+    // Ensure current page is valid
+    if (currentPage > totalPages) {
+      currentPage = totalPages || 1;
+    }
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+    // Update products grid
+    productsGrid.innerHTML = paginatedProducts
       .map(
         (product) => `
         <div class="shop_product-card" data-product-id="${
@@ -186,6 +205,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 .from("project-images")
                 .getPublicUrl(product.image).data.publicUrl
             }" alt="${product.title}">
+            <button class="shop_read-more-btn" onclick="event.stopPropagation(); window.location.href='product.html?id=${
+              product.id
+            }'">Read More</button>
           </div>
           <div class="shop_product-content">
             <h3 class="shop_product-title">${product.title}</h3>
@@ -205,7 +227,91 @@ document.addEventListener("DOMContentLoaded", function () {
       `
       )
       .join("");
+
+    // Update pagination
+    updatePagination(totalPages);
   }
+
+  function updatePagination(totalPages) {
+    const paginationNumbers = document.getElementById("pagination-numbers");
+    const prevButton = document.getElementById("pagination-prev");
+    const nextButton = document.getElementById("pagination-next");
+
+    // Update prev/next buttons
+    prevButton.disabled = currentPage === 1;
+    nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+    // Generate page numbers
+    let paginationHTML = "";
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    // Add first page and ellipsis if needed
+    if (startPage > 1) {
+      paginationHTML += `<span class="shop_pagination-number" data-page="1">1</span>`;
+      if (startPage > 2) {
+        paginationHTML += `<span class="shop_pagination-ellipsis">...</span>`;
+      }
+    }
+
+    // Add page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      paginationHTML += `<span class="shop_pagination-number ${
+        i === currentPage ? "active" : ""
+      }" data-page="${i}">${i}</span>`;
+    }
+
+    // Add last page and ellipsis if needed
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        paginationHTML += `<span class="shop_pagination-ellipsis">...</span>`;
+      }
+      paginationHTML += `<span class="shop_pagination-number" data-page="${totalPages}">${totalPages}</span>`;
+    }
+
+    paginationNumbers.innerHTML = paginationHTML;
+
+    // Add click event listeners
+    document.querySelectorAll(".shop_pagination-number").forEach((button) => {
+      button.addEventListener("click", () => {
+        currentPage = parseInt(button.dataset.page);
+        displayProducts();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+  }
+
+  // Add event listeners for pagination buttons
+  document.getElementById("pagination-prev").addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayProducts();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  document.getElementById("pagination-next").addEventListener("click", () => {
+    const totalPages = Math.ceil(
+      products.filter(
+        (product) =>
+          (selectedCategories.has("all") ||
+            selectedCategories.has(product.section || "Others")) &&
+          (!product.price ||
+            (product.price >= minPrice && product.price <= maxPrice))
+      ).length / itemsPerPage
+    );
+
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayProducts();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
 
   // Show product details
   function showProductDetails(productId) {
@@ -232,19 +338,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Handle price range changes
   function handlePriceChange() {
-    minPrice = parseInt(priceMinInput.value);
-    maxPrice = parseInt(priceMaxInput.value);
+    const minValue = parseInt(priceMinInput.value) || 0;
+    const maxValue = parseInt(priceMaxInput.value) || 1000;
 
     // Ensure min doesn't exceed max
-    if (minPrice > maxPrice) {
-      minPrice = maxPrice;
-      priceMinInput.value = minPrice;
+    if (minValue > maxValue) {
+      priceMinInput.value = maxValue;
+      priceMinRange.value = maxValue;
     }
 
-    // Update range inputs
-    priceMinRange.value = minPrice;
-    priceMaxRange.value = maxPrice;
+    // Ensure max doesn't go below min
+    if (maxValue < minValue) {
+      priceMaxInput.value = minValue;
+      priceMaxRange.value = minValue;
+    }
 
+    minPrice = parseInt(priceMinInput.value) || 0;
+    maxPrice = parseInt(priceMaxInput.value) || 1000;
+    currentPage = 1; // Reset to first page when filters change
     displayProducts();
   }
 

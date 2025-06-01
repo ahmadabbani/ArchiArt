@@ -161,7 +161,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("product-category").textContent = product.section;
     document.getElementById("product-description").textContent =
       product.description;
-    document.getElementById("product-price").textContent = `$${product.price}`;
+    document.getElementById("product-price").textContent = product.price
+      ? `$${product.price}`
+      : "";
 
     // Handle image loading
     const productImage = document.getElementById("product-image");
