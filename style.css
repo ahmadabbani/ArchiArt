@@ -76,6 +76,12 @@ h2 {
     padding: 0 5%;
     box-shadow: 0 4px 10px rgb(254, 0, 0, 0.4);
     z-index: 1000;
+    transition: background-color 0.8s ease;
+}
+
+.header_container.header_transparent {
+    background-color: transparent;
+    box-shadow: none;
 }
 
 .header_logo {
@@ -220,7 +226,7 @@ h2 {
     position: relative;
     min-height: 100vh;
     width: 100%;
-    background: url('images/plainneon.png') no-repeat top center;
+    background: url('images/grafheroooo_batcheditor_fotor\ \(1\).jpg') no-repeat center;
     background-size: cover;
     display: flex;
     align-items: center;
@@ -237,9 +243,9 @@ h2 {
     color: #fff;
     padding: 4rem 3rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    background: rgb(254, 0, 0, 0.15);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgb(254, 0, 0, 0.05);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     border-radius: 18px;
 }
 
@@ -247,6 +253,7 @@ h2 {
     font-size: 3.5rem;
     margin-bottom: 1rem;
     font-weight: bold;
+
 }
 
 .hero_subheading {
@@ -257,7 +264,7 @@ h2 {
 .hero_cta-button {
     display: inline-block;
     padding: 15px 30px;
-    background: rgba(254, 0, 0, 0.45);
+    background: rgba(254, 0, 0, 0.75);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);

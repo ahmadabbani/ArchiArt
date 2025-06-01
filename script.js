@@ -11,6 +11,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // Variables
   const header = document.querySelector(".header_container");
 
+  // Set initial header style for index.html
+  if (
+    window.location.pathname === "/index.html" ||
+    window.location.pathname === "/"
+  ) {
+    header.classList.add("header_transparent");
+  }
+
   const mobileToggle = document.querySelector(".header_mobile-toggle");
   const nav = document.querySelector(".header_nav");
   const navLinks = document.querySelectorAll(".header_nav-link");
@@ -62,6 +70,18 @@ document.addEventListener("DOMContentLoaded", function () {
         link.classList.add("header_active");
       }
     });
+
+    // Change header style on scroll for index.html
+    if (
+      window.location.pathname === "/index.html" ||
+      window.location.pathname === "/"
+    ) {
+      if (window.scrollY > 400) {
+        header.classList.remove("header_transparent");
+      } else {
+        header.classList.add("header_transparent");
+      }
+    }
   });
   // Function to check if element is in viewport
   function isInViewport(element) {
