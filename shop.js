@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <input type="checkbox" value="all" ${
           selectedCategories.has("all") ? "checked" : ""
         }>
-        <span>All Products</span>
+        <span>Printing Services</span>
       </label>
       ${categoriesHTML}
     `;
