@@ -6260,7 +6260,7 @@ h2 {
 
 .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
     padding: 20px 0;
     width: 100%;
@@ -6306,17 +6306,20 @@ h2 {
 /* Size variations */
 .portfolio-project-card.size-1 {
     grid-column: span 1;
-    min-height: 400px;
+    max-height: 300px;
+    height: 300px;
 }
 
 .portfolio-project-card.size-2 {
     grid-column: span 1;
-    min-height: 400px;
+    max-height: 300px;
+    height: 300px;
 }
 
 .portfolio-project-card.size-3 {
     grid-column: span 2;
-    min-height: 400px;
+    max-height: 300px;
+    height: 300px;
 }
 
 /* Portfolio Modal Styles */
@@ -6373,88 +6376,121 @@ h2 {
 /* Responsive Design */
 @media (min-width: 1800px) {
     .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)) !important;
+    }
 
+    /* Size variations */
+    .portfolio-project-card.size-1 {
+        grid-column: span 1;
+        max-height: 500px !important;
+        height: 500px !important;
+    }
+
+    .portfolio-project-card.size-2 {
+        grid-column: span 1;
+        max-height: 500px !important;
+        height: 500px !important;
+    }
+
+    .portfolio-project-card.size-3 {
+        grid-column: span 2;
+        max-height: 500px !important;
+        height: 500px !important;
     }
 }
 
 @media (min-width: 1600px) {
     .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)) !important;
         gap: 25px;
         padding: 25px;
     }
 
     .portfolio-project-card.size-1 {
-        min-height: 500px;
+        min-height: 400px !important;
+        height: 400px !important;
     }
 
     .portfolio-project-card.size-2 {
-        min-height: 500px;
+        min-height: 400px !important;
+        height: 400px !important;
     }
 
     .portfolio-project-card.size-3 {
-        min-height: 500px;
+        min-height: 400px !important;
+        height: 400px !important;
     }
 }
 
 @media (max-width: 1200px) {
     .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 15px;
         padding: 15px;
     }
 
     .portfolio-project-card.size-1 {
-        height: 300px;
+        height: 250px;
+        max-height: 250px;
     }
 
     .portfolio-project-card.size-2 {
-        height: 300px;
+        height: 250px;
+        max-height: 250px;
     }
 
     .portfolio-project-card.size-3 {
-        height: 300px;
+        grid-column: span 2;
+        height: 250px;
+        max-height: 250px;
     }
 }
 
 @media (max-width: 768px) {
     .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 12px;
         padding: 12px;
     }
 
     .portfolio-project-card.size-1 {
-        height: 200px;
+        height: 250px;
+        max-height: 250px;
     }
 
     .portfolio-project-card.size-2 {
-        height: 200px;
+        height: 250px;
+        max-height: 250px;
     }
 
     .portfolio-project-card.size-3 {
-        height: 200px;
-        grid-column: span 1;
+        grid-column: span 2;
+        height: 250px;
+        max-height: 250px;
     }
 }
 
 @media (max-width: 480px) {
     .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 10px;
         padding: 10px;
     }
 
     .portfolio-project-card.size-1 {
-        height: 180px;
+        height: 200px;
+        max-height: 200px;
     }
 
     .portfolio-project-card.size-2 {
-        height: 180px;
+        height: 200px;
+        max-height: 200px;
     }
 
     .portfolio-project-card.size-3 {
-        height: 180px;
+        grid-column: span 2;
+        height: 200px;
+        max-height: 200px;
     }
+
 }
