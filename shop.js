@@ -131,8 +131,9 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedCategories.has(parentSection) ? "checked" : ""
       }>
             <span>${parentSection}</span>
+            <i class="fas fa-chevron-down shop_category-dropdown"></i>
           </label>
-          <div class="shop_subcategories">
+          <div class="shop_subcategories" style="display: none;">
             ${subsections
               .map(
                 (subsection) => `
@@ -174,6 +175,22 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add event listeners to category checkboxes
     document.querySelectorAll(".shop_category input").forEach((checkbox) => {
       checkbox.addEventListener("change", handleCategoryChange);
+    });
+
+    // Add event listeners for dropdown toggles
+    document.querySelectorAll(".shop_category-dropdown").forEach((dropdown) => {
+      dropdown.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const parentLabel = dropdown.closest(".shop_category");
+        const subcategories = parentLabel.nextElementSibling;
+        const isExpanded = subcategories.style.display !== "none";
+
+        subcategories.style.display = isExpanded ? "none" : "block";
+        dropdown.style.transform = isExpanded
+          ? "rotate(0deg)"
+          : "rotate(180deg)";
+      });
     });
   }
 
