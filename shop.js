@@ -93,34 +93,83 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Populate categories in the filter
   function populateCategories() {
-    // Extract unique categories from products
-    categories = new Set(
-      products.map((product) => product.section || "Others").filter(Boolean)
-    );
+    // Extract unique categories and parent sections from products
+    const sections = new Set();
+    const parentSections = new Set();
+    const sectionToParent = new Map();
 
-    const categoriesHTML = Array.from(categories)
-      .sort() // Sort categories alphabetically
-      .map(
-        (category) => `
-        <label class="shop_category">
-          <input type="checkbox" value="${category}" ${
-          selectedCategories.has(category) ? "checked" : ""
-        }>
-          <span>${category}</span>
-        </label>
-      `
-      )
-      .join("");
+    products.forEach((product) => {
+      if (product.section) {
+        sections.add(product.section);
+        if (product.parent_section) {
+          parentSections.add(product.parent_section);
+          sectionToParent.set(product.section, product.parent_section);
+        }
+      }
+    });
 
-    categoriesContainer.innerHTML = `
+    // Create HTML for categories
+    let categoriesHTML = `
       <label class="shop_category">
         <input type="checkbox" value="all" ${
           selectedCategories.has("all") ? "checked" : ""
         }>
-        <span>Printing Services</span>
+        <span>All</span>
       </label>
-      ${categoriesHTML}
     `;
+
+    // Add parent sections with their subsections
+    parentSections.forEach((parentSection) => {
+      const subsections = Array.from(sections).filter(
+        (section) => sectionToParent.get(section) === parentSection
+      );
+
+      categoriesHTML += `
+        <div class="shop_category-group">
+          <label class="shop_category parent">
+            <input type="checkbox" value="${parentSection}" ${
+        selectedCategories.has(parentSection) ? "checked" : ""
+      }>
+            <span>${parentSection}</span>
+          </label>
+          <div class="shop_subcategories">
+            ${subsections
+              .map(
+                (subsection) => `
+              <label class="shop_category child">
+                <input type="checkbox" value="${subsection}" ${
+                  selectedCategories.has(subsection) ? "checked" : ""
+                }>
+                <span>${subsection}</span>
+              </label>
+            `
+              )
+              .join("")}
+          </div>
+        </div>
+      `;
+    });
+
+    // Add sections without parents
+    const sectionsWithoutParents = Array.from(sections).filter(
+      (section) => !sectionToParent.has(section)
+    );
+    if (sectionsWithoutParents.length > 0) {
+      categoriesHTML += sectionsWithoutParents
+        .map(
+          (section) => `
+        <label class="shop_category">
+          <input type="checkbox" value="${section}" ${
+            selectedCategories.has(section) ? "checked" : ""
+          }>
+          <span>${section}</span>
+        </label>
+      `
+        )
+        .join("");
+    }
+
+    categoriesContainer.innerHTML = categoriesHTML;
 
     // Add event listeners to category checkboxes
     document.querySelectorAll(".shop_category input").forEach((checkbox) => {
@@ -132,6 +181,13 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleCategoryChange(e) {
     const checkbox = e.target;
     const value = checkbox.value;
+    const isParent = checkbox
+      .closest(".shop_category")
+      .classList.contains("parent");
+    const isChild = checkbox
+      .closest(".shop_category")
+      .classList.contains("child");
+    const isStandalone = !isParent && !isChild;
 
     if (value === "all") {
       if (checkbox.checked) {
@@ -152,10 +208,28 @@ document.addEventListener("DOMContentLoaded", function () {
       if (checkbox.checked) {
         selectedCategories.delete("all");
         selectedCategories.add(value);
+
+        // If selecting a standalone section, uncheck all parent sections and their subsections
+        if (isStandalone) {
+          document
+            .querySelectorAll('.shop_category.parent input[type="checkbox"]')
+            .forEach((cb) => {
+              cb.checked = false;
+              selectedCategories.delete(cb.value);
+            });
+          document
+            .querySelectorAll('.shop_category.child input[type="checkbox"]')
+            .forEach((cb) => {
+              cb.checked = false;
+              selectedCategories.delete(cb.value);
+            });
+        }
+
         // Uncheck "all" checkbox
         document.querySelector('input[value="all"]').checked = false;
       } else {
         selectedCategories.delete(value);
+
         if (selectedCategories.size === 0) {
           selectedCategories.add("all");
           document.querySelector('input[value="all"]').checked = true;
@@ -170,9 +244,46 @@ document.addEventListener("DOMContentLoaded", function () {
   // Display filtered products
   function displayProducts() {
     const filteredProducts = products.filter((product) => {
+      // Check if any parent section is selected
+      const selectedParentSections = Array.from(selectedCategories).filter(
+        (category) => {
+          const checkbox = document.querySelector(
+            `.shop_category.parent input[value="${category}"]`
+          );
+          return checkbox && checkbox.checked;
+        }
+      );
+
+      // If a parent section is selected, show all products from that parent
+      if (selectedParentSections.length > 0) {
+        const matchesParent = selectedParentSections.some(
+          (parentSection) => product.parent_section === parentSection
+        );
+        if (matchesParent) {
+          // If no subsections are selected, show all products from this parent
+          const selectedSubsections = Array.from(selectedCategories).filter(
+            (category) => {
+              const checkbox = document.querySelector(
+                `.shop_category.child input[value="${category}"]`
+              );
+              return checkbox && checkbox.checked;
+            }
+          );
+
+          if (selectedSubsections.length === 0) {
+            return true;
+          }
+
+          // If subsections are selected, only show products from those subsections
+          return selectedSubsections.includes(product.section);
+        }
+      }
+
+      // If no parent section is selected, use normal category filtering
       const matchesCategory =
         selectedCategories.has("all") ||
         selectedCategories.has(product.section || "Others");
+
       const matchesPrice =
         (!product.price || product.price >= minPrice) &&
         (!product.price || product.price <= maxPrice);

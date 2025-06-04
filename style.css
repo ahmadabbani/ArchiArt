@@ -3184,7 +3184,7 @@ h2 {
     display: flex;
     justify-content: center;
     min-height: 100vh;
-    padding: 4rem 2rem 2rem 2rem;
+    padding: 2rem 2rem 2rem 2rem;
 }
 
 .admin-panel-gohome {
@@ -3203,6 +3203,12 @@ h2 {
 
 .admin-panel-gohome:hover {
     background-color: #e50000;
+}
+
+.dashboard-logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
 }
 
 .dashboard-main-items {
@@ -3227,6 +3233,7 @@ h2 {
 .dashboard-title {
     color: #333;
     font-size: 2rem;
+    margin-top: 0.5rem;
     margin-bottom: 1.8rem;
     font-weight: 600;
 }
@@ -5190,6 +5197,33 @@ h2 {
 .shop_category span {
     font-size: 0.95rem;
     color: #444;
+}
+
+.shop_category-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.shop_category.parent {
+    font-weight: 600;
+}
+
+.shop_subcategories {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-left: 1.5rem;
+    border-left: 2px solid #ddd;
+    padding-left: 0.75rem;
+}
+
+.shop_category.child {
+    font-size: 0.9rem;
+}
+
+.shop_category.child span {
+    color: #666;
 }
 
 /* Products Grid */

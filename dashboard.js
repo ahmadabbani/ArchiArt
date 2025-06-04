@@ -333,14 +333,17 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const { data: products, error } = await supabaseClient
           .from("products")
-          .select("section")
+          .select("section, parent_section")
           .not("section", "is", null);
 
         if (error) throw error;
 
-        // Get unique sections
+        // Get unique sections and parent sections
         const sections = [
           ...new Set(products.map((p) => p.section).filter(Boolean)),
+        ];
+        const parentSections = [
+          ...new Set(products.map((p) => p.parent_section).filter(Boolean)),
         ];
 
         // Populate section dropdown
@@ -352,6 +355,19 @@ document.addEventListener("DOMContentLoaded", function () {
           option.value = section;
           option.textContent = section;
           sectionSelect.appendChild(option);
+        });
+
+        // Populate parent section dropdown
+        const parentSectionSelect = document.getElementById(
+          "product-parent-section"
+        );
+        parentSectionSelect.innerHTML =
+          '<option value="">Select an existing parent section</option>';
+        parentSections.forEach((section) => {
+          const option = document.createElement("option");
+          option.value = section;
+          option.textContent = section;
+          parentSectionSelect.appendChild(option);
         });
       } catch (error) {
         console.error("Error fetching sections:", error);
@@ -391,6 +407,12 @@ document.addEventListener("DOMContentLoaded", function () {
       const section = document.getElementById("product-section").value;
       const newSection = document
         .getElementById("new-product-section")
+        .value.trim();
+      const parentSection = document.getElementById(
+        "product-parent-section"
+      ).value;
+      const newParentSection = document
+        .getElementById("new-product-parent-section")
         .value.trim();
 
       // Get button element
@@ -440,6 +462,15 @@ document.addEventListener("DOMContentLoaded", function () {
         isValid = false;
       }
 
+      // Validate parent section selection
+      if (parentSection && newParentSection) {
+        document.getElementById("product-parent-section-error").textContent =
+          "Please select either an existing parent section or create a new one, not both";
+        document.getElementById("product-parent-section-error").style.display =
+          "block";
+        isValid = false;
+      }
+
       if (!isValid) {
         submitButton.innerHTML = "Create Product";
         submitButton.disabled = false;
@@ -481,6 +512,7 @@ document.addEventListener("DOMContentLoaded", function () {
               price: price ? parseFloat(price) : null,
               image: imagePath,
               section: newSection || section || null,
+              parent_section: newParentSection || parentSection || null,
             },
           ])
           .select()
@@ -1240,7 +1272,9 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("Setting product ID in details modal:", product.id); // Debug log
 
     title.textContent = product.title;
-    section.textContent = product.section;
+    section.textContent = product.parent_section
+      ? `${product.parent_section} > ${product.section}`
+      : product.section;
     description.textContent = product.description;
     price.textContent = product.price
       ? `$${product.price}`
@@ -1283,14 +1317,17 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const { data: products, error } = await supabaseClient
           .from("products")
-          .select("section")
+          .select("section, parent_section")
           .not("section", "is", null);
 
         if (error) throw error;
 
-        // Get unique sections
+        // Get unique sections and parent sections
         const sections = [
           ...new Set(products.map((p) => p.section).filter(Boolean)),
+        ];
+        const parentSections = [
+          ...new Set(products.map((p) => p.parent_section).filter(Boolean)),
         ];
 
         // Populate section dropdown
@@ -1304,8 +1341,22 @@ document.addEventListener("DOMContentLoaded", function () {
           sectionSelect.appendChild(option);
         });
 
-        // Set current section after populating options
+        // Populate parent section dropdown
+        const parentSectionSelect = document.getElementById(
+          "edit-product-parent-section"
+        );
+        parentSectionSelect.innerHTML =
+          '<option value="">Select an existing parent section</option>';
+        parentSections.forEach((section) => {
+          const option = document.createElement("option");
+          option.value = section;
+          option.textContent = section;
+          parentSectionSelect.appendChild(option);
+        });
+
+        // Set current section and parent section after populating options
         sectionSelect.value = product.section || "";
+        parentSectionSelect.value = product.parent_section || "";
       } catch (error) {
         console.error("Error fetching sections:", error);
       }
@@ -1703,9 +1754,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const newSectionInput = document.getElementById(
           "edit-new-product-section"
         );
+        const parentSectionSelect = document.getElementById(
+          "edit-product-parent-section"
+        );
+        const newParentSectionInput = document.getElementById(
+          "edit-new-product-parent-section"
+        );
 
         // Prioritize new section if it has a value, otherwise use current section
         let section = newSectionInput.value.trim() || sectionSelect.value;
+        let parentSection =
+          newParentSectionInput.value.trim() || parentSectionSelect.value;
 
         if (!title) {
           throw new Error("Title is required");
@@ -1724,6 +1783,7 @@ document.addEventListener("DOMContentLoaded", function () {
           title: title,
           description: description,
           section: section,
+          parent_section: parentSection || null,
           price: price ? parseFloat(price) : null,
         };
 

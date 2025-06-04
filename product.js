@@ -153,8 +153,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // Update breadcrumb
-    document.getElementById("breadcrumb-product-name").textContent =
-      product.title;
+    const breadcrumbNav = document.querySelector(
+      ".singleproduct_breadcrumb-nav"
+    );
+    breadcrumbNav.innerHTML = `
+      <a href="shop.html" class="singleproduct_breadcrumb-link">Shop</a>
+      <span class="singleproduct_breadcrumb-separator">/</span>
+      ${
+        product.parent_section
+          ? `
+        <span class="singleproduct_breadcrumb-current">${product.parent_section}</span>
+        <span class="singleproduct_breadcrumb-separator">/</span>
+      `
+          : ""
+      }
+      ${
+        product.section
+          ? `
+        <span class="singleproduct_breadcrumb-current">${product.section}</span>
+        <span class="singleproduct_breadcrumb-separator">/</span>
+      `
+          : ""
+      }
+      <span class="singleproduct_breadcrumb-current">${product.title}</span>
+    `;
 
     // Update product details
     document.getElementById("product-title").textContent = product.title;
