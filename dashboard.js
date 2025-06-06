@@ -734,6 +734,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const productsDisplay = document.querySelector(".products-display");
       const projectsGrid = document.getElementById("projects-grid");
       const productsGrid = document.getElementById("products-grid");
+      const productsSearch = document.getElementById("products-search-input");
 
       if (projectsDisplay.style.display === "none") {
         // Switch to projects view
@@ -741,6 +742,10 @@ document.addEventListener("DOMContentLoaded", function () {
         productsDisplay.style.display = "none";
         // Clear products grid
         productsGrid.innerHTML = "";
+        // Reset products search
+        if (productsSearch) {
+          productsSearch.value = "";
+        }
         // Fetch and display projects
         fetchAndDisplayProjects();
         // Update button text after state change
@@ -755,6 +760,10 @@ document.addEventListener("DOMContentLoaded", function () {
         productsDisplay.style.display = "block";
         // Clear projects grid
         projectsGrid.innerHTML = "";
+        // Reset products search
+        if (productsSearch) {
+          productsSearch.value = "";
+        }
         // Fetch and display products
         fetchAndDisplayProducts();
         // Update button text after state change
@@ -1227,10 +1236,35 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
+      // Add search functionality for products
+      const productsSearch = document.getElementById("products-search-input");
+      if (productsSearch) {
+        productsSearch.addEventListener("input", (e) => {
+          const searchTerm = e.target.value.toLowerCase();
+          const productCards = document.querySelectorAll(
+            ".portfolio-project-card"
+          );
+
+          productCards.forEach((card) => {
+            const title = card
+              .querySelector(".portfolio-project-title")
+              .textContent.toLowerCase();
+            if (title.includes(searchTerm)) {
+              card.style.display = "flex";
+              card.style.flexDirection = "column";
+            } else {
+              card.style.display = "none";
+            }
+          });
+        });
+      }
+
       products.forEach((product) => {
         const productCard = document.createElement("div");
         productCard.className = "portfolio-project-card";
-        productCard.dataset.productId = product.id; // Store ID in dataset
+        productCard.style.display = "flex";
+        productCard.style.flexDirection = "column";
+        productCard.dataset.productId = product.id;
 
         let imageUrl = "";
         if (product.image) {
@@ -1248,7 +1282,7 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         productCard.addEventListener("click", () => {
-          console.log("Product clicked:", product); // Debug log
+          console.log("Product clicked:", product);
           showProductDetails(product);
         });
         productsGrid.appendChild(productCard);
@@ -1302,6 +1336,9 @@ document.addEventListener("DOMContentLoaded", function () {
       // Show edit modal
       const editModal = document.getElementById("edit-product-modal");
       editModal.style.display = "block";
+
+      // Clear success message
+      document.getElementById("edit-product-success").style.display = "none";
 
       // Set product ID in edit form
       const editForm = document.getElementById("edit-product-form");

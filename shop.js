@@ -271,6 +271,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       );
 
+      // Price filtering
+      const productPrice = parseFloat(product.price) || 0;
+      const matchesPrice = productPrice >= minPrice && productPrice <= maxPrice;
+
       // If a parent section is selected, show all products from that parent
       if (selectedParentSections.length > 0) {
         const matchesParent = selectedParentSections.some(
@@ -288,22 +292,19 @@ document.addEventListener("DOMContentLoaded", function () {
           );
 
           if (selectedSubsections.length === 0) {
-            return true;
+            return matchesPrice; // Only check price filter for parent category
           }
 
           // If subsections are selected, only show products from those subsections
-          return selectedSubsections.includes(product.section);
+          return selectedSubsections.includes(product.section) && matchesPrice;
         }
+        return false; // Don't show products that don't match parent category
       }
 
       // If no parent section is selected, use normal category filtering
       const matchesCategory =
         selectedCategories.has("all") ||
         selectedCategories.has(product.section || "Others");
-
-      const matchesPrice =
-        (!product.price || product.price >= minPrice) &&
-        (!product.price || product.price <= maxPrice);
 
       return matchesCategory && matchesPrice;
     });
@@ -488,8 +489,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Event Listeners
-  priceMinInput.addEventListener("change", handlePriceChange);
-  priceMaxInput.addEventListener("change", handlePriceChange);
+  priceMinInput.addEventListener("input", handlePriceChange);
+  priceMaxInput.addEventListener("input", handlePriceChange);
   priceMinRange.addEventListener("input", (e) => {
     priceMinInput.value = e.target.value;
     handlePriceChange();
