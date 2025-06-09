@@ -13,8 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Set initial header style for index.html
   if (
-    window.location.pathname === "/index.html" ||
-    window.location.pathname === "/"
+    window.location.pathname.endsWith("index.html") ||
+    window.location.pathname === "/" ||
+    window.location.pathname === "" ||
+    window.location.pathname.endsWith("/")
   ) {
     header.classList.add("header_transparent");
   }
@@ -73,8 +75,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Change header style on scroll for index.html
     if (
-      window.location.pathname === "/index.html" ||
-      window.location.pathname === "/"
+      window.location.pathname.endsWith("index.html") ||
+      window.location.pathname === "/" ||
+      window.location.pathname === "" ||
+      window.location.pathname.endsWith("/")
     ) {
       if (window.scrollY > 400) {
         header.classList.remove("header_transparent");
