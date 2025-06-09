@@ -1,4 +1,136 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Mouse movement effect for hero section
+  const hero = document.querySelector(".hero_section");
+
+  if (hero) {
+    hero.addEventListener("mousemove", (e) => {
+      const { clientX, clientY } = e;
+      const { left, top, width, height } = hero.getBoundingClientRect();
+
+      // Calculate mouse position relative to the center of the hero
+      const x = (clientX - left - width / 2) / (width / 2);
+      const y = (clientY - top - height / 2) / (height / 2);
+
+      // Update CSS variables for rotation
+      hero.style.setProperty("--mouse-x", `${x * 10}deg`);
+      hero.style.setProperty("--mouse-y", `${y * -10}deg`);
+    });
+
+    // Reset transform when mouse leaves
+    hero.addEventListener("mouseleave", () => {
+      hero.style.setProperty("--mouse-x", "0deg");
+      hero.style.setProperty("--mouse-y", "0deg");
+    });
+  }
+
+  // Mouse trail effect
+  const trailContainer = document.createElement("div");
+  trailContainer.className = "mouse-trail";
+  document.body.appendChild(trailContainer);
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let lastX = 0;
+  let lastY = 0;
+  let speed = 0;
+  let lastTime = Date.now();
+  let lastParticleTime = 0;
+  const minParticleInterval = 5;
+
+  function createParticle(x, y, speed, isCurrent = false) {
+    const particle = document.createElement("div");
+    particle.className = `trail-particle${isCurrent ? " current" : ""}`;
+
+    // Size based on speed and time
+    const size = isCurrent ? 2.5 : 1.5;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+
+    // Position with wider offset for more natural distribution
+    const offsetX = (Math.random() - 0.5) * 4;
+    const offsetY = (Math.random() - 0.5) * 4;
+    particle.style.left = `${x + offsetX}px`;
+    particle.style.top = `${y + offsetY}px`;
+
+    // More varied movement for drawing effect
+    const angle1 = Math.random() * Math.PI * 2;
+    const angle2 = Math.random() * Math.PI * 2;
+    const distance1 = Math.random() * 15; // Increased spread
+    const distance2 = Math.random() * 20; // Increased spread
+
+    const tx = Math.cos(angle1) * distance1;
+    const ty = Math.sin(angle1) * distance1;
+    const tx2 = Math.cos(angle2) * distance2;
+    const ty2 = Math.sin(angle2) * distance2;
+
+    particle.style.setProperty("--tx", `${tx}px`);
+    particle.style.setProperty("--ty", `${ty}px`);
+    particle.style.setProperty("--tx2", `${tx2}px`);
+    particle.style.setProperty("--ty2", `${ty2}px`);
+
+    // Opacity based on speed
+    const opacity = isCurrent ? 1 : Math.min(0.9, 0.3 + speed * 0.5);
+    particle.style.opacity = opacity;
+
+    trailContainer.appendChild(particle);
+
+    // Remove particle after animation
+    setTimeout(() => {
+      particle.remove();
+    }, 2000);
+  }
+
+  function updateMousePosition(e) {
+    const currentTime = Date.now();
+    const deltaTime = currentTime - lastTime;
+
+    // Calculate speed
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    speed = Math.sqrt(dx * dx + dy * dy) / deltaTime;
+
+    // Update positions
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    lastTime = currentTime;
+
+    // Create particles with time-based spacing
+    if (currentTime - lastParticleTime >= minParticleInterval) {
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      // Adjust particle count based on speed to prevent line-like appearance
+      const baseCount = Math.min(12, Math.max(4, Math.floor(distance / 4)));
+      const particleCount = Math.min(baseCount, Math.floor(8 + speed * 2));
+
+      // Create current position particle
+      createParticle(mouseX, mouseY, speed, true);
+
+      // Create trail particles with more spread
+      for (let i = 0; i < particleCount; i++) {
+        const t = i / particleCount;
+        // Add some randomness to the position
+        const randomOffset = (Math.random() - 0.5) * 8;
+        const x = lastX + dx * t + randomOffset;
+        const y = lastY + dy * t + randomOffset;
+        createParticle(x, y, speed);
+      }
+
+      lastParticleTime = currentTime;
+    }
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+  }
+
+  // Start the effect
+  if (hero) {
+    hero.addEventListener("mousemove", updateMousePosition);
+    animate();
+  }
+
+  // Initialize AOS
   AOS.init({
     // Global settings
     startEvent: "DOMContentLoaded",
@@ -976,135 +1108,4 @@ document.addEventListener("DOMContentLoaded", function () {
     SUPABASE_CONFIG.url,
     SUPABASE_CONFIG.key
   );
-
-  // Mouse movement effect for hero section
-  const hero = document.querySelector(".hero_section");
-
-  if (hero) {
-    hero.addEventListener("mousemove", (e) => {
-      const { clientX, clientY } = e;
-      const { left, top, width, height } = hero.getBoundingClientRect();
-
-      // Calculate mouse position relative to the center of the hero
-      const x = (clientX - left - width / 2) / (width / 2);
-      const y = (clientY - top - height / 2) / (height / 2);
-
-      // Update CSS variables for rotation
-      hero.style.setProperty("--mouse-x", `${x * 10}deg`);
-      hero.style.setProperty("--mouse-y", `${y * -10}deg`);
-    });
-
-    // Reset transform when mouse leaves
-    hero.addEventListener("mouseleave", () => {
-      hero.style.setProperty("--mouse-x", "0deg");
-      hero.style.setProperty("--mouse-y", "0deg");
-    });
-  }
-
-  // Mouse trail effect
-  const trailContainer = document.createElement("div");
-  trailContainer.className = "mouse-trail";
-  document.body.appendChild(trailContainer);
-
-  let mouseX = 0;
-  let mouseY = 0;
-  let lastX = 0;
-  let lastY = 0;
-  let speed = 0;
-  let lastTime = Date.now();
-  let lastParticleTime = 0;
-  const minParticleInterval = 5;
-
-  function createParticle(x, y, speed, isCurrent = false) {
-    const particle = document.createElement("div");
-    particle.className = `trail-particle${isCurrent ? " current" : ""}`;
-
-    // Size based on speed and time
-    const size = isCurrent ? 2.5 : 1.5;
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-
-    // Position with wider offset for more natural distribution
-    const offsetX = (Math.random() - 0.5) * 4;
-    const offsetY = (Math.random() - 0.5) * 4;
-    particle.style.left = `${x + offsetX}px`;
-    particle.style.top = `${y + offsetY}px`;
-
-    // More varied movement for drawing effect
-    const angle1 = Math.random() * Math.PI * 2;
-    const angle2 = Math.random() * Math.PI * 2;
-    const distance1 = Math.random() * 15; // Increased spread
-    const distance2 = Math.random() * 20; // Increased spread
-
-    const tx = Math.cos(angle1) * distance1;
-    const ty = Math.sin(angle1) * distance1;
-    const tx2 = Math.cos(angle2) * distance2;
-    const ty2 = Math.sin(angle2) * distance2;
-
-    particle.style.setProperty("--tx", `${tx}px`);
-    particle.style.setProperty("--ty", `${ty}px`);
-    particle.style.setProperty("--tx2", `${tx2}px`);
-    particle.style.setProperty("--ty2", `${ty2}px`);
-
-    // Opacity based on speed
-    const opacity = isCurrent ? 1 : Math.min(0.9, 0.3 + speed * 0.5);
-    particle.style.opacity = opacity;
-
-    trailContainer.appendChild(particle);
-
-    // Remove particle after animation
-    setTimeout(() => {
-      particle.remove();
-    }, 2000);
-  }
-
-  function updateMousePosition(e) {
-    const currentTime = Date.now();
-    const deltaTime = currentTime - lastTime;
-
-    // Calculate speed
-    const dx = e.clientX - lastX;
-    const dy = e.clientY - lastY;
-    speed = Math.sqrt(dx * dx + dy * dy) / deltaTime;
-
-    // Update positions
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    lastX = e.clientX;
-    lastY = e.clientY;
-    lastTime = currentTime;
-
-    // Create particles with time-based spacing
-    if (currentTime - lastParticleTime >= minParticleInterval) {
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      // Adjust particle count based on speed to prevent line-like appearance
-      const baseCount = Math.min(12, Math.max(4, Math.floor(distance / 4)));
-      const particleCount = Math.min(baseCount, Math.floor(8 + speed * 2));
-
-      // Create current position particle
-      createParticle(mouseX, mouseY, speed, true);
-
-      // Create trail particles with more spread
-      for (let i = 0; i < particleCount; i++) {
-        const t = i / particleCount;
-        // Add some randomness to the position
-        const randomOffset = (Math.random() - 0.5) * 8;
-        const x = lastX + dx * t + randomOffset;
-        const y = lastY + dy * t + randomOffset;
-        createParticle(x, y, speed);
-      }
-
-      lastParticleTime = currentTime;
-    }
-  }
-
-  function animate() {
-    requestAnimationFrame(animate);
-  }
-
-  // Start the effect
-  if (hero) {
-    hero.addEventListener("mousemove", updateMousePosition);
-    animate();
-  }
 });
