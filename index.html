@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="script.js" defer></script>
+    <script src="cart.js"></script>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <!-- SEO Meta Tags -->
@@ -123,6 +124,12 @@
           <li data-aos="fade-up" data-aos-delay="900">
             <a href="contact.html" class="header_nav-link">Contact</a>
           </li>
+          <li data-aos="fade-up" data-aos-delay="1200">
+            <a href="#" class="header_nav-link cart-icon-btn">
+              <span class="material-symbols-outlined">shopping_cart</span>
+              <span class="cart-count">0</span>
+            </a>
+          </li>
         </ul>
       </nav>
       <div class="header_mobile-toggle">
@@ -131,6 +138,9 @@
       </div>
     </header>
     <section id="hero" class="hero_section">
+      <!--<img src="images/logo-hero.png" class="herobg" /> -->
+      <div class="hero_overlay hero_overlay-left"></div>
+      <div class="hero_overlay hero_overlay-right"></div>
       <div class="hero_container">
         <div class="hero_content">
           <h1
@@ -347,6 +357,48 @@
         </div>
       </div>
     </section>
+    <section class="categories-section">
+      <h2 class="section-title" data-aos="fade-up">Shop by Categories</h2>
+      <div class="categories-container">
+          <a href="shop.html?category=Signs"  data-aos="zoom-in" data-aos-delay="100" class="category-card">
+              <div class="category-icon">
+                  <i class="fas fa-sign"></i>
+              </div>
+              <h3>Signs</h3>
+          </a>
+          <a href="shop.html?category=Car%20Wrapping" data-aos="zoom-in" data-aos-delay="200" class="category-card">
+              <div class="category-icon">
+                  <i class="fas fa-car-side"></i>
+              </div>
+              <h3>Car Wrapping</h3>
+          </a>
+          <a href="shop.html?category=Customized%20Gifts" data-aos="zoom-in" data-aos-delay="300" class="category-card">
+              <div class="category-icon">
+                  <i class="fas fa-gift"></i>
+              </div>
+              <h3>Customized Gifts</h3>
+          </a>
+          <a href="shop.html?category=Printing%20Services" data-aos="zoom-in" data-aos-delay="400" class="category-card">
+              <div class="category-icon">
+                  <i class="fas fa-print"></i>
+              </div>
+              <h3>Printing Services</h3>
+          </a>
+          <a href="shop.html?category=Stationery%20%26%20Office%20Supplies" data-aos="zoom-in" data-aos-delay="500" class="category-card">
+              <div class="category-icon">
+                  <i class="fas fa-book"></i>
+              </div>
+              <h3>Stationery & Office Supplies</h3>
+          </a>
+          <a href="shop.html?category=School%20%26%20Office%20Supplies" data-aos="zoom-in" data-aos-delay="600" class="category-card">
+              <div class="category-icon">
+                  <i class="fas fa-pencil-ruler"></i>
+              </div>
+              <h3>School & Office Supplies</h3>
+          </a>
+      </div>
+      <a href="shop.html" data-aos="fade-up" class="shopnow-btn">Shop Now</a>
+  </section>
     <section id="services" class="services_section">
       <div class="services_container">
         <h2 class="services_heading">SERVICES WE OFFER</h2>
@@ -894,7 +946,7 @@
         </div>
       </div>
     </section> --->
-    <section id="leaders" class="ourleaders_section">
+    <!----- <section id="leaders" class="ourleaders_section">
       <h2 class="ourleaders_main-title">Our Leaders</h2>
 
       <div class="ourleaders_container">
@@ -970,7 +1022,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> --->
 
     <section id="faq" class="faq_section">
       <h2 class="faq_main-title">Frequently Asked Questions</h2>
@@ -1549,6 +1601,7 @@
         </div>
       </div>
     </section>
+    <section class="contact-section">
     <footer class="footer_section">
       <div class="footer_container">
         <div class="footer_column footer_brand-column">
@@ -1712,5 +1765,48 @@
     <a href="https://wa.me/96181882662" target="_blank" class="whatsapp-fixed">
       <i class="fab fa-whatsapp"></i>
     </a>
+    <div id="cart-modal" class="cart-modal">
+      <div class="cart-modal-content">
+        <div class="cart-modal-header">
+          <h2>Your Cart</h2>
+          <span class="cart-modal-close">&times;</span>
+        </div>
+        <div id="cart-items" class="cart-items">
+          <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-summary">
+          <p>Total: $<span id="cart-total">0.00</span></p>
+          <div class="cart-buttons">
+            <button id="checkout-btn" class="checkout-btn">Checkout</button>
+            <a href="view-cart.html" class="view-cart-btn">View Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="career-modal" class="career-modal" style="display:none;">
+      <div class="career-modal-content">
+        <span class="career-modal-close">&times;</span>
+        <h2 class="career-modal-title">Apply for a Career</h2>
+        <form id="career-form" class="career-form" action="https://formspree.io/f/xqabdjzl" method="POST">
+          <div class="career-form-group">
+            <label for="career-name" class="career-label">Name<span style="color:red;">*</span></label>
+            <input type="text" id="career-name" name="name" class="career-input" required />
+          </div>
+          <div class="career-form-group">
+            <label for="career-email" class="career-label">Email<span style="color:red;">*</span></label>
+            <input type="email" id="career-email" name="email" class="career-input" required />
+          </div>
+          <div class="career-form-group">
+            <label for="career-cv" class="career-label">Upload CV<span style="color:red;">*</span></label>
+            <input type="file" id="career-cv" class="career-input" accept=".pdf,.doc,.docx" required />
+          </div>
+          <input type="hidden" id="career-cv-url" name="cv_url" />
+          <input type="hidden" name="_replyto" id="career-replyto" />
+          <input type="hidden" name="_subject" value="New Career Application" />
+          <button type="submit" class="career-submit-btn">Submit Application</button>
+        </form>
+        <div id="career-form-status" class="career-form-status"></div>
+      </div>
+    </div>
   </body>
 </html>

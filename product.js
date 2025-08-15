@@ -21,19 +21,23 @@ async function fetchRelatedProducts(currentProductId, section) {
       return [];
     }
 
-    const { data: relatedProducts, error } = await supabaseClient
+    return supabaseClient
       .from("products")
       .select("*")
       .eq("section", section)
       .neq("id", currentProductId)
-      .limit(4);
-
-    if (error) throw error;
-
-    return relatedProducts || [];
+      .limit(4)
+      .then(({ data, error }) => {
+        if (error) throw error;
+        return data || [];
+      })
+      .catch((error) => {
+        console.error("Error fetching related products:", error);
+        return [];
+      });
   } catch (error) {
-    console.error("Error fetching related products:", error);
-    return [];
+    console.error("Unexpected error in fetchRelatedProducts:", error);
+    return Promise.resolve([]);
   }
 }
 
@@ -91,20 +95,34 @@ function displayRelatedProducts(products) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", function () {
   // Mobile menu functionality
   const mobileToggle = document.querySelector(".header_mobile-toggle");
   const nav = document.querySelector(".header_nav");
   const navLinks = document.querySelectorAll(".header_nav-link");
 
+  // Product Details Elements
+  const productImage = document.getElementById("product-image");
+  const productTitle = document.getElementById("product-title");
+  const productCategory = document.getElementById("product-category");
+  const productDescription = document.getElementById("product-description");
+  const priceElement = document.getElementById("product-price");
+  const inquiryBtn = document.getElementById("inquiry-btn");
+  const addToCartBtn = document.getElementById("add-to-cart-btn");
+  const breadcrumbProductName = document.getElementById(
+    "breadcrumb-product-name"
+  );
+  const inquiryModal = document.getElementById("inquiry-modal");
+  const inquiryMessage = inquiryModal.querySelector("#message");
+  const inquiryForm = document.getElementById("inquiry-form");
+
+  let currentProduct = null;
+
   // Mobile menu toggle
   mobileToggle.addEventListener("click", function () {
     nav.classList.toggle("header_open");
-
-    // Update icons visibility
     const menuIcon = document.querySelector(".header_menu-icon");
     const closeIcon = document.querySelector(".header_close-icon");
-
     if (nav.classList.contains("header_open")) {
       menuIcon.style.display = "none";
       closeIcon.style.display = "block";
@@ -125,138 +143,244 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const productId = urlParams.get("id");
+  async function initializeProductPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get("id");
 
-  if (!productId) {
-    window.location.href = "shop.html";
-    return;
-  }
-
-  try {
-    const { data: product, error } = await supabaseClient
-      .from("products")
-      .select("*")
-      .eq("id", productId)
-      .single();
-
-    if (error) {
-      console.error("Error fetching product:", error);
+    if (!productId) {
       window.location.href = "shop.html";
       return;
     }
 
-    if (!product) {
-      console.error("Product not found");
+    try {
+      const { data: product, error } = await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("id", productId)
+        .single();
+
+      if (error) {
+        console.error("Error fetching product:", error);
+        window.location.href = "shop.html";
+        return;
+      }
+
+      if (!product) {
+        console.error("Product not found");
+        window.location.href = "shop.html";
+        return;
+      }
+
+      // Update breadcrumb
+      const breadcrumbNav = document.querySelector(
+        ".singleproduct_breadcrumb-nav"
+      );
+      breadcrumbNav.innerHTML = `
+  <a href="shop.html" class="singleproduct_breadcrumb-link">Shop</a>
+  ${
+    product.parent_section
+      ? `
+    <span class="singleproduct_breadcrumb-separator">/</span>
+    <a href="shop.html?category=${encodeURIComponent(product.parent_section)}" 
+       class="singleproduct_breadcrumb-link">${product.parent_section}</a>
+  `
+      : ""
+  }
+  ${
+    product.section
+      ? `
+    <span class="singleproduct_breadcrumb-separator">/</span>
+    <a href="shop.html?category=${encodeURIComponent(product.section)}" 
+       class="singleproduct_breadcrumb-link">${product.section}</a>
+  `
+      : ""
+  }
+  ${
+    product.branding
+      ? `
+    <span class="singleproduct_breadcrumb-separator">/</span>
+    <a href="shop.html?category=${encodeURIComponent(product.branding)}" 
+       class="singleproduct_breadcrumb-link">${product.branding}</a>
+  `
+      : ""
+  }
+  <span class="singleproduct_breadcrumb-separator">/</span>
+  <span class="singleproduct_breadcrumb-current">${product.title}</span>
+`;
+
+      // Update product details
+      productTitle.textContent = product.title;
+      productCategory.textContent = product.section;
+      // Set in-stock indicator
+      const instockIndicator = document.getElementById(
+        "product-instock-indicator"
+      );
+      if (instockIndicator) {
+        if (product.instock === false) {
+          instockIndicator.innerHTML =
+            '<span class="instock-dot out"></span> <span class="instock-text">Out of Stock</span>';
+        } else {
+          instockIndicator.innerHTML =
+            '<span class="instock-dot in"></span> <span class="instock-text">In Stock</span>';
+        }
+      }
+      productDescription.textContent = product.description;
+
+      // Handle subdescription
+      const productSubdescription = document.getElementById(
+        "product-subdescription"
+      );
+      if (productSubdescription) {
+        if (product.subdescription) {
+          productSubdescription.textContent = product.subdescription;
+          productSubdescription.style.display = "block";
+        } else {
+          productSubdescription.style.display = "none";
+        }
+      }
+
+      priceElement.textContent = product.price ? `$${product.price}` : "";
+
+      // Handle image loading
+      const placeholder = document.querySelector(
+        ".singleproduct_image-placeholder"
+      );
+
+      productImage.onload = function () {
+        console.log("Image loaded successfully");
+        placeholder.style.display = "none";
+        productImage.classList.add("loaded");
+      };
+
+      productImage.onerror = function () {
+        console.error("Error loading image");
+        placeholder.style.display = "block";
+        productImage.classList.remove("loaded");
+      };
+
+      // Get the correct image URL from Supabase storage
+      const imageUrl = supabaseClient.storage
+        .from("project-images")
+        .getPublicUrl(product.image).data.publicUrl;
+
+      console.log("Setting image URL:", imageUrl);
+      productImage.src = imageUrl;
+      productImage.alt = product.title;
+
+      // Update currentProduct with the full image URL before setting it
+      currentProduct = {
+        ...product,
+        image: imageUrl, // Overwrite with the public URL
+      };
+
+      // Back button event listener
+      const backBtn = document.querySelector(".singleproduct-back-btn");
+      if (backBtn) {
+        backBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          // Use parent_section as category if it exists, otherwise fallback to section
+          const category = product.section || product.parent_section || "";
+          const categoryParam = encodeURIComponent(category);
+          window.location.href = `shop.html?category=${categoryParam}`;
+        });
+      }
+
+      // Fetch and display related products
+      fetchRelatedProducts(productId, currentProduct.section).then(
+        (relatedProducts) => {
+          displayRelatedProducts(relatedProducts);
+        }
+      );
+
+      // Handle price-based button visibility
+      if (product.price) {
+        priceElement.textContent = `$${product.price}`;
+        inquiryBtn.style.display = "none"; // Hide inquiry button if price exists
+        addToCartBtn.style.display = "block"; // Show add to cart button
+
+        // Disable add to cart button if out of stock
+        if (product.instock === false) {
+          addToCartBtn.disabled = true;
+          addToCartBtn.classList.add("disabled");
+        }
+
+        // Set up add to cart button click listener with the updated currentProduct
+        addToCartBtn.addEventListener("click", () => {
+          console.log("Add to Cart button clicked on product page.");
+          console.log(
+            "Adding product to cart from product.html:",
+            currentProduct
+          );
+          console.log("Product image being passed:", currentProduct.image);
+          window.addToCart(currentProduct);
+        });
+      } else {
+        priceElement.textContent = "Price available upon request";
+        inquiryBtn.style.display = "block"; // Show inquiry button if no price
+        addToCartBtn.style.display = "none"; // Hide add to cart button
+
+        // Disable inquiry button if out of stock
+        if (product.instock === false) {
+          inquiryBtn.disabled = true;
+          inquiryBtn.classList.add("disabled");
+        }
+      }
+
+      // Handle inquiry button click
+      inquiryBtn.addEventListener("click", () => {
+        inquiryMessage.value = `I'm interested in the following product:\n\nProduct: ${product.title}\n\nPlease provide more information about this product.`;
+        inquiryModal.style.display = "block";
+      });
+
+      // Close inquiry modal
+      document
+        .querySelector(".singleproduct_modal-close")
+        .addEventListener("click", () => {
+          inquiryModal.style.display = "none";
+        });
+
+      // Handle inquiry form submission
+      inquiryForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Get form values
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const message = document.getElementById("message").value.trim();
+
+        // Basic validation
+        if (!name) {
+          window.showNotification("Please enter your name", "error");
+          return;
+        }
+
+        if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+          window.showNotification(
+            "Please enter a valid email address",
+            "error"
+          );
+          return;
+        }
+
+        // Format WhatsApp message
+        const whatsappMessage = encodeURIComponent(
+          `*New Quote Request*\n\nName: ${name}\nEmail: ${email}\n\n${message}`
+        );
+        const whatsappNumber = "96181882662"; // Your WhatsApp business number
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+        // Open WhatsApp in new tab
+        window.open(whatsappUrl, "_blank");
+
+        // Close modal and reset form
+        inquiryModal.style.display = "none";
+        inquiryForm.reset();
+      });
+    } catch (error) {
+      console.error("Error initializing product page:", error);
       window.location.href = "shop.html";
-      return;
     }
-
-    // Update breadcrumb
-    const breadcrumbNav = document.querySelector(
-      ".singleproduct_breadcrumb-nav"
-    );
-    breadcrumbNav.innerHTML = `
-      <a href="shop.html" class="singleproduct_breadcrumb-link">Shop</a>
-      <span class="singleproduct_breadcrumb-separator">/</span>
-      ${
-        product.parent_section
-          ? `
-        <span class="singleproduct_breadcrumb-current">${product.parent_section}</span>
-        <span class="singleproduct_breadcrumb-separator">/</span>
-      `
-          : ""
-      }
-      ${
-        product.section
-          ? `
-        <span class="singleproduct_breadcrumb-current">${product.section}</span>
-        <span class="singleproduct_breadcrumb-separator">/</span>
-      `
-          : ""
-      }
-      <span class="singleproduct_breadcrumb-current">${product.title}</span>
-    `;
-
-    // Update product details
-    document.getElementById("product-title").textContent = product.title;
-    document.getElementById("product-category").textContent = product.section;
-    document.getElementById("product-description").textContent =
-      product.description;
-    document.getElementById("product-price").textContent = product.price
-      ? `$${product.price}`
-      : "";
-
-    // Handle image loading
-    const productImage = document.getElementById("product-image");
-    const placeholder = document.querySelector(
-      ".singleproduct_image-placeholder"
-    );
-
-    productImage.onload = function () {
-      console.log("Image loaded successfully");
-      placeholder.style.display = "none";
-      productImage.classList.add("loaded");
-    };
-
-    productImage.onerror = function () {
-      console.error("Error loading image");
-      placeholder.style.display = "block";
-      productImage.classList.remove("loaded");
-    };
-
-    // Get the correct image URL from Supabase storage
-    const imageUrl = supabaseClient.storage
-      .from("project-images")
-      .getPublicUrl(product.image).data.publicUrl;
-
-    console.log("Setting image URL:", imageUrl);
-    productImage.src = imageUrl;
-    productImage.alt = product.title;
-
-    // Fetch and display related products
-    const relatedProducts = await fetchRelatedProducts(
-      productId,
-      product.section
-    );
-    displayRelatedProducts(relatedProducts);
-  } catch (error) {
-    console.error("Error:", error);
-    window.location.href = "shop.html";
   }
-});
 
-// Handle inquiry modal
-const inquiryBtn = document.getElementById("inquiry-btn");
-const inquiryModal = document.getElementById("inquiry-modal");
-const closeModal = document.querySelector(".singleproduct_modal-close");
-const inquiryForm = document.getElementById("inquiry-form");
-
-inquiryBtn.addEventListener("click", () => {
-  inquiryModal.style.display = "block";
-  // Set default message with product name
-  const productName = document.getElementById("product-title").textContent;
-  document.getElementById(
-    "message"
-  ).value = `I'm interested in the ${productName}. Please provide more information.`;
-});
-
-closeModal.addEventListener("click", () => {
-  inquiryModal.style.display = "none";
-});
-
-// Close modal when clicking outside
-window.addEventListener("click", (e) => {
-  if (e.target === inquiryModal) {
-    inquiryModal.style.display = "none";
-  }
-});
-
-// Handle form submission
-inquiryForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  // Here you would typically handle the form submission
-  // For now, we'll just close the modal
-  inquiryModal.style.display = "none";
-  alert("Thank you for your inquiry. We will get back to you soon!");
+  initializeProductPage();
 });

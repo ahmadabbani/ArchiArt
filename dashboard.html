@@ -67,6 +67,20 @@
               class="dashboard-search"
               placeholder="Search products..."
             />
+            <button
+              id="outofstock-toggle"
+              class="dashboard-button outofstock-toggle"
+              style="margin-left: 10px"
+            >
+              Out of Stock Only
+            </button>
+            <button
+              id="available-toggle"
+              class="dashboard-button available-toggle"
+              style="margin-left: 10px"
+            >
+              Unavailable Only
+            </button>
             <button class="dashboard-button toggle-view-btn">
               Show Projects
             </button>
@@ -488,6 +502,21 @@
               ></p>
             </div>
             <div class="dashboard-field">
+              <label for="product-subdescription" class="dashboard-label"
+                >Sub Description (Optional)</label
+              >
+              <textarea
+                id="product-subdescription"
+                class="dashboard-input"
+                placeholder="Enter additional details or specifications"
+              ></textarea>
+              <p
+                id="product-subdescription-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
               <label for="product-section" class="dashboard-label"
                 >Product Section</label
               >
@@ -560,6 +589,80 @@
               />
               <p
                 id="product-price-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="product-branding" class="dashboard-label"
+                >Branding (Optional)</label
+              >
+              <input
+                type="text"
+                id="product-branding"
+                class="dashboard-input"
+                placeholder="Enter branding information"
+              />
+              <p
+                id="product-branding-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label class="dashboard-label">In Stock?</label>
+              <div style="display: flex; gap: 1.5rem; align-items: center">
+                <label style="display: flex; align-items: center; gap: 0.3rem">
+                  <input
+                    type="radio"
+                    name="product-instock"
+                    id="product-instock-yes"
+                    value="yes"
+                    checked
+                  />
+                  Yes
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.3rem">
+                  <input
+                    type="radio"
+                    name="product-instock"
+                    id="product-instock-no"
+                    value="no"
+                  />
+                  No
+                </label>
+              </div>
+              <p
+                id="product-instock-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label class="dashboard-label">Available?</label>
+              <div style="display: flex; gap: 1.5rem; align-items: center">
+                <label style="display: flex; align-items: center; gap: 0.3rem">
+                  <input
+                    type="radio"
+                    name="product-available"
+                    id="product-available-yes"
+                    value="yes"
+                    checked
+                  />
+                  Yes
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.3rem">
+                  <input
+                    type="radio"
+                    name="product-available"
+                    id="product-available-no"
+                    value="no"
+                  />
+                  No
+                </label>
+              </div>
+              <p
+                id="product-available-error"
                 class="dashboard-error"
                 style="display: none"
               ></p>
@@ -673,6 +776,21 @@
               ></p>
             </div>
             <div class="dashboard-field">
+              <label for="edit-product-subdescription" class="dashboard-label"
+                >Sub Description (Optional)</label
+              >
+              <textarea
+                id="edit-product-subdescription"
+                class="dashboard-input"
+                placeholder="Enter additional details or specifications"
+              ></textarea>
+              <p
+                id="edit-product-subdescription-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
               <label for="edit-product-section" class="dashboard-label"
                 >Product Section</label
               >
@@ -747,6 +865,78 @@
               />
               <p
                 id="edit-product-price-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label for="edit-product-branding" class="dashboard-label"
+                >Branding (Optional)</label
+              >
+              <input
+                type="text"
+                id="edit-product-branding"
+                class="dashboard-input"
+                placeholder="Enter branding information"
+              />
+              <p
+                id="edit-product-branding-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label class="dashboard-label">In Stock?</label>
+              <div style="display: flex; gap: 1.5rem; align-items: center">
+                <label style="display: flex; align-items: center; gap: 0.3rem">
+                  <input
+                    type="radio"
+                    name="edit-product-instock"
+                    id="edit-product-instock-yes"
+                    value="yes"
+                  />
+                  Yes
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.3rem">
+                  <input
+                    type="radio"
+                    name="edit-product-instock"
+                    id="edit-product-instock-no"
+                    value="no"
+                  />
+                  No
+                </label>
+              </div>
+              <p
+                id="edit-product-instock-error"
+                class="dashboard-error"
+                style="display: none"
+              ></p>
+            </div>
+            <div class="dashboard-field">
+              <label class="dashboard-label">Available?</label>
+              <div style="display: flex; gap: 1.5rem; align-items: center">
+                <label style="display: flex; align-items: center; gap: 0.3rem">
+                  <input
+                    type="radio"
+                    name="edit-product-available"
+                    id="edit-product-available-yes"
+                    value="yes"
+                  />
+                  Yes
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.3rem">
+                  <input
+                    type="radio"
+                    name="edit-product-available"
+                    id="edit-product-available-no"
+                    value="no"
+                  />
+                  No
+                </label>
+              </div>
+              <p
+                id="edit-product-available-error"
                 class="dashboard-error"
                 style="display: none"
               ></p>

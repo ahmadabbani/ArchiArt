@@ -3,7 +3,58 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shop - Archiart</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+    <title>Archiart - Shop</title>
+    <meta
+      name="description"
+      content="Discover and shop custom printing products at ArchiArt. Explore personalized notebooks, mugs, billboards, wall murals, signage, car wraps, and more. Find creative and innovative print solutions for every need."
+    />
+    <meta
+      name="keywords"
+      content="custom printing, ArchiArt, personalized notebooks, custom mugs, billboard printing, wall murals, signage, car wraps, creative printing, innovative designs, large-scale prints, small-scale prints"
+    />
+
+    <meta name="author" content="ArchiArt" />
+
+    <!-- Open Graph Meta Tags (for social media sharing) -->
+    <meta property="og:title" content=" ArchiArt - Shop" />
+    <meta
+      property="og:description"
+      content="Discover and shop custom printing products at ArchiArt. Explore personalized notebooks, mugs, billboards, wall murals, signage, car wraps, and more. Find creative and innovative print solutions for every need."
+    />
+    <meta property="og:type" content="website" />
+    <!-- Replace with your actual domain -->
+    <meta property="og:url" content="https://archiart.com.lb/shop.html" />
+
+    <!-- Replace with your actual Open Graph image (1200x630px recommended) -->
+    <meta
+      property="og:image"
+      content="https://archiart.com.lb/images/logo.jpg"
+    />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="ArchiArt Lebanon" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ArchiArt - shop" />
+    <meta
+      name="twitter:description"
+      content="Discover and shop custom printing products at ArchiArt. Explore personalized notebooks, mugs, billboards, wall murals, signage, car wraps, and more. Find creative and innovative print solutions for every need."
+    />
+    <!-- Replace with your actual Twitter image (1200x600px recommended) -->
+    <meta
+      name="twitter:image"
+      content="https://archiart.com.lb/images/logo.jpg"
+    />
+
+    <!-- Canonical URL -->
+    <!-- Replace with your actual domain -->
+    <link rel="canonical" href="https://archiart.com.lb/shop.html" />
+
+    <!-- Robots Meta Tag -->
+    <meta name="robots" content="index, follow" />
+
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
@@ -36,6 +87,12 @@
             <a href="shop.html" class="header_nav-link header_active">Shop</a>
           </li>
           <li><a href="contact.html" class="header_nav-link">Contact</a></li>
+          <li>
+            <a href="#" class="header_nav-link cart-icon-btn">
+              <span class="material-symbols-outlined">shopping_cart</span>
+              <span class="cart-count">0</span>
+            </a>
+          </li>
         </ul>
       </nav>
       <div class="header_mobile-toggle">
@@ -49,6 +106,25 @@
       <div class="shop_container">
         <!-- Filters Sidebar -->
         <aside class="shop_filters">
+          <!-- Search Bar -->
+          <div class="shop_filter-group">
+            <div class="shop_search-bar">
+              <input
+                type="text"
+                id="shop-search-input"
+                placeholder="Search products..."
+                autocomplete="off"
+              />
+              <button
+                type="button"
+                id="shop-search-reset"
+                class="shop_search-reset"
+                title="Reset search"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
           <div class="shop_filter-group">
             <h3 class="shop_filter-title">Price Range</h3>
             <div class="shop_price-slider">
@@ -92,7 +168,6 @@
               </div>
             </div>
           </div>
-
           <div class="shop_filter-group">
             <h3 class="shop_filter-title">Categories</h3>
             <div class="shop_categories">
@@ -101,6 +176,17 @@
                 <span>All</span>
               </label>
               <!-- Categories will be populated dynamically -->
+            </div>
+          </div>
+          <hr class="shop_filter-divider" />
+          <div class="shop_filter-group">
+            <h3 class="shop_filter-title">Brands</h3>
+            <div class="shop_brands">
+              <label class="shop_brand">
+                <input type="checkbox" value="all" checked />
+                <span>All</span>
+              </label>
+              <!-- Brands will be populated dynamically -->
             </div>
           </div>
         </aside>
@@ -282,5 +368,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="shop.js"></script>
+    <script src="cart.js"></script>
   </body>
 </html>
+
+<div id="cart-modal" class="cart-modal">
+  <div class="cart-modal-content">
+    <span class="cart-modal-close">&times;</span>
+    <h2 class="cart-modal-title">Your Cart</h2>
+    <div id="cart-items" class="cart-items">
+      <!-- Cart items will be loaded here -->
+      <p class="cart-empty-message">Your cart is empty.</p>
+    </div>
+    <div class="cart-summary">
+      <p>Total: $<span id="cart-total">0.00</span></p>
+      <div class="cart-buttons">
+        <button id="checkout-btn" class="checkout-btn">Checkout</button>
+        <a href="view-cart.html" class="view-cart-btn">View Cart</a>
+      </div>
+    </div>
+  </div>
+</div>

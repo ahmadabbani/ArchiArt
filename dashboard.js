@@ -329,28 +329,45 @@ document.addEventListener("DOMContentLoaded", function () {
       // Reset success message when opening modal
       document.getElementById("product-success").style.display = "none";
 
-      // Fetch existing sections
+      // Fetch existing sections - UPDATED QUERY
       try {
+        console.log("Fetching sections from products table..."); // Debug log
+
+        // Use a more comprehensive query without any limits
         const { data: products, error } = await supabaseClient
           .from("products")
           .select("section, parent_section")
-          .not("section", "is", null);
+          .order("created_at", { ascending: false }); // Order by creation date, newest first
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error fetching products:", error);
+          throw error;
+        }
+
+        console.log("Raw products data:", products); // Debug log
+        console.log("Total products fetched:", products?.length); // Debug log
 
         // Get unique sections and parent sections
-        const sections = [
-          ...new Set(products.map((p) => p.section).filter(Boolean)),
-        ];
-        const parentSections = [
-          ...new Set(products.map((p) => p.parent_section).filter(Boolean)),
-        ];
+        const allSections = products
+          .map((p) => p.section)
+          .filter(Boolean) // Remove null/undefined/empty values
+          .filter((section, index, arr) => arr.indexOf(section) === index); // Remove duplicates manually
+
+        const allParentSections = products
+          .map((p) => p.parent_section)
+          .filter(Boolean) // Remove null/undefined/empty values
+          .filter((section, index, arr) => arr.indexOf(section) === index); // Remove duplicates manually
+
+        console.log("Unique sections found:", allSections); // Debug log
+        console.log("Unique parent sections found:", allParentSections); // Debug log
 
         // Populate section dropdown
         const sectionSelect = document.getElementById("product-section");
         sectionSelect.innerHTML =
           '<option value="">Select an existing section</option>';
-        sections.forEach((section) => {
+
+        // Sort sections alphabetically for better UX
+        allSections.sort().forEach((section) => {
           const option = document.createElement("option");
           option.value = section;
           option.textContent = section;
@@ -363,14 +380,29 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         parentSectionSelect.innerHTML =
           '<option value="">Select an existing parent section</option>';
-        parentSections.forEach((section) => {
+
+        // Sort parent sections alphabetically for better UX
+        allParentSections.sort().forEach((section) => {
           const option = document.createElement("option");
           option.value = section;
           option.textContent = section;
           parentSectionSelect.appendChild(option);
         });
+
+        console.log("Sections populated in dropdown"); // Debug log
       } catch (error) {
         console.error("Error fetching sections:", error);
+
+        // Show error in UI
+        const sectionSelect = document.getElementById("product-section");
+        sectionSelect.innerHTML =
+          '<option value="">Error loading sections</option>';
+
+        const parentSectionSelect = document.getElementById(
+          "product-parent-section"
+        );
+        parentSectionSelect.innerHTML =
+          '<option value="">Error loading parent sections</option>';
       }
     });
 
@@ -402,7 +434,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const description = document
         .getElementById("product-description")
         .value.trim();
+      const subdescription = document
+        .getElementById("product-subdescription")
+        .value.trim();
       const price = document.getElementById("product-price").value;
+      const branding = document.getElementById("product-branding").value.trim();
       const image = document.getElementById("product-image").files[0];
       const section = document.getElementById("product-section").value;
       const newSection = document
@@ -414,6 +450,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const newParentSection = document
         .getElementById("new-product-parent-section")
         .value.trim();
+      // Add inStock boolean
+      let inStock = true;
+      const inStockYes = document.getElementById("product-instock-yes");
+      const inStockNo = document.getElementById("product-instock-no");
+      if (inStockNo && inStockNo.checked) inStock = false;
+      // Add available boolean
+      let available = true;
+      const availableYes = document.getElementById("product-available-yes");
+      const availableNo = document.getElementById("product-available-no");
+      if (availableNo && availableNo.checked) available = false;
 
       // Get button element
       const submitButton = productForm.querySelector(".dashboard-submit");
@@ -509,10 +555,14 @@ document.addEventListener("DOMContentLoaded", function () {
             {
               title,
               description,
+              subdescription: subdescription || null,
               price: price ? parseFloat(price) : null,
+              branding: branding || null,
               image: imagePath,
               section: newSection || section || null,
               parent_section: newParentSection || parentSection || null,
+              instock: inStock,
+              available: available,
             },
           ])
           .select()
@@ -735,6 +785,26 @@ document.addEventListener("DOMContentLoaded", function () {
       const projectsGrid = document.getElementById("projects-grid");
       const productsGrid = document.getElementById("products-grid");
       const productsSearch = document.getElementById("products-search-input");
+      // Reset product toggles when switching views
+      const outOfStockToggle = document.getElementById("outofstock-toggle");
+      const availableToggle = document.getElementById("available-toggle");
+      let outOfStockFilterActive = false;
+      let availableFilterActive = false;
+      if (outOfStockToggle) {
+        outOfStockToggle.classList.remove("active");
+        outOfStockToggle.textContent = "Out of Stock Only";
+        outOfStockToggle.style.background = "";
+        outOfStockToggle.style.color = "";
+      }
+      if (availableToggle) {
+        availableToggle.classList.remove("active");
+        availableToggle.textContent = "Unavailable Only";
+        availableToggle.style.background = "";
+        availableToggle.style.color = "";
+      }
+      // Remove no products message if present
+      const noProductsMsg = document.getElementById("no-products-msg");
+      if (noProductsMsg) noProductsMsg.remove();
 
       if (projectsDisplay.style.display === "none") {
         // Switch to projects view
@@ -1238,6 +1308,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Add search functionality for products
       const productsSearch = document.getElementById("products-search-input");
+      const outOfStockToggle = document.getElementById("outofstock-toggle");
+      const availableToggle = document.getElementById("available-toggle");
+      let outOfStockFilterActive = false;
+      let availableFilterActive = false;
+
       if (productsSearch) {
         productsSearch.addEventListener("input", (e) => {
           const searchTerm = e.target.value.toLowerCase();
@@ -1259,6 +1334,121 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       }
 
+      // Out of Stock toggle filter
+      if (outOfStockToggle) {
+        outOfStockToggle.addEventListener("click", () => {
+          outOfStockFilterActive = !outOfStockFilterActive;
+          if (outOfStockFilterActive && availableFilterActive) {
+            availableFilterActive = false;
+            availableToggle.classList.remove("active");
+            availableToggle.textContent = "Unavailable Only";
+            availableToggle.style.background = "";
+            availableToggle.style.color = "";
+          }
+          outOfStockToggle.classList.toggle("active", outOfStockFilterActive);
+          // Change text and color
+          if (outOfStockFilterActive) {
+            outOfStockToggle.textContent = "Show All";
+            outOfStockToggle.style.background = "#fe0000";
+            outOfStockToggle.style.color = "#fff";
+          } else {
+            outOfStockToggle.textContent = "Out of Stock Only";
+            outOfStockToggle.style.background = "";
+            outOfStockToggle.style.color = "";
+          }
+          const productCards = document.querySelectorAll(
+            ".portfolio-project-card"
+          );
+          let anyVisible = false;
+          productCards.forEach((card) => {
+            const isOut = card
+              .querySelector(".product-instock-indicator")
+              ?.classList.contains("out-stock");
+            if (outOfStockFilterActive) {
+              card.style.display = isOut ? "flex" : "none";
+              card.style.flexDirection = "column";
+              if (isOut) anyVisible = true;
+            } else {
+              card.style.display = "flex";
+              card.style.flexDirection = "column";
+              anyVisible = true;
+            }
+          });
+          const productsGrid = document.getElementById("products-grid");
+          let noProductsMsg = document.getElementById("no-products-msg");
+          if (!anyVisible && outOfStockFilterActive) {
+            if (!noProductsMsg) {
+              noProductsMsg = document.createElement("div");
+              noProductsMsg.id = "no-products-msg";
+              noProductsMsg.textContent = "No products found";
+              noProductsMsg.className = "dashboard-no-products";
+              productsGrid.appendChild(noProductsMsg);
+            }
+          } else if (noProductsMsg) {
+            noProductsMsg.remove();
+          }
+        });
+      }
+
+      // Available Only toggle filter
+      if (availableToggle) {
+        availableToggle.addEventListener("click", () => {
+          availableFilterActive = !availableFilterActive;
+          if (availableFilterActive && outOfStockFilterActive) {
+            outOfStockFilterActive = false;
+            outOfStockToggle.classList.remove("active");
+            outOfStockToggle.textContent = "Out of Stock Only";
+            outOfStockToggle.style.background = "";
+            outOfStockToggle.style.color = "";
+          }
+          availableToggle.classList.toggle("active", availableFilterActive);
+          // Change text and color
+          if (availableFilterActive) {
+            availableToggle.textContent = "Show All";
+            availableToggle.style.background = "#fe0000";
+            availableToggle.style.color = "#fff";
+          } else {
+            availableToggle.textContent = "Unavailable Only";
+            availableToggle.style.background = "";
+            availableToggle.style.color = "";
+          }
+          const productCards = document.querySelectorAll(
+            ".portfolio-project-card"
+          );
+          let anyVisible = false;
+          productCards.forEach((card) => {
+            // If available is false, show; else hide
+            const productId = card.dataset.productId;
+            const product = products.find(
+              (p) => String(p.id) === String(productId)
+            );
+            if (availableFilterActive) {
+              card.style.display =
+                product && product.available === false ? "flex" : "none";
+              card.style.flexDirection = "column";
+              if (product && product.available === false) anyVisible = true;
+            } else {
+              card.style.display = "flex";
+              card.style.flexDirection = "column";
+              anyVisible = true;
+            }
+          });
+          const productsGrid = document.getElementById("products-grid");
+          let noProductsMsg = document.getElementById("no-products-msg");
+          if (!anyVisible && availableFilterActive) {
+            if (!noProductsMsg) {
+              noProductsMsg = document.createElement("div");
+              noProductsMsg.id = "no-products-msg";
+              noProductsMsg.textContent = "No products found";
+              noProductsMsg.className = "dashboard-no-products";
+              productsGrid.appendChild(noProductsMsg);
+            }
+          } else if (noProductsMsg) {
+            noProductsMsg.remove();
+          }
+        });
+      }
+
       products.forEach((product) => {
         const productCard = document.createElement("div");
         productCard.className = "portfolio-project-card";
@@ -1274,9 +1464,15 @@ document.addEventListener("DOMContentLoaded", function () {
           imageUrl = data.publicUrl;
         }
 
+        // Add in-stock indicator circle
+        const inStockCircle = `<div class="product-instock-indicator ${
+          product.instock ? "in-stock" : "out-stock"
+        }"></div>`;
+
         productCard.innerHTML = `
-          <div class="portfolio-project-image">
+          <div class="portfolio-project-image" style="position:relative;">
             <img src="${imageUrl}" alt="${product.title}" />
+            ${inStockCircle}
           </div>
           <div class="portfolio-project-title">${product.title}</div>
         `;
@@ -1320,9 +1516,22 @@ document.addEventListener("DOMContentLoaded", function () {
         .getPublicUrl(product.image);
       mainImage.src = data.publicUrl;
       mainImage.style.display = "block";
+      // Add in-stock indicator to modal image
+      let indicator = modal.querySelector(".product-instock-indicator");
+      if (!indicator) {
+        indicator = document.createElement("div");
+        indicator.className = "product-instock-indicator";
+        mainImage.parentElement.appendChild(indicator);
+      }
+      indicator.className =
+        "product-instock-indicator " +
+        (product.instock ? "in-stock" : "out-stock");
+      indicator.style.display = "block";
     } else {
       mainImage.src = "";
       mainImage.style.display = "none";
+      let indicator = modal.querySelector(".product-instock-indicator");
+      if (indicator) indicator.style.display = "none";
     }
 
     modal.style.display = "block";
@@ -1348,30 +1557,74 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("edit-product-title").value = product.title;
       document.getElementById("edit-product-description").value =
         product.description;
+      document.getElementById("edit-product-subdescription").value =
+        product.subdescription || "";
       document.getElementById("edit-product-price").value = product.price || "";
+      document.getElementById("edit-product-branding").value =
+        product.branding || "";
 
-      // Fetch and populate sections dropdown
+      // Set inStock radio
+      if (product.instock === true) {
+        document.getElementById("edit-product-instock-yes").checked = true;
+      } else if (product.instock === false) {
+        document.getElementById("edit-product-instock-no").checked = true;
+      } else {
+        document.getElementById("edit-product-instock-yes").checked = false;
+        document.getElementById("edit-product-instock-no").checked = false;
+      }
+
+      // Set available radio
+      if (product.available === true) {
+        document.getElementById("edit-product-available-yes").checked = true;
+      } else if (product.available === false) {
+        document.getElementById("edit-product-available-no").checked = true;
+      } else {
+        document.getElementById("edit-product-available-yes").checked = false;
+        document.getElementById("edit-product-available-no").checked = false;
+      }
+
+      // Fetch and populate sections dropdown - UPDATED CODE
       try {
+        console.log("Fetching sections for edit modal..."); // Debug log
+
+        // Use the same query approach as create modal
         const { data: products, error } = await supabaseClient
           .from("products")
           .select("section, parent_section")
-          .not("section", "is", null);
+          .order("created_at", { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error fetching products for edit:", error);
+          throw error;
+        }
+
+        console.log("Raw products data for edit:", products); // Debug log
+        console.log("Total products fetched for edit:", products?.length); // Debug log
 
         // Get unique sections and parent sections
-        const sections = [
-          ...new Set(products.map((p) => p.section).filter(Boolean)),
-        ];
-        const parentSections = [
-          ...new Set(products.map((p) => p.parent_section).filter(Boolean)),
-        ];
+        const allSections = products
+          .map((p) => p.section)
+          .filter(Boolean) // Remove null/undefined/empty values
+          .filter((section, index, arr) => arr.indexOf(section) === index); // Remove duplicates manually
+
+        const allParentSections = products
+          .map((p) => p.parent_section)
+          .filter(Boolean) // Remove null/undefined/empty values
+          .filter((section, index, arr) => arr.indexOf(section) === index); // Remove duplicates manually
+
+        console.log("Unique sections found for edit:", allSections); // Debug log
+        console.log(
+          "Unique parent sections found for edit:",
+          allParentSections
+        ); // Debug log
 
         // Populate section dropdown
         const sectionSelect = document.getElementById("edit-product-section");
         sectionSelect.innerHTML =
           '<option value="">Select an existing section</option>';
-        sections.forEach((section) => {
+
+        // Sort sections alphabetically for better UX
+        allSections.sort().forEach((section) => {
           const option = document.createElement("option");
           option.value = section;
           option.textContent = section;
@@ -1384,18 +1637,40 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         parentSectionSelect.innerHTML =
           '<option value="">Select an existing parent section</option>';
-        parentSections.forEach((section) => {
+
+        // Sort parent sections alphabetically for better UX
+        allParentSections.sort().forEach((section) => {
           const option = document.createElement("option");
           option.value = section;
           option.textContent = section;
           parentSectionSelect.appendChild(option);
         });
 
-        // Set current section and parent section after populating options
+        // Set current section and parent section AFTER populating options
         sectionSelect.value = product.section || "";
         parentSectionSelect.value = product.parent_section || "";
+
+        console.log(
+          "Edit modal sections populated, current section set to:",
+          product.section
+        ); // Debug log
+        console.log(
+          "Edit modal parent section set to:",
+          product.parent_section
+        ); // Debug log
       } catch (error) {
-        console.error("Error fetching sections:", error);
+        console.error("Error fetching sections for edit modal:", error);
+
+        // Show error in UI
+        const sectionSelect = document.getElementById("edit-product-section");
+        sectionSelect.innerHTML =
+          '<option value="">Error loading sections</option>';
+
+        const parentSectionSelect = document.getElementById(
+          "edit-product-parent-section"
+        );
+        parentSectionSelect.innerHTML =
+          '<option value="">Error loading parent sections</option>';
       }
 
       // Show current image
@@ -1786,7 +2061,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const description = document
           .getElementById("edit-product-description")
           .value.trim();
+        const subdescription = document
+          .getElementById("edit-product-subdescription")
+          .value.trim();
         const price = document.getElementById("edit-product-price").value;
+        const branding = document
+          .getElementById("edit-product-branding")
+          .value.trim();
         const sectionSelect = document.getElementById("edit-product-section");
         const newSectionInput = document.getElementById(
           "edit-new-product-section"
@@ -1815,14 +2096,35 @@ document.addEventListener("DOMContentLoaded", function () {
           throw new Error("Please select or create a section");
         }
 
+        // Add inStock boolean for edit
+        let inStock = null;
+        const inStockYes = document.getElementById("edit-product-instock-yes");
+        const inStockNo = document.getElementById("edit-product-instock-no");
+        if (inStockYes && inStockYes.checked) inStock = true;
+        else if (inStockNo && inStockNo.checked) inStock = false;
+        // Add available boolean for edit
+        let available = null;
+        const availableYes = document.getElementById(
+          "edit-product-available-yes"
+        );
+        const availableNo = document.getElementById(
+          "edit-product-available-no"
+        );
+        if (availableYes && availableYes.checked) available = true;
+        else if (availableNo && availableNo.checked) available = false;
+
         // Update product in database
         const updateData = {
           title: title,
           description: description,
+          subdescription: subdescription || null,
           section: section,
           parent_section: parentSection || null,
           price: price ? parseFloat(price) : null,
+          branding: branding || null,
         };
+        if (inStock !== null) updateData.instock = inStock;
+        if (available !== null) updateData.available = available;
 
         // Handle image upload if a new image is selected
         const imageInput = document.getElementById("edit-product-image");
@@ -1909,14 +2211,6 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", () => {
       document.getElementById("edit-project-modal").style.display = "none";
     });
-
-  // Close edit project modal when clicking outside
-  window.addEventListener("click", (e) => {
-    const editModal = document.getElementById("edit-project-modal");
-    if (e.target === editModal) {
-      editModal.style.display = "none";
-    }
-  });
 
   // Close image preview modal
   document

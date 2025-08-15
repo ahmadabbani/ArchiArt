@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.pathname === "" ||
       window.location.pathname.endsWith("/")
     ) {
-      if (window.scrollY > 400) {
+      if (window.scrollY > 200) {
         header.classList.remove("header_transparent");
       } else {
         header.classList.add("header_transparent");
@@ -1108,4 +1108,128 @@ document.addEventListener("DOMContentLoaded", function () {
     SUPABASE_CONFIG.url,
     SUPABASE_CONFIG.key
   );
+
+  // --- Career Modal Logic ---
+  // Modal elements
+  const careerModal = document.getElementById("career-modal");
+  const careerOpenBtn = document.querySelector(".cta_apply_button");
+  const careerCloseBtn = document.querySelector(".career-modal-close");
+  const careerForm = document.getElementById("career-form");
+  const careerFormStatus = document.getElementById("career-form-status");
+  const careerCvInput = document.getElementById("career-cv");
+  const careerCvUrlInput = document.getElementById("career-cv-url");
+
+  // Open modal on CTA button click
+  if (careerOpenBtn) {
+    careerOpenBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      careerModal.style.display = "flex";
+      careerFormStatus.textContent = "";
+      careerForm.reset();
+    });
+  }
+
+  // Close modal on close button click
+  if (careerCloseBtn) {
+    careerCloseBtn.addEventListener("click", function () {
+      careerModal.style.display = "none";
+      careerFormStatus.textContent = "";
+    });
+  }
+  // Close modal on outside click
+  window.addEventListener("click", function (e) {
+    if (e.target === careerModal) {
+      careerModal.style.display = "none";
+      careerFormStatus.textContent = "";
+    }
+  });
+
+  // Supabase credentials (reuse from shop.js)
+  let supabaseCareerClient;
+  try {
+    if (typeof supabase === "undefined") throw new Error("Supabase not loaded");
+    const supabaseUrl = "https://iupipboqnmtzulhvabil.supabase.co";
+    const supabaseKey =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1cGlwYm9xbm10enVsaHZhYmlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzMTI2NDIsImV4cCI6MjA1OTg4ODY0Mn0.nchOl1HSDYHBg_Crzam-DY1ZWop8QC5SNgvuUeADxM4";
+    supabaseCareerClient = supabase.createClient(supabaseUrl, supabaseKey);
+  } catch (error) {
+    supabaseCareerClient = null;
+  }
+
+  // Form submit handler
+  if (careerForm) {
+    careerForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      careerFormStatus.textContent = "";
+      careerFormStatus.className = "career-form-status";
+
+      // Validate required fields
+      const name = document.getElementById("career-name").value.trim();
+      const email = document.getElementById("career-email").value.trim();
+      const cvFile = careerCvInput.files[0];
+      document.getElementById("career-replyto").value = email;
+
+      if (!name || !email || !cvFile) {
+        careerFormStatus.textContent = "All fields are required.";
+        careerFormStatus.classList.add("career-error");
+        return;
+      }
+      if (!supabaseCareerClient) {
+        careerFormStatus.textContent = "File upload service unavailable.";
+        careerFormStatus.classList.add("career-error");
+        return;
+      }
+      careerFormStatus.textContent = "Uploading CV...";
+      careerFormStatus.classList.remove("career-error");
+      careerFormStatus.classList.add("career-info");
+      // Upload CV to Supabase
+      try {
+        const fileExt = cvFile.name.split(".").pop();
+        const fileName = `${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(2)}.${fileExt}`;
+        const filePath = `career-resume/${fileName}`;
+        const { data, error } = await supabaseCareerClient.storage
+          .from("career-resume")
+          .upload(filePath, cvFile, { upsert: false });
+        if (error) throw error;
+        // Get public URL
+        const { data: publicData } = supabaseCareerClient.storage
+          .from("career-resume")
+          .getPublicUrl(filePath);
+        const publicUrl = publicData?.publicUrl;
+        if (!publicUrl) throw new Error("Could not get file URL.");
+        careerCvUrlInput.value = publicUrl;
+      } catch (err) {
+        careerFormStatus.textContent = "Failed to upload CV. Please try again.";
+        careerFormStatus.classList.add("career-error");
+        return;
+      }
+      // Submit to Formspree
+      careerFormStatus.textContent = "Submitting application...";
+      careerFormStatus.classList.remove("career-error");
+      careerFormStatus.classList.add("career-info");
+      const formData = new FormData(careerForm);
+      try {
+        const response = await fetch(careerForm.action, {
+          method: careerForm.method,
+          body: formData,
+          headers: { Accept: "application/json" },
+        });
+        if (response.ok) {
+          careerFormStatus.textContent = "Application submitted successfully!";
+          careerFormStatus.className = "career-form-status career-success";
+          careerForm.reset();
+        } else {
+          const result = await response.json();
+          careerFormStatus.textContent =
+            result.error || "Submission failed. Please try again.";
+          careerFormStatus.className = "career-form-status career-error";
+        }
+      } catch (err) {
+        careerFormStatus.textContent = "Submission failed. Please try again.";
+        careerFormStatus.className = "career-form-status career-error";
+      }
+    });
+  }
 });

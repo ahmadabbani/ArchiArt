@@ -168,16 +168,23 @@ document.addEventListener("DOMContentLoaded", async function () {
         const projectCard = document.createElement("div");
         projectCard.className = "portfolio-project-card";
 
-        // Determine size based on image dimensions
+        // Determine size based on image dimensions with more granular control
         const img = new Image();
         img.onload = () => {
           const aspectRatio = img.width / img.height;
-          if (aspectRatio > 1.5) {
-            projectCard.classList.add("size-3"); // Wide image
-          } else if (aspectRatio < 0.7) {
-            projectCard.classList.add("size-2"); // Tall image
+
+          if (aspectRatio > 2.5) {
+            projectCard.classList.add("size-panoramic"); // Ultra-wide
+          } else if (aspectRatio > 1.8) {
+            projectCard.classList.add("size-wide"); // Wide landscape
+          } else if (aspectRatio > 1.2) {
+            projectCard.classList.add("size-landscape"); // Standard landscape
+          } else if (aspectRatio > 0.8) {
+            projectCard.classList.add("size-square"); // Square-ish
+          } else if (aspectRatio > 0.5) {
+            projectCard.classList.add("size-portrait"); // Portrait
           } else {
-            projectCard.classList.add("size-1"); // Square-ish image
+            projectCard.classList.add("size-tall"); // Very tall
           }
         };
         img.src = imageUrl;

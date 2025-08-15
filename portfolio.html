@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio</title>
+    <title>Archiart - Portfolio</title>
     <link rel="stylesheet" href="style.css" />
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
@@ -93,20 +93,26 @@
       </div>
       <nav class="header_nav">
         <ul class="header_nav-list">
-          <li>
+          <li data-aos="fade-up">
             <a href="index.html" class="header_nav-link">Home</a>
           </li>
 
-          <li>
+          <li data-aos="fade-up" data-aos-delay="300">
             <a href="portfolio.html" class="header_nav-link header_active"
               >Portfolio</a
             >
           </li>
-          <li>
+          <li data-aos="fade-up" data-aos-delay="600">
             <a href="shop.html" class="header_nav-link">Shop</a>
           </li>
-          <li>
+          <li data-aos="fade-up" data-aos-delay="900">
             <a href="contact.html" class="header_nav-link">Contact</a>
+          </li>
+          <li data-aos="fade-up" data-aos-delay="1200">
+            <a href="#" class="header_nav-link cart-icon-btn">
+              <span class="material-symbols-outlined">shopping_cart</span>
+              <span class="cart-count">0</span>
+            </a>
           </li>
         </ul>
       </nav>
@@ -535,9 +541,27 @@
     <a href="https://wa.me/96181882662" target="_blank" class="whatsapp-fixed">
       <i class="fab fa-whatsapp"></i>
     </a>
-
+    <div id="cart-modal" class="cart-modal">
+      <div class="cart-modal-content">
+        <div class="cart-modal-header">
+          <h2>Your Cart</h2>
+          <span class="cart-modal-close">&times;</span>
+        </div>
+        <div id="cart-items" class="cart-items">
+          <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-summary">
+          <p>Total: $<span id="cart-total">0.00</span></p>
+          <div class="cart-buttons">
+            <button id="checkout-btn" class="checkout-btn">Checkout</button>
+            <a href="view-cart.html" class="view-cart-btn">View Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
     <script src="config.js"></script>
     <script src="portfolio.js"></script>
+    <script src="cart.js"></script>
   </body>
 </html>

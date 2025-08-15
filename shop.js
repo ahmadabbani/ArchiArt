@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // DOM Elements
   const productsGrid = document.getElementById("products-grid");
   const categoriesContainer = document.querySelector(".shop_categories");
+  const brandsContainer = document.querySelector(".shop_brands");
   const priceMinInput = document.getElementById("min-price");
   const priceMaxInput = document.getElementById("max-price");
   const priceMinRange = document.getElementById("price-min");
@@ -32,6 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let products = [];
   let categories = new Set();
   let selectedCategories = new Set(["all"]);
+  let brands = new Set();
+  let selectedBrands = new Set(["all"]);
   let minPrice = 0;
   let maxPrice = 1000;
   let currentPage = 1;
@@ -70,6 +73,135 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Function to get URL parameters
+  function getURLParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+
+  // Function to set initial category from URL
+  function setInitialCategoryFromURL() {
+    const categoryParam = getURLParameter("category");
+    if (categoryParam) {
+      selectedCategories.clear();
+      selectedCategories.add(categoryParam);
+      console.log("Setting initial category from URL:", categoryParam);
+    }
+  }
+
+  // Function to update category checkboxes based on selected categories
+  function updateCategoryCheckboxes() {
+    // First, uncheck all checkboxes
+    document
+      .querySelectorAll('.shop_category input[type="checkbox"]')
+      .forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+
+    // Then check the selected categories
+    selectedCategories.forEach((category) => {
+      const checkbox = document.querySelector(
+        `.shop_category input[value="${category}"]`
+      );
+      if (checkbox) {
+        checkbox.checked = true;
+
+        // If it's a child category, also expand its parent
+        const parentCategory = checkbox.closest(".shop_category");
+        if (parentCategory && parentCategory.classList.contains("child")) {
+          const parentGroup = parentCategory.closest(".shop_category-group");
+          if (parentGroup) {
+            const subcategories = parentGroup.querySelector(
+              ".shop_subcategories"
+            );
+            const dropdown = parentGroup.querySelector(
+              ".shop_category-dropdown"
+            );
+            if (subcategories && dropdown) {
+              subcategories.style.display = "flex";
+              dropdown.style.transform = "rotate(180deg)";
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Function to populate brands in the filter
+  function populateBrands() {
+    brands.clear();
+    products.forEach((product) => {
+      if (product.branding) {
+        brands.add(product.branding);
+      }
+    });
+
+    let brandsHTML = `
+      <label class="shop_brand">
+        <input type="checkbox" value="all" ${
+          selectedBrands.has("all") ? "checked" : ""
+        }>
+        <span>All</span>
+      </label>
+    `;
+
+    brandsHTML += Array.from(brands)
+      .map(
+        (brand) => `
+        <label class="shop_brand">
+          <input type="checkbox" value="${brand}" ${
+          selectedBrands.has(brand) ? "checked" : ""
+        }>
+          <span>${brand}</span>
+        </label>
+      `
+      )
+      .join("");
+
+    brandsContainer.innerHTML = brandsHTML;
+
+    document.querySelectorAll(".shop_brand input").forEach((checkbox) => {
+      checkbox.addEventListener("change", handleBrandChange);
+    });
+  }
+
+  // Handle brand selection change
+  function handleBrandChange(e) {
+    const checkbox = e.target;
+    const brand = checkbox.value;
+
+    if (brand === "all") {
+      if (checkbox.checked) {
+        selectedBrands.clear();
+        selectedBrands.add("all");
+        document
+          .querySelectorAll('.shop_brand input[type="checkbox"]')
+          .forEach((cb) => {
+            if (cb !== checkbox) cb.checked = false;
+          });
+      }
+    } else {
+      if (checkbox.checked) {
+        selectedBrands.delete("all");
+        document.querySelector(
+          '.shop_brand input[value="all"]'
+        ).checked = false;
+        selectedBrands.add(brand);
+      } else {
+        selectedBrands.delete(brand);
+        if (selectedBrands.size === 0) {
+          selectedBrands.add("all");
+          document.querySelector(
+            '.shop_brand input[value="all"]'
+          ).checked = true;
+        }
+      }
+    }
+
+    currentPage = 1;
+    displayProducts();
+  }
+
   // Fetch and display products
   async function fetchAndDisplayProducts() {
     const loadingElement = document.querySelector(".shop_loading");
@@ -77,12 +209,22 @@ document.addEventListener("DOMContentLoaded", function () {
       loadingElement.classList.add("active");
       const { data: fetchedProducts, error } = await supabaseClient
         .from("products")
-        .select("*");
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
 
-      products = fetchedProducts || [];
+      products = (fetchedProducts || []).filter((p) => p.available !== false);
+
+      // Set initial category from URL before populating categories
+      setInitialCategoryFromURL();
+
       populateCategories();
+      populateBrands();
+
+      // Update checkboxes to reflect URL-based selection
+      updateCategoryCheckboxes();
+
       displayProducts();
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -194,7 +336,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Handle category selection
+  // handleCategoryChange:
+
   function handleCategoryChange(e) {
     const checkbox = e.target;
     const value = checkbox.value;
@@ -204,10 +347,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const isChild = checkbox
       .closest(".shop_category")
       .classList.contains("child");
-    const isStandalone = !isParent && !isChild;
 
     if (value === "all") {
       if (checkbox.checked) {
+        // Clear all selections and select "all"
         selectedCategories.clear();
         selectedCategories.add("all");
         // Uncheck all other checkboxes
@@ -219,94 +362,145 @@ document.addEventListener("DOMContentLoaded", function () {
             cb.checked = false;
           });
       } else {
-        checkbox.checked = true; // Prevent unchecking "all"
+        checkbox.checked = true; // Prevent unchecking "all" if nothing else is selected
       }
     } else {
       if (checkbox.checked) {
-        selectedCategories.delete("all");
+        // CLEAR ALL PREVIOUS SELECTIONS
+        selectedCategories.clear();
+
+        // Uncheck ALL other checkboxes (including "all")
+        document
+          .querySelectorAll('.shop_category input[type="checkbox"]')
+          .forEach((cb) => {
+            if (cb !== checkbox) {
+              cb.checked = false;
+            }
+          });
+
+        // Add only the newly selected category
         selectedCategories.add(value);
 
-        // If selecting a standalone section, uncheck all parent sections and their subsections
-        if (isStandalone) {
-          document
-            .querySelectorAll('.shop_category.parent input[type="checkbox"]')
-            .forEach((cb) => {
-              cb.checked = false;
-              selectedCategories.delete(cb.value);
-            });
-          document
-            .querySelectorAll('.shop_category.child input[type="checkbox"]')
-            .forEach((cb) => {
-              cb.checked = false;
-              selectedCategories.delete(cb.value);
-            });
-        }
-
-        // Uncheck "all" checkbox
-        document.querySelector('input[value="all"]').checked = false;
+        console.log(
+          "Selected category:",
+          value,
+          "isParent:",
+          isParent,
+          "isChild:",
+          isChild
+        );
       } else {
-        selectedCategories.delete(value);
-
-        if (selectedCategories.size === 0) {
-          selectedCategories.add("all");
-          document.querySelector('input[value="all"]').checked = true;
-        }
+        // If unchecking the currently selected item, go back to "all"
+        selectedCategories.clear();
+        selectedCategories.add("all");
+        document.querySelector('input[value="all"]').checked = true;
       }
     }
 
+    console.log("Current selected categories:", Array.from(selectedCategories));
     currentPage = 1; // Reset to first page when filters change
     displayProducts();
   }
 
+  // --- Simple Search Feature ---
+  let searchQuery = "";
+  const searchInput = document.getElementById("shop-search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      searchQuery = this.value.trim().toLowerCase();
+      displayProducts();
+    });
+  }
+
+  // Reset button for search
+  const searchResetBtn = document.getElementById("shop-search-reset");
+  if (searchResetBtn && searchInput) {
+    searchResetBtn.addEventListener("click", function () {
+      searchInput.value = "";
+      searchQuery = "";
+      displayProducts();
+      searchInput.focus();
+    });
+  }
+
+  // Patch displayProducts to include search filtering
+  const originalDisplayProducts = displayProducts;
+  displayProducts = function () {
+    let filteredProducts = products;
+    if (searchQuery) {
+      filteredProducts = filteredProducts.filter((product) => {
+        const title = (product.title || "").toLowerCase();
+        if (searchQuery.length === 1) {
+          return title.startsWith(searchQuery);
+        } else {
+          return title.includes(searchQuery);
+        }
+      });
+    }
+    // Use the rest of the original displayProducts logic
+    // Temporarily replace products with filteredProducts
+    const oldProducts = products;
+    products = filteredProducts;
+    originalDisplayProducts();
+    products = oldProducts;
+  };
+
   // Display filtered products
   function displayProducts() {
     const filteredProducts = products.filter((product) => {
-      // Check if any parent section is selected
-      const selectedParentSections = Array.from(selectedCategories).filter(
-        (category) => {
-          const checkbox = document.querySelector(
-            `.shop_category.parent input[value="${category}"]`
-          );
-          return checkbox && checkbox.checked;
-        }
-      );
+      // Only show available products
+      if (product.available === false) return false;
 
       // Price filtering
       const productPrice = parseFloat(product.price) || 0;
       const matchesPrice = productPrice >= minPrice && productPrice <= maxPrice;
 
-      // If a parent section is selected, show all products from that parent
-      if (selectedParentSections.length > 0) {
-        const matchesParent = selectedParentSections.some(
-          (parentSection) => product.parent_section === parentSection
+      // Brand filtering
+      const matchesBrand =
+        selectedBrands.has("all") ||
+        (product.branding && selectedBrands.has(product.branding));
+
+      // Category filtering - SIMPLIFIED LOGIC
+      let matchesCategory = false;
+
+      if (selectedCategories.has("all")) {
+        // Show all products
+        matchesCategory = true;
+      } else {
+        // Get the single selected category
+        const selectedCategory = Array.from(selectedCategories)[0];
+
+        // Check if the selected category is a parent section
+        const isSelectedParent = document.querySelector(
+          `.shop_category.parent input[value="${selectedCategory}"]`
         );
-        if (matchesParent) {
-          // If no subsections are selected, show all products from this parent
-          const selectedSubsections = Array.from(selectedCategories).filter(
-            (category) => {
-              const checkbox = document.querySelector(
-                `.shop_category.child input[value="${category}"]`
-              );
-              return checkbox && checkbox.checked;
-            }
+
+        if (isSelectedParent) {
+          // If parent is selected, show all products from that parent section
+          matchesCategory = product.parent_section === selectedCategory;
+          console.log(
+            "Filtering by parent:",
+            selectedCategory,
+            "Product parent:",
+            product.parent_section,
+            "Match:",
+            matchesCategory
           );
-
-          if (selectedSubsections.length === 0) {
-            return matchesPrice; // Only check price filter for parent category
-          }
-
-          // If subsections are selected, only show products from those subsections
-          return selectedSubsections.includes(product.section) && matchesPrice;
+        } else {
+          // If child section is selected, show only products from that specific section
+          matchesCategory = product.section === selectedCategory;
+          console.log(
+            "Filtering by section:",
+            selectedCategory,
+            "Product section:",
+            product.section,
+            "Match:",
+            matchesCategory
+          );
         }
-        return false; // Don't show products that don't match parent category
       }
 
-      // If no parent section is selected, use normal category filtering
-      const matchesCategory =
-        selectedCategories.has("all") ||
-        selectedCategories.has(product.section || "Others");
-
-      return matchesCategory && matchesPrice;
+      return matchesCategory && matchesPrice && matchesBrand;
     });
 
     // Calculate pagination
@@ -321,41 +515,71 @@ document.addEventListener("DOMContentLoaded", function () {
     const endIndex = startIndex + itemsPerPage;
     const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
+    console.log("Filtered products count:", filteredProducts.length);
+
     // Update products grid
     productsGrid.innerHTML = paginatedProducts
       .map(
         (product) => `
-        <div class="shop_product-card" data-product-id="${
-          product.id
-        }" onclick="window.location.href='product.html?id=${product.id}'">
-          <div class="shop_product-image">
-            <img src="${
-              supabaseClient.storage
-                .from("project-images")
-                .getPublicUrl(product.image).data.publicUrl
-            }" alt="${product.title}">
-            <button class="shop_read-more-btn" onclick="event.stopPropagation(); window.location.href='product.html?id=${
-              product.id
-            }'">Read More</button>
-          </div>
-          <div class="shop_product-content">
-            <h3 class="shop_product-title">${product.title}</h3>
-            ${
-              product.section
-                ? `<p class="shop_product-category">${product.section}</p>`
-                : ""
-            }
-            <p class="shop_product-description">${product.description}</p>
-            ${
-              product.price
-                ? `<p class="shop_product-price">$${product.price}</p>`
-                : ""
-            }
-          </div>
+      <div class="shop_product-card" data-product-id="${
+        product.id
+      }" onclick="window.location.href='product.html?id=${product.id}'">
+        <div class="shop_product-image">
+          <img src="${
+            supabaseClient.storage
+              .from("project-images")
+              .getPublicUrl(product.image).data.publicUrl
+          }" alt="${product.title}">
+          <button class="shop_read-more-btn" onclick="event.stopPropagation(); window.location.href='product.html?id=${
+            product.id
+          }'">Details</button>
         </div>
-      `
+        <div class="shop_product-content">
+          <h3 class="shop_product-title">${product.title}</h3>
+          ${
+            product.instock === false
+              ? '<span class="shop_outofstock-label">Out of Stock</span>'
+              : ""
+          }
+          ${
+            product.section
+              ? `<p class="shop_product-category">${product.section}</p>`
+              : ""
+          }
+          <p class="shop_product-description">${product.description}</p>
+          ${
+            product.price
+              ? `<p class="shop_product-price">$${product.price}</p>
+              <button class="shop_add-to-cart-btn ${
+                product.instock === false ? "disabled" : ""
+              }" 
+                data-product='${JSON.stringify(product).replace(
+                  /'/g,
+                  "&apos;"
+                )}' 
+                ${product.instock === false ? "disabled" : ""}>
+                <span class="material-symbols-outlined">shopping_cart</span>
+              </button>`
+              : ""
+          }
+        </div>
+      </div>
+    `
       )
       .join("");
+
+    // Add event listeners for add to cart buttons
+    document.querySelectorAll(".shop_add-to-cart-btn").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const productData = JSON.parse(
+          e.target
+            .closest(".shop_add-to-cart-btn")
+            .dataset.product.replace(/&apos;/g, "'")
+        );
+        window.addToCart(productData);
+      });
+    });
 
     // Update pagination
     updatePagination(totalPages);
@@ -544,30 +768,65 @@ document.addEventListener("DOMContentLoaded", function () {
 function createProductCard(product) {
   const card = document.createElement("div");
   card.className = "shop_product-card";
+
+  // Get the image URL from Supabase storage
+  const imageUrl = supabaseClient.storage
+    .from("project-images")
+    .getPublicUrl(product.image).data.publicUrl;
+
   card.innerHTML = `
-        <div class="shop_product-image">
-            <img src="${product.image}" alt="${product.name}">
-        </div>
-        <div class="shop_product-content">
-            <h3 class="shop_product-title">${product.name}</h3>
-            ${
-              product.section
-                ? `<p class="shop_product-category">${product.section}</p>`
-                : ""
-            }
-            <p class="shop_product-description">${product.description}</p>
-            ${
-              product.price
-                ? `<p class="shop_product-price">$${product.price}</p>`
-                : ""
-            }
-        </div>
-    `;
+    <div class="shop_product-image">
+      <img src="${imageUrl}" alt="${product.title}">
+      <button class="shop_read-more-btn" onclick="event.stopPropagation(); window.location.href='product.html?id=${
+        product.id
+      }'">Details</button>
+    </div>
+    <div class="shop_product-content">
+      <h3 class="shop_product-title">${product.title}</h3>
+      ${
+        product.instock === false
+          ? '<span class="shop_outofstock-label">Out of Stock</span>'
+          : ""
+      }
+      ${
+        product.section
+          ? `<p class="shop_product-category">${product.section}</p>`
+          : ""
+      }
+      <p class="shop_product-description">${product.description}</p>
+      ${
+        product.price
+          ? `<p class="shop_product-price">$${product.price}</p>
+        <button class="shop_add-to-cart-btn ${
+          product.instock === false ? "disabled" : ""
+        }" 
+          data-product='${JSON.stringify(product).replace(/'/g, "&apos;")}' 
+          ${product.instock === false ? "disabled" : ""}>
+          <span class="material-symbols-outlined">shopping_cart</span>
+        </button>`
+          : ""
+      }
+    </div>
+  `;
 
   // Add click event listener to redirect to product page
   card.addEventListener("click", () => {
-    window.location.href = `/product.html?id=${product.id}`;
+    window.location.href = `product.html?id=${product.id}`;
   });
+
+  // Add event listener for add to cart button
+  const addToCartBtn = card.querySelector(".shop_add-to-cart-btn");
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const productData = JSON.parse(
+        e.target
+          .closest(".shop_add-to-cart-btn")
+          .dataset.product.replace(/&apos;/g, "'")
+      );
+      window.addToCart(productData);
+    });
+  }
 
   return card;
 }

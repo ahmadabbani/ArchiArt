@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Us - Archiart</title>
+    <title>Archiart - Contact Us</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="script.js" defer></script>
+    <script src="cart.js"></script>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <!-- SEO Meta Tags -->
@@ -92,6 +93,12 @@
               >Contact</a
             >
           </li>
+          <li data-aos="fade-up" data-aos-delay="400">
+            <a href="#" class="header_nav-link cart-icon-btn">
+              <span class="material-symbols-outlined">shopping_cart</span>
+              <span class="cart-count">0</span>
+            </a>
+          </li>
         </ul>
       </nav>
       <div class="header_mobile-toggle">
@@ -168,18 +175,6 @@
                 <h3 class="contactus_info-title">Phone</h3>
                 <p class="contactus_info-text">
                   <a
-                    href="https://wa.me/96181882662"
-                    target="_blank"
-                    style="
-                      display: inline-block;
-                      text-decoration: none;
-                      color: inherit;
-                    "
-                  >
-                    81 882 662
-                  </a>
-                  |
-                  <a
                     href="https://wa.me/96101881885"
                     target="_blank"
                     style="
@@ -189,6 +184,18 @@
                     "
                   >
                     01 881 885
+                  </a>
+                  |
+                  <a
+                    href="https://wa.me/96181882662"
+                    target="_blank"
+                    style="
+                      display: inline-block;
+                      text-decoration: none;
+                      color: inherit;
+                    "
+                  >
+                    81 882 662
                   </a>
                 </p>
               </div>
@@ -386,5 +393,23 @@
     <a href="https://wa.me/96181882662" target="_blank" class="whatsapp-fixed">
       <i class="fab fa-whatsapp"></i>
     </a>
+    <div id="cart-modal" class="cart-modal">
+      <div class="cart-modal-content">
+        <div class="cart-modal-header">
+          <h2>Your Cart</h2>
+          <span class="cart-modal-close">&times;</span>
+        </div>
+        <div id="cart-items" class="cart-items">
+          <!-- Cart items will be dynamically added here -->
+        </div>
+        <div class="cart-summary">
+          <p>Total: $<span id="cart-total">0.00</span></p>
+          <div class="cart-buttons">
+            <button id="checkout-btn" class="checkout-btn">Checkout</button>
+            <a href="view-cart.html" class="view-cart-btn">View Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
