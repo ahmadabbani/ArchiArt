@@ -195,15 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
   `
       : ""
   }
-  ${
-    product.branding
-      ? `
-    <span class="singleproduct_breadcrumb-separator">/</span>
-    <a href="shop.html?category=${encodeURIComponent(product.branding)}" 
-       class="singleproduct_breadcrumb-link">${product.branding}</a>
-  `
-      : ""
-  }
+ 
   <span class="singleproduct_breadcrumb-separator">/</span>
   <span class="singleproduct_breadcrumb-current">${product.title}</span>
 `;
