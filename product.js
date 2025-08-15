@@ -195,7 +195,14 @@ document.addEventListener("DOMContentLoaded", function () {
   `
       : ""
   }
- 
+  ${
+    product.branding
+      ? `
+    <span class="singleproduct_breadcrumb-separator">/</span>
+   <span class="singleproduct_breadcrumb-current">${product.branding}</span>
+  `
+      : ""
+  }
   <span class="singleproduct_breadcrumb-separator">/</span>
   <span class="singleproduct_breadcrumb-current">${product.title}</span>
 `;
