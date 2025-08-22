@@ -692,7 +692,7 @@ h2 {
     .hero_section {
         padding-top: 100px;
         background: url('images/homepagebg (1).jpg') no-repeat;
-        background-position: calc(80% - 20px) center;
+        background-position: calc(10% - 20px) bottom;
         min-height: auto;
         max-height: 80vh;
     }
@@ -729,10 +729,6 @@ h2 {
 }
 
 @media screen and (max-width: 390px) {
-    .hero_section {
-        background-position: calc(77% - 20px) center;
-
-    }
 
     .hero_cta-button {
         padding: 10px 18px;
